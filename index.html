@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Models Decision Navigator - Untangled Narrative</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --teal: #1B7F92;
+            --mauve: #b36278;
+            --light-teal: #2a9fb5;
+            --light-mauve: #c47a95;
+            --cream: #f8f6f3;
+            --charcoal: #2a2a2a;
+            --warm-white: #fefdfb;
+            --shadow-teal: rgba(27, 127, 146, 0.15);
+            --shadow-mauve: rgba(179, 98, 120, 0.15);
+            --diagnostic-color: #1B7F92;
+            --evaluative-color: #4CAF50;
+            --protective-color: #b36278;
+            --generative-color: #FF9800;
+            --implementation-color: #9C27B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--warm-white) 100%);
+            color: var(--charcoal);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 0.2rem;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            color: var(--charcoal);
+            opacity: 0.65;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+            margin-right: 60px; /* Space for drawer toggle buttons */
+        }
+
+        /* Problem Reference Banner */
+        .problem-reference {
+            background: linear-gradient(135deg, rgba(27, 127, 146, 0.08), white);
+            border: 1px solid var(--teal);
+            border-left: 4px solid var(--teal);
+            border-radius: 8px;
+            padding: 1rem;
+            display: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-reference.visible {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .problem-reference-header {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .problem-reference-text {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--charcoal);
+            font-weight: 500;
+        }
+
+        /* Problem Type Selection */
+        .problem-type-selector {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .problem-type-selector.visible {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .problem-type-selector h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .problem-type-selector p {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+
+        .problem-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .problem-type-card {
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .problem-type-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .problem-type-card.selected {
+            border-color: var(--teal);
+            border-width: 2px;
+            background: rgba(27, 127, 146, 0.03);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.2);
+        }
+
+        .problem-type-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            color: var(--charcoal);
+        }
+
+        .problem-type-description {
+            font-size: 0.75rem;
+            line-height: 1.3;
+            color: var(--charcoal);
+            opacity: 0.75;
+        }
+
+        .continue-btn {
+            margin-top: 1rem;
+            padding: 0.6rem 1.5rem;
+            background: var(--teal);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: none;
+        }
+
+        .continue-btn.visible {
+            display: inline-block;
+        }
+
+        .continue-btn:hover {
+            background: var(--light-teal);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.3);
+        }
+
+        /* Toggle Buttons */
+        .toggle-buttons {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .toggle-btn {
+            background: var(--teal);
+            color: white;
+            border: none;
+            padding: 0.75rem 0.5rem;
+            border-radius: 8px 0 0 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            width: 50px;
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 80;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-btn::before {
+            content: '◀';
+            font-size: 1rem;
+            display: block;
+            transition: transform 0.3s ease;
+            writing-mode: horizontal-tb;
+            text-orientation: upright;
+        }
+
+        .toggle-btn:hover {
+            background: var(--light-teal);
+            transform: translateY(-50%) translateX(-5px);
+            box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .toggle-btn:hover::before {
+            transform: translateX(-3px);
+        }
+
+        .toggle-btn.active {
+            background: var(--charcoal);
+            transform: translateY(-50%) translateX(-5px);
+        }
+
+        .toggle-btn.active::before {
+            content: '▶';
+        }
+
+        /* Drawer Panels */
+        .drawer-panel {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 450px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+            transition: right 0.3s ease;
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .drawer-panel.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            background: var(--cream);
+            flex-shrink: 0;
+        }
+
+        .drawer-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .drawer-tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--charcoal);
+            opacity: 0.6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drawer-tab:hover {
+            opacity: 0.8;
+        }
+
+        .drawer-tab.active {
+            opacity: 1;
+            border-bottom-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--charcoal);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .drawer-close:hover {
+            opacity: 1;
+        }
+
+        .drawer-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .drawer-section {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .drawer-section.active {
+            display: flex;
+        }
+
+        /* Phase Navigation */
+        .phase-navigation {
+            background: white;
+            border-radius: 10px;
+            padding: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--teal);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.5s ease, opacity 0.5s ease, padding 0.5s ease, margin 0.5s ease;
+            margin-bottom: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .phase-navigation.revealed {
+            max-height: 200px;
+            opacity: 1;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .phase-navigation h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            opacity: 0.7;
+        }
+
+        .phase-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+        }
+
+        .phase-btn {
+            flex: 1;
+            min-width: 110px;
+            padding: 0.5rem 0.6rem;
+            border: 2px solid;
+            border-radius: 8px;
+            background: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .phase-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .phase-btn.active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .phase-btn.diagnostic {
+            border-color: var(--diagnostic-color);
+            color: var(--diagnostic-color);
+        }
+
+        .phase-btn.diagnostic.active {
+            background: var(--diagnostic-color);
+            color: white;
+        }
+
+        .phase-btn.evaluative {
+            border-color: var(--evaluative-color);
+            color: var(--evaluative-color);
+        }
+
+        .phase-btn.evaluative.active {
+            background: var(--evaluative-color);
+            color: white;
+        }
+
+        .phase-btn.protective {
+            border-color: var(--protective-color);
+            color: var(--protective-color);
+        }
+
+        .phase-btn.protective.active {
+            background: var(--protective-color);
+            color: white;
+        }
+
+        .phase-btn.generative {
+            border-color: var(--generative-color);
+            color: var(--generative-color);
+        }
+
+        .phase-btn.generative.active {
+            background: var(--generative-color);
+            color: white;
+        }
+
+        .phase-btn.implementation {
+            border-color: var(--implementation-color);
+            color: var(--implementation-color);
+        }
+
+        .phase-btn.implementation.active {
+            background: var(--implementation-color);
+            color: white;
+        }
+
+        /* Models Section */
+        .models-section {
+            background: white;
+            border-radius: 10px;
+            padding: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            min-height: 250px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.5s ease 0.3s, opacity 0.5s ease 0.3s, padding 0.5s ease 0.3s;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .models-section.revealed {
+            max-height: 1000px;
+            opacity: 1;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .phase-description {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border-left: 3px solid;
+        }
+
+        .phase-description.diagnostic {
+            background: rgba(27, 127, 146, 0.08);
+            border-color: var(--diagnostic-color);
+        }
+
+        .phase-description.evaluative {
+            background: rgba(76, 175, 80, 0.08);
+            border-color: var(--evaluative-color);
+        }
+
+        .phase-description.protective {
+            background: rgba(179, 98, 120, 0.08);
+            border-color: var(--protective-color);
+        }
+
+        .phase-description.generative {
+            background: rgba(255, 152, 0, 0.08);
+            border-color: var(--generative-color);
+        }
+
+        .phase-description.implementation {
+            background: rgba(156, 39, 176, 0.08);
+            border-color: var(--implementation-color);
+        }
+
+        .phase-description h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .phase-description p {
+            font-size: 0.75rem;
+            line-height: 1.3;
+            margin-bottom: 0.15rem;
+        }
+
+        .phase-description .core-question {
+            font-weight: 600;
+            font-style: italic;
+            margin-top: 0.25rem;
+            opacity: 0.9;
+            font-size: 0.75rem;
+        }
+
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 0.6rem;
+        }
+
+        .model-card {
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .model-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .model-card.selected {
+            border-color: var(--teal);
+            border-width: 2px;
+            background: rgba(27, 127, 146, 0.03);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.2);
+        }
+
+        .model-card.diagnostic.selected {
+            border-color: var(--diagnostic-color);
+            background: rgba(27, 127, 146, 0.05);
+        }
+
+        .model-card.evaluative.selected {
+            border-color: var(--evaluative-color);
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .model-card.protective.selected {
+            border-color: var(--protective-color);
+            background: rgba(179, 98, 120, 0.05);
+        }
+
+        .model-card.generative.selected {
+            border-color: var(--generative-color);
+            background: rgba(255, 152, 0, 0.05);
+        }
+
+        .model-card.implementation.selected {
+            border-color: var(--implementation-color);
+            background: rgba(156, 39, 176, 0.05);
+        }
+
+        .model-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+            color: var(--charcoal);
+            line-height: 1.2;
+        }
+
+        .model-description {
+            font-size: 0.7rem;
+            line-height: 1.25;
+            color: var(--charcoal);
+            opacity: 0.75;
+        }
+
+        /* Work Area */
+        .work-area {
+            background: white;
+            border-radius: 10px;
+            padding: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: margin-top 0.5s ease;
+            margin-top: 0;
+        }
+
+        .work-area.slide-down {
+            margin-top: 0;
+        }
+
+        .work-area h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            color: var(--charcoal);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            opacity: 0.7;
+        }
+
+        .selected-model-display {
+            padding: 0.5rem;
+            background: var(--cream);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            min-height: 40px;
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .selected-model-display.initial {
+            background: linear-gradient(135deg, rgba(27, 127, 146, 0.1), var(--cream));
+            border: 3px solid var(--teal);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 16px rgba(27, 127, 146, 0.2);
+        }
+
+        .selected-model-display.initial .instruction-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 0.75rem;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+        }
+
+        .selected-model-display.initial .instruction-subtext {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            opacity: 0.85;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .selected-model-display.empty {
+            opacity: 0.5;
+            font-style: italic;
+        }
+
+        .model-prompt {
+            font-weight: 600;
+            color: var(--teal);
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 0.6rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.8rem;
+            resize: vertical;
+            transition: border-color 0.3s ease, min-height 0.3s ease;
+            line-height: 1.4;
+        }
+
+        textarea.initial-entry {
+            min-height: 120px;
+            font-size: 0.9rem;
+            border-color: var(--teal);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--teal);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--light-teal);
+            box-shadow: 0 1px 4px rgba(27, 127, 146, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--charcoal);
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: var(--cream);
+            border-color: var(--mauve);
+            color: var(--mauve);
+            box-shadow: 0 1px 4px rgba(179, 98, 120, 0.2);
+        }
+
+        .btn-warning {
+            background: transparent;
+            color: #FF9800;
+            border: 1px solid #FF9800;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .btn-warning:hover {
+            background: #FF9800;
+            color: white;
+            box-shadow: 0 1px 4px rgba(255, 152, 0, 0.3);
+        }
+
+        /* Sidebar - Now in Drawer */
+        .sidebar {
+            display: none; /* Hidden - content moved to drawers */
+        }
+
+        .decision-log {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .decision-log h3 {
+            display: none; /* Header now in drawer-header */
+        }
+
+        .log-entries {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .log-entry {
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            cursor: move;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .log-entry:hover {
+            border-color: var(--teal);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .log-entry.diagnostic {
+            border-left: 3px solid var(--diagnostic-color);
+        }
+
+        .log-entry.evaluative {
+            border-left: 3px solid var(--evaluative-color);
+        }
+
+        .log-entry.protective {
+            border-left: 3px solid var(--protective-color);
+        }
+
+        .log-entry.generative {
+            border-left: 3px solid var(--generative-color);
+        }
+
+        .log-entry.implementation {
+            border-left: 3px solid var(--implementation-color);
+        }
+
+        .log-entry.initial {
+            border-left: 3px solid var(--charcoal);
+            background: rgba(42, 42, 42, 0.02);
+        }
+
+        .log-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .log-model-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .log-actions {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .log-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .log-action-btn:hover {
+            opacity: 1;
+        }
+
+        .log-content {
+            font-size: 0.7rem;
+            line-height: 1.3;
+            color: var(--charcoal);
+            word-wrap: break-word;
+        }
+
+        .log-timestamp {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            margin-top: 0.3rem;
+        }
+
+        /* Notepad - Now in Drawer */
+        .notepad {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .notepad h3 {
+            display: none; /* Header now in drawer-header */
+        }
+
+        .notepad-area {
+            flex: 1;
+            padding: 0.6rem;
+            border: 2px dashed var(--teal);
+            border-radius: 6px;
+            background: var(--cream);
+            font-size: 0.75rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-y: auto;
+            min-height: 300px;
+            cursor: text;
+            outline: none;
+        }
+
+        .notepad-area:focus {
+            border-color: var(--light-teal);
+            border-style: solid;
+            background: white;
+        }
+
+        .notepad-area.drag-over {
+            background: rgba(27, 127, 146, 0.15);
+            border-color: var(--light-teal);
+        }
+
+        .notepad-area.empty {
+            opacity: 0.5;
+            font-style: italic;
+        }
+
+        .notepad-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .notepad-actions button {
+            flex: 1;
+            padding: 0.4rem;
+            border: 2px solid var(--mauve);
+            background: white;
+            color: var(--mauve);
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notepad-actions button:hover {
+            background: var(--mauve);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 1rem;
+            opacity: 0.5;
+            font-style: italic;
+            font-size: 0.75rem;
+        }
+
+        /* Flying Entry Animation */
+        @keyframes flyToLog {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(200px, -100px) scale(0.5) rotate(10deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(400px, -200px) scale(0.2) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        .flying-entry {
+            position: fixed;
+            background: white;
+            border: 2px solid var(--charcoal);
+            border-radius: 8px;
+            padding: 0.6rem;
+            max-width: 300px;
+            z-index: 1000;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: flyToLog 0.8s ease-out forwards;
+        }
+
+        .flying-entry .flying-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-bottom: 0.3rem;
+            color: var(--charcoal);
+        }
+
+        .flying-entry .flying-text {
+            font-size: 0.7rem;
+            line-height: 1.3;
+            color: var(--charcoal);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Scrollbar Styling */
+        .log-entries::-webkit-scrollbar,
+        .notepad-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .log-entries::-webkit-scrollbar-track,
+        .notepad-area::-webkit-scrollbar-track {
+            background: var(--cream);
+            border-radius: 4px;
+        }
+
+        .log-entries::-webkit-scrollbar-thumb,
+        .notepad-area::-webkit-scrollbar-thumb {
+            background: var(--teal);
+            border-radius: 4px;
+        }
+
+        .log-entries::-webkit-scrollbar-thumb:hover,
+        .notepad-area::-webkit-scrollbar-thumb:hover {
+            background: var(--light-teal);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .phase-buttons {
+                flex-direction: column;
+            }
+
+            .phase-btn {
+                min-width: 100%;
+            }
+
+            .models-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Mental Models Decision Navigator</h1>
+            <p>A systematic approach to better decisions through structured thinking</p>
+        </div>
+
+        <!-- Toggle Buttons -->
+        <div class="toggle-buttons">
+            <!-- Single Toggle Button -->
+            <button class="toggle-btn" id="drawerToggle">Log & Notes</button>
+        </div>
+
+        <!-- Single Tabbed Drawer -->
+        <div class="drawer-panel" id="drawer">
+            <div class="drawer-header">
+                <div class="drawer-tabs">
+                    <button class="drawer-tab active" id="logTab">Decision Log</button>
+                    <button class="drawer-tab" id="notepadTab">Notepad</button>
+                </div>
+                <button class="drawer-close" id="drawerClose">&times;</button>
+            </div>
+            <div class="drawer-content">
+                <!-- Decision Log Section -->
+                <div class="drawer-section active" id="logSection">
+                    <div class="decision-log">
+                        <div class="log-entries" id="logEntries">
+                            <div class="empty-state">No entries yet. Start by selecting a mental model and responding.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notepad Section -->
+                <div class="drawer-section" id="notepadSection">
+                    <div class="notepad">
+                        <div class="notepad-area empty" id="notepadArea" contenteditable="true">
+                            Drag log entries here to compile your thinking...
+                        </div>
+                        <div class="notepad-actions">
+                            <button id="clearNotepad">Clear</button>
+                            <button id="copyNotepad">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Problem Reference Banner - shows after problem is described -->
+            <div class="problem-reference" id="problemReference">
+                <div class="problem-reference-header">Your Decision / Problem</div>
+                <div class="problem-reference-text" id="problemReferenceText"></div>
+            </div>
+
+            <!-- Problem Type Selector - shows after problem description, before models -->
+            <div class="problem-type-selector" id="problemTypeSelector">
+                <h3>What type of problem is this?</h3>
+                <p>Selecting a problem type will show you the most relevant mental models for your situation.</p>
+                <div class="problem-types-grid" id="problemTypesGrid">
+                    <!-- Problem types will be populated by JavaScript -->
+                </div>
+                <button class="continue-btn" id="continueBtn">Continue with Selected Type</button>
+            </div>
+
+            <!-- Work Area - appears first, at top -->
+            <div class="work-area">
+                <h3>Your Response</h3>
+                <div class="selected-model-display empty" id="selectedModelDisplay">
+                    Select a mental model to begin...
+                </div>
+                <textarea id="responseInput" placeholder="Apply this mental model to your situation..."></textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="saveBtn">Add to Log</button>
+                    <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
+                    <button class="btn btn-warning" id="startOverBtn">Start Over</button>
+                </div>
+            </div>
+
+            <!-- Phase Navigation - hidden initially -->
+            <div class="phase-navigation">
+                <h2>Decision-Making Sequence</h2>
+                <div class="phase-buttons">
+                    <button class="phase-btn diagnostic active" data-phase="diagnostic">
+                        1. Diagnose
+                    </button>
+                    <button class="phase-btn evaluative" data-phase="evaluative">
+                        2. Evaluate
+                    </button>
+                    <button class="phase-btn protective" data-phase="protective">
+                        3. Protect
+                    </button>
+                    <button class="phase-btn generative" data-phase="generative">
+                        4. Generate
+                    </button>
+                    <button class="phase-btn implementation" data-phase="implementation">
+                        5. Implement
+                    </button>
+                </div>
+            </div>
+
+            <!-- Models Section - hidden initially -->
+            <div class="models-section">
+                <div class="phase-description diagnostic" id="phaseDescription">
+                    <h3>Diagnostic Models</h3>
+                    <p><strong>Purpose:</strong> Understand what's actually happening before making decisions</p>
+                    <p class="core-question">What's the true nature of this situation?</p>
+                </div>
+                <div class="models-grid" id="modelsGrid">
+                    <!-- Models will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mental Models Data Structure
+        const mentalModelsData = {
+            diagnostic: {
+                title: "Diagnostic Models",
+                purpose: "Understand what's actually happening before making decisions",
+                coreQuestion: "What's the true nature of this situation?",
+                whenToUse: "At the beginning of any decision process, when confused or stuck, when conventional explanations don't fit the evidence.",
+                models: [
+                    {
+                        name: "Circle of Competence",
+                        description: "Know what you know vs. what you assume",
+                        prompt: "Are you qualified to assess this? What do you truly understand vs. what are you assuming?"
+                    },
+                    {
+                        name: "Occam's Razor",
+                        description: "The simplest explanation is usually correct",
+                        prompt: "What's the simplest explanation that fits the evidence?"
+                    },
+                    {
+                        name: "First Principles",
+                        description: "Break down to fundamental truths",
+                        prompt: "What are the fundamental truths here? Strip away assumptions and conventions."
+                    },
+                    {
+                        name: "Confirmation Bias Recognition",
+                        description: "Challenge your assumptions",
+                        prompt: "Are you seeing reality or your assumptions? What evidence contradicts your view?"
+                    },
+                    {
+                        name: "Root Cause Analysis",
+                        description: "Find underlying causes, not symptoms",
+                        prompt: "What's the underlying cause vs. symptoms? Keep asking 'why' until you hit bedrock."
+                    },
+                    {
+                        name: "Systems Thinking",
+                        description: "See how parts interact",
+                        prompt: "How do the parts interact to create the whole? What feedback loops exist?"
+                    }
+                ]
+            },
+            evaluative: {
+                title: "Evaluative Models",
+                purpose: "Weigh options and determine what matters most",
+                coreQuestion: "How do these alternatives compare?",
+                whenToUse: "When comparing alternatives, allocating resources, prioritizing actions, or determining trade-offs.",
+                models: [
+                    {
+                        name: "Opportunity Cost",
+                        description: "What you give up for this choice",
+                        prompt: "What are you trading for this choice? What are you giving up?"
+                    },
+                    {
+                        name: "Incentives",
+                        description: "What drives the behavior",
+                        prompt: "What drives the behavior you're seeing? Follow the incentives."
+                    },
+                    {
+                        name: "Second-Order Thinking",
+                        description: "Consider downstream consequences",
+                        prompt: "What are the downstream consequences? Then what? And then what?"
+                    },
+                    {
+                        name: "Cost-Benefit Analysis",
+                        description: "Does the gain justify the cost",
+                        prompt: "Does the gain justify the investment? List all costs and benefits."
+                    },
+                    {
+                        name: "Expected Value",
+                        description: "Probability-weighted outcomes",
+                        prompt: "What's the probability-weighted outcome? (Probability × Outcome for each scenario)"
+                    },
+                    {
+                        name: "Pareto Principle (80/20)",
+                        description: "Find disproportionate impact",
+                        prompt: "Where is the disproportionate impact? What 20% creates 80% of results?"
+                    },
+                    {
+                        name: "Satisficing vs. Optimizing",
+                        description: "Good enough vs. perfect",
+                        prompt: "Is 'good enough' better than 'perfect'? When does more searching hurt?"
+                    }
+                ]
+            },
+            protective: {
+                title: "Protective Models",
+                purpose: "Reduce risk and avoid disaster",
+                coreQuestion: "How do I prevent failure?",
+                whenToUse: "Before major commitments, when downside is severe, in high-uncertainty situations, when building systems or strategies.",
+                models: [
+                    {
+                        name: "Margin of Safety",
+                        description: "Build in extra buffer capacity",
+                        prompt: "What buffer do I need? Build in extra capacity beyond requirements."
+                    },
+                    {
+                        name: "Inversion",
+                        description: "Ask how to fail, then avoid that",
+                        prompt: "What guarantees failure? Instead of asking how to succeed, ask how to fail—then avoid that."
+                    },
+                    {
+                        name: "Reversible vs. Irreversible Decisions",
+                        description: "Can you undo this decision",
+                        prompt: "How permanent is this? Can I undo it? How much caution is warranted?"
+                    },
+                    {
+                        name: "Pre-mortem",
+                        description: "Identify failure modes in advance",
+                        prompt: "If this failed spectacularly, what would have caused it? Identify failure modes in advance."
+                    },
+                    {
+                        name: "Antifragility",
+                        description: "Benefit from volatility",
+                        prompt: "How can I benefit from volatility? What gets stronger under stress?"
+                    },
+                    {
+                        name: "Redundancy",
+                        description: "Prevent single points of failure",
+                        prompt: "What backup systems prevent single points of failure? Where do I need duplicates?"
+                    },
+                    {
+                        name: "Precautionary Principle",
+                        description: "When unknown risks are too great",
+                        prompt: "When is caution warranted despite uncertainty? When are unknown risks too great?"
+                    }
+                ]
+            },
+            generative: {
+                title: "Generative Models",
+                purpose: "Create new possibilities and novel solutions",
+                coreQuestion: "What options haven't I considered?",
+                whenToUse: "When stuck with unsatisfactory options, when innovation is needed, when breaking into new markets or categories.",
+                models: [
+                    {
+                        name: "First Principles (Generative)",
+                        description: "Rebuild from scratch differently",
+                        prompt: "Can we rebuild this differently from scratch? Ignore 'how it's always been done.'"
+                    },
+                    {
+                        name: "Lateral Thinking",
+                        description: "Approach from different angle",
+                        prompt: "What if we approached from a different angle? What's an indirect path?"
+                    },
+                    {
+                        name: "Combinatorial Thinking",
+                        description: "Merge X and Y for new combinations",
+                        prompt: "What happens if we merge X and Y? What new combinations are possible?"
+                    },
+                    {
+                        name: "Constraint Removal",
+                        description: "Challenge assumed limitations",
+                        prompt: "What if this limitation didn't exist? Challenge your assumptions about what's fixed."
+                    },
+                    {
+                        name: "Analogical Thinking",
+                        description: "Learn from different domains",
+                        prompt: "How is this like something else entirely? What can we learn from different domains?"
+                    },
+                    {
+                        name: "Reframing",
+                        description: "Define the problem differently",
+                        prompt: "What changes if we define the problem differently? Is there another way to see this?"
+                    },
+                    {
+                        name: "Blue Ocean Strategy",
+                        description: "Find uncontested market space",
+                        prompt: "Where is the uncontested market space? How can we make competition irrelevant?"
+                    }
+                ]
+            },
+            implementation: {
+                title: "Implementation Models",
+                purpose: "Move from decision to effective action",
+                coreQuestion: "How do I actually execute this?",
+                whenToUse: "After deciding what to do, when planning execution, when building sustainable practices.",
+                models: [
+                    {
+                        name: "Minimum Viable Product (MVP)",
+                        description: "Smallest testable version",
+                        prompt: "What's the smallest testable version? Start with the minimum that provides learning."
+                    },
+                    {
+                        name: "Feedback Loops",
+                        description: "Track if this is working",
+                        prompt: "How do I know if this is working? What metrics tell me I'm on track?"
+                    },
+                    {
+                        name: "Compound Interest",
+                        description: "Small actions, exponential results",
+                        prompt: "What small thing, repeated, creates exponential results? What compounds over time?"
+                    },
+                    {
+                        name: "Leverage",
+                        description: "Small effort, big impact",
+                        prompt: "Where does small effort create disproportionate impact? Find the highest-leverage activities."
+                    },
+                    {
+                        name: "Critical Path",
+                        description: "Sequence and dependencies",
+                        prompt: "What must happen in what sequence? Identify dependencies and bottlenecks."
+                    },
+                    {
+                        name: "80/20 Action",
+                        description: "Focus on highest-impact actions",
+                        prompt: "What 20% of actions drive 80% of results? Focus ruthlessly."
+                    },
+                    {
+                        name: "Habit Stacking",
+                        description: "Link to established routines",
+                        prompt: "How do I attach new behaviors to existing ones? Link to established routines."
+                    }
+                ]
+            }
+        };
+
+        // Problem Types and Their Relevant Models
+        const problemTypes = {
+            strategic: {
+                name: "Strategic Decision",
+                description: "Long-term direction, business strategy, major pivots, market positioning",
+                models: {
+                    diagnostic: ["First Principles", "Systems Thinking", "Confirmation Bias Recognition"],
+                    evaluative: ["Second-Order Thinking", "Opportunity Cost", "Expected Value", "Pareto Principle (80/20)"],
+                    protective: ["Pre-mortem", "Reversible vs. Irreversible Decisions", "Inversion"],
+                    generative: ["First Principles (Generative)", "Blue Ocean Strategy", "Reframing", "Constraint Removal"],
+                    implementation: ["Critical Path", "Feedback Loops", "80/20 Action"]
+                }
+            },
+            operational: {
+                name: "Operational Problem",
+                description: "Process improvement, efficiency, workflows, resource allocation, team coordination",
+                models: {
+                    diagnostic: ["Root Cause Analysis", "Systems Thinking", "Occam's Razor"],
+                    evaluative: ["Pareto Principle (80/20)", "Cost-Benefit Analysis", "Opportunity Cost"],
+                    protective: ["Margin of Safety", "Redundancy", "Inversion"],
+                    generative: ["Constraint Removal", "Combinatorial Thinking", "Lateral Thinking"],
+                    implementation: ["Critical Path", "Leverage", "80/20 Action", "Feedback Loops"]
+                }
+            },
+            interpersonal: {
+                name: "People/Team Issue",
+                description: "Conflict resolution, hiring, firing, team dynamics, communication, leadership",
+                models: {
+                    diagnostic: ["Circle of Competence", "Confirmation Bias Recognition", "Root Cause Analysis"],
+                    evaluative: ["Incentives", "Second-Order Thinking", "Opportunity Cost"],
+                    protective: ["Pre-mortem", "Reversible vs. Irreversible Decisions", "Margin of Safety"],
+                    generative: ["Reframing", "Lateral Thinking", "Analogical Thinking"],
+                    implementation: ["Feedback Loops", "Habit Stacking", "Minimum Viable Product (MVP)"]
+                }
+            },
+            technical: {
+                name: "Technical/Analytical Problem",
+                description: "Debugging, troubleshooting, data analysis, system design, technical architecture",
+                models: {
+                    diagnostic: ["Occam's Razor", "Root Cause Analysis", "First Principles", "Systems Thinking"],
+                    evaluative: ["Cost-Benefit Analysis", "Expected Value", "Satisficing vs. Optimizing"],
+                    protective: ["Margin of Safety", "Redundancy", "Pre-mortem", "Antifragility"],
+                    generative: ["First Principles (Generative)", "Constraint Removal", "Combinatorial Thinking"],
+                    implementation: ["Minimum Viable Product (MVP)", "Feedback Loops", "Critical Path"]
+                }
+            },
+            personal: {
+                name: "Personal Decision",
+                description: "Career change, major purchase, relationship, lifestyle, health, financial planning",
+                models: {
+                    diagnostic: ["Circle of Competence", "Confirmation Bias Recognition", "First Principles"],
+                    evaluative: ["Opportunity Cost", "Second-Order Thinking", "Expected Value", "Satisficing vs. Optimizing"],
+                    protective: ["Reversible vs. Irreversible Decisions", "Pre-mortem", "Inversion", "Margin of Safety"],
+                    generative: ["Reframing", "Constraint Removal", "Lateral Thinking"],
+                    implementation: ["Minimum Viable Product (MVP)", "Feedback Loops", "Habit Stacking", "Compound Interest"]
+                }
+            },
+            creative: {
+                name: "Innovation/Creative Challenge",
+                description: "New product, creative project, innovation, breaking into new markets, differentiation",
+                models: {
+                    diagnostic: ["First Principles", "Confirmation Bias Recognition", "Systems Thinking"],
+                    evaluative: ["Opportunity Cost", "Second-Order Thinking", "Pareto Principle (80/20)"],
+                    protective: ["Reversible vs. Irreversible Decisions", "Antifragility", "Pre-mortem"],
+                    generative: ["First Principles (Generative)", "Blue Ocean Strategy", "Combinatorial Thinking", "Lateral Thinking", "Constraint Removal", "Analogical Thinking", "Reframing"],
+                    implementation: ["Minimum Viable Product (MVP)", "Feedback Loops", "Leverage"]
+                }
+            }
+        };
+
+        // State Management
+        let currentPhase = 'diagnostic';
+        let selectedModel = null;
+        let logEntries = [];
+        let nextLogId = 1;
+        let problemDescribed = false;
+        let problemType = null;
+
+        // DOM Elements
+        const container = document.querySelector('.container');
+        const problemReference = document.getElementById('problemReference');
+        const problemReferenceText = document.getElementById('problemReferenceText');
+        const problemTypeSelector = document.getElementById('problemTypeSelector');
+        const problemTypesGrid = document.getElementById('problemTypesGrid');
+        const continueBtn = document.getElementById('continueBtn');
+        const phaseButtons = document.querySelectorAll('.phase-btn');
+        const phaseNavigation = document.querySelector('.phase-navigation');
+        const modelsSection = document.querySelector('.models-section');
+        const workArea = document.querySelector('.work-area');
+        const mainContent = document.querySelector('.main-content');
+        const modelsGrid = document.getElementById('modelsGrid');
+        const phaseDescription = document.getElementById('phaseDescription');
+        const selectedModelDisplay = document.getElementById('selectedModelDisplay');
+        const responseInput = document.getElementById('responseInput');
+        const saveBtn = document.getElementById('saveBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const startOverBtn = document.getElementById('startOverBtn');
+        const logEntriesContainer = document.getElementById('logEntries');
+        const notepadArea = document.getElementById('notepadArea');
+        const clearNotepadBtn = document.getElementById('clearNotepad');
+        const copyNotepadBtn = document.getElementById('copyNotepad');
+        
+        // Drawer elements
+        const logToggle = document.getElementById('logToggle');
+        const notepadToggle = document.getElementById('notepadToggle');
+        const drawer = document.getElementById('drawer');
+        const drawerToggle = document.getElementById('drawerToggle');
+        const drawerClose = document.getElementById('drawerClose');
+        const logTab = document.getElementById('logTab');
+        const notepadTab = document.getElementById('notepadTab');
+        const logSection = document.getElementById('logSection');
+        const notepadSection = document.getElementById('notepadSection');
+
+        // Render Problem Type Selector
+        function renderProblemTypeSelector() {
+            problemTypesGrid.innerHTML = '';
+            
+            Object.keys(problemTypes).forEach(typeKey => {
+                const type = problemTypes[typeKey];
+                const card = document.createElement('div');
+                card.className = 'problem-type-card';
+                card.dataset.typeKey = typeKey;
+                card.innerHTML = `
+                    <div class="problem-type-name">${type.name}</div>
+                    <div class="problem-type-description">${type.description}</div>
+                `;
+                card.addEventListener('click', () => selectProblemType(typeKey, card));
+                problemTypesGrid.appendChild(card);
+            });
+        }
+
+        // Select Problem Type
+        function selectProblemType(typeKey, card) {
+            // Clear previous selection
+            document.querySelectorAll('.problem-type-card').forEach(c => c.classList.remove('selected'));
+            
+            // Set new selection
+            card.classList.add('selected');
+            problemType = typeKey;
+            
+            // Show continue button
+            continueBtn.classList.add('visible');
+        }
+
+        // Continue After Problem Type Selection
+        function continueToProblemSolving() {
+            // Hide problem type selector
+            problemTypeSelector.classList.remove('visible');
+            
+            // Reveal the decision-making sections with filtered models
+            setTimeout(() => {
+                revealSections();
+            }, 300);
+        }
+
+        // Initialize
+        function init() {
+            showInitialPrompt();
+            renderPhaseContent();
+            setupEventListeners();
+            setupDrawers();
+            loadFromLocalStorage();
+        }
+
+        // Show Initial Prompt
+        function showInitialPrompt() {
+            selectedModelDisplay.className = 'selected-model-display initial';
+            selectedModelDisplay.innerHTML = `
+                <div class="instruction-text">Welcome! Let's start with your decision or problem.</div>
+                <div class="instruction-subtext">Before exploring mental models, describe the situation you're facing. What decision do you need to make? What problem are you trying to solve?</div>
+            `;
+            responseInput.placeholder = "Describe your decision or problem here...";
+            responseInput.classList.add('initial-entry');
+            saveBtn.textContent = 'Add to Log';
+        }
+
+        // Setup Drawer Controls
+        function setupDrawers() {
+            drawerToggle.addEventListener('click', toggleDrawer);
+            drawerClose.addEventListener('click', closeDrawer);
+            logTab.addEventListener('click', () => switchTab('log'));
+            notepadTab.addEventListener('click', () => switchTab('notepad'));
+        }
+
+        function toggleDrawer() {
+            drawer.classList.toggle('open');
+            drawerToggle.classList.toggle('active');
+        }
+
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            drawerToggle.classList.remove('active');
+        }
+
+        function switchTab(tab) {
+            if (tab === 'log') {
+                logTab.classList.add('active');
+                notepadTab.classList.remove('active');
+                logSection.classList.add('active');
+                notepadSection.classList.remove('active');
+            } else {
+                notepadTab.classList.add('active');
+                logTab.classList.remove('active');
+                notepadSection.classList.add('active');
+                logSection.classList.remove('active');
+            }
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            phaseButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentPhase = btn.dataset.phase;
+                    updatePhaseButtons();
+                    renderPhaseContent();
+                    clearSelection();
+                });
+            });
+
+            saveBtn.addEventListener('click', saveToLog);
+            clearBtn.addEventListener('click', clearCurrentResponse);
+            startOverBtn.addEventListener('click', startOver);
+            continueBtn.addEventListener('click', continueToProblemSolving);
+            clearNotepadBtn.addEventListener('click', clearNotepad);
+            copyNotepadBtn.addEventListener('click', copyNotepad);
+
+            // Drag and drop for notepad
+            notepadArea.addEventListener('dragover', handleDragOver);
+            notepadArea.addEventListener('drop', handleDrop);
+            notepadArea.addEventListener('dragleave', handleDragLeave);
+        }
+
+        // Update Phase Buttons
+        function updatePhaseButtons() {
+            phaseButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.phase === currentPhase);
+            });
+        }
+
+        // Render Phase Content
+        function renderPhaseContent() {
+            const phaseData = mentalModelsData[currentPhase];
+            
+            // Update phase description
+            phaseDescription.className = `phase-description ${currentPhase}`;
+            phaseDescription.innerHTML = `
+                <h3>${phaseData.title}</h3>
+                <p><strong>Purpose:</strong> ${phaseData.purpose}</p>
+                <p class="core-question">${phaseData.coreQuestion}</p>
+            `;
+
+            // Filter models based on problem type
+            let modelsToShow = phaseData.models;
+            if (problemType && problemTypes[problemType]) {
+                const relevantModelNames = problemTypes[problemType].models[currentPhase];
+                if (relevantModelNames) {
+                    modelsToShow = phaseData.models.filter(model => 
+                        relevantModelNames.includes(model.name)
+                    );
+                }
+            }
+
+            // Render models
+            modelsGrid.innerHTML = '';
+            modelsToShow.forEach((model, index) => {
+                const modelCard = document.createElement('div');
+                modelCard.className = `model-card ${currentPhase}`;
+                modelCard.dataset.modelIndex = index;
+                modelCard.innerHTML = `
+                    <div class="model-name">${model.name}</div>
+                    <div class="model-description">${model.description}</div>
+                `;
+                modelCard.addEventListener('click', () => selectModel(model, modelCard));
+                modelsGrid.appendChild(modelCard);
+            });
+            
+            // Show message if no models match
+            if (modelsToShow.length === 0) {
+                modelsGrid.innerHTML = '<div class="empty-state">No models match this problem type for this phase. Try another phase or problem type.</div>';
+            }
+        }
+
+        // Select Model
+        function selectModel(model, card) {
+            // If problem hasn't been described yet, save it first
+            if (!problemDescribed && responseInput.value.trim()) {
+                saveProblemDescription();
+                return; // Let the save process complete
+            }
+
+            // Clear previous selection
+            document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+            
+            // Set new selection
+            card.classList.add('selected');
+            selectedModel = { ...model, phase: currentPhase };
+
+            // Update display
+            selectedModelDisplay.className = 'selected-model-display';
+            selectedModelDisplay.innerHTML = `
+                <div class="model-prompt"><strong>${model.name}</strong></div>
+                <div>${model.prompt}</div>
+            `;
+
+            // Reset placeholder and button for model response
+            responseInput.placeholder = "Apply this mental model to your situation...";
+            responseInput.classList.remove('initial-entry');
+            saveBtn.textContent = 'Add to Log';
+            
+            // Focus textarea
+            responseInput.focus();
+        }
+
+        // Create Flying Entry Animation
+        function createFlyingEntry(text) {
+            // Get the position of the work area
+            const workArea = document.querySelector('.work-area');
+            const workRect = workArea.getBoundingClientRect();
+            
+            // Create the flying element
+            const flyingEl = document.createElement('div');
+            flyingEl.className = 'flying-entry';
+            flyingEl.style.left = `${workRect.left}px`;
+            flyingEl.style.top = `${workRect.top + 100}px`;
+            flyingEl.innerHTML = `
+                <div class="flying-title">Problem Description</div>
+                <div class="flying-text">${text}</div>
+            `;
+            
+            document.body.appendChild(flyingEl);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                flyingEl.remove();
+            }, 800);
+        }
+
+        // Reveal Sections
+        function revealSections() {
+            // Move phase navigation and models section before work area
+            mainContent.insertBefore(phaseNavigation, workArea);
+            mainContent.insertBefore(modelsSection, workArea);
+            
+            // Reveal phase navigation first
+            phaseNavigation.classList.add('revealed');
+            
+            // Then reveal models section with a slight delay
+            setTimeout(() => {
+                modelsSection.classList.add('revealed');
+            }, 100);
+            
+            // Slide work area down
+            setTimeout(() => {
+                workArea.classList.add('slide-down');
+            }, 200);
+        }
+
+        // Save Problem Description
+        function saveProblemDescription() {
+            const description = responseInput.value.trim();
+            if (!description) return;
+
+            // Create flying animation
+            createFlyingEntry(description);
+
+            const entry = {
+                id: nextLogId++,
+                phase: 'initial',
+                modelName: 'Problem Description',
+                modelPrompt: 'What decision or problem are you trying to solve?',
+                response: description,
+                timestamp: new Date().toLocaleString()
+            };
+
+            logEntries.unshift(entry);
+            problemDescribed = true;
+            
+            // Show problem reference banner
+            problemReferenceText.textContent = description;
+            setTimeout(() => {
+                problemReference.classList.add('visible');
+            }, 100);
+            
+            // Delay log rendering and drawer opening to sync with animation
+            setTimeout(() => {
+                renderLogEntries();
+                saveToLocalStorage();
+                
+                // Open drawer and show log tab
+                drawer.classList.add('open');
+                drawerToggle.classList.add('active');
+                switchTab('log');
+            }, 400);
+            
+            // Add problem description to notepad automatically
+            notepadArea.innerText = `PROBLEM/DECISION:\n${description}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
+            notepadArea.classList.remove('empty');
+            
+            // Show problem type selector after brief delay
+            setTimeout(() => {
+                problemTypeSelector.classList.add('visible');
+                renderProblemTypeSelector();
+            }, 900);
+            
+            // Clear the textarea and reset styling
+            responseInput.value = '';
+            responseInput.classList.remove('initial-entry');
+            saveBtn.textContent = 'Add to Log';
+        }
+
+        // Clear Selection
+        function clearSelection() {
+            selectedModel = null;
+            document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+            
+            if (!problemDescribed) {
+                showInitialPrompt();
+            } else {
+                selectedModelDisplay.className = 'selected-model-display empty';
+                selectedModelDisplay.innerHTML = 'Select a mental model to continue...';
+                responseInput.placeholder = "Apply this mental model to your situation...";
+            }
+        }
+
+        // Save to Log
+        function saveToLog() {
+            // If we haven't described the problem yet, save the problem description
+            if (!problemDescribed) {
+                if (!responseInput.value.trim()) {
+                    alert('Please describe your decision or problem before continuing.');
+                    return;
+                }
+                saveProblemDescription();
+                return;
+            }
+            
+            // Otherwise, save a mental model response
+            if (!selectedModel || !responseInput.value.trim()) {
+                alert('Please select a mental model and enter your response.');
+                return;
+            }
+
+            const entry = {
+                id: nextLogId++,
+                phase: selectedModel.phase,
+                modelName: selectedModel.name,
+                modelPrompt: selectedModel.prompt,
+                response: responseInput.value.trim(),
+                timestamp: new Date().toLocaleString()
+            };
+
+            logEntries.unshift(entry);
+            renderLogEntries();
+            clearCurrentResponse();
+            saveToLocalStorage();
+            
+            // Open drawer and show log tab
+            drawer.classList.add('open');
+            drawerToggle.classList.add('active');
+            switchTab('log');
+        }
+
+        // Render Log Entries
+        function renderLogEntries() {
+            if (logEntries.length === 0) {
+                logEntriesContainer.innerHTML = '<div class="empty-state">No entries yet. Start by selecting a mental model and responding.</div>';
+                return;
+            }
+
+            logEntriesContainer.innerHTML = '';
+            logEntries.forEach(entry => {
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry ${entry.phase}`;
+                logEntry.draggable = true;
+                logEntry.dataset.entryId = entry.id;
+                logEntry.innerHTML = `
+                    <div class="log-entry-header">
+                        <div class="log-model-name">${entry.modelName}</div>
+                        <div class="log-actions">
+                            <button class="log-action-btn" onclick="editEntry(${entry.id})" title="Edit">✏️</button>
+                            <button class="log-action-btn" onclick="deleteEntry(${entry.id})" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="log-content">${entry.response}</div>
+                    <div class="log-timestamp">${entry.timestamp}</div>
+                `;
+
+                // Add drag event listeners
+                logEntry.addEventListener('dragstart', handleDragStart);
+                logEntriesContainer.appendChild(logEntry);
+            });
+        }
+
+        // Start Over - Save and Reset
+        function startOver() {
+            if (logEntries.length === 0 && notepadArea.classList.contains('empty')) {
+                if (confirm('Start over? This will reset the app to the beginning.')) {
+                    resetApp();
+                }
+                return;
+            }
+            
+            // Prompt to save work before resetting
+            const shouldSave = confirm('Would you like to save your decision-making session before starting over?\n\nClick OK to download a text file with all your work, or Cancel to start over without saving.');
+            
+            if (shouldSave) {
+                downloadSession();
+            }
+            
+            // Confirm reset
+            const shouldReset = confirm('Ready to start over? This will clear all your entries and reset the app.');
+            if (shouldReset) {
+                resetApp();
+            }
+        }
+
+        // Download Session as Text File
+        function downloadSession() {
+            let content = 'MENTAL MODELS DECISION-MAKING SESSION\n';
+            content += '=' .repeat(60) + '\n';
+            content += `Date: ${new Date().toLocaleString()}\n\n`;
+            
+            // Add problem description if exists
+            const problemEntry = logEntries.find(e => e.phase === 'initial');
+            if (problemEntry) {
+                content += 'PROBLEM/DECISION:\n';
+                content += problemEntry.response + '\n\n';
+                content += '=' .repeat(60) + '\n\n';
+            }
+            
+            // Add all mental model responses grouped by phase
+            const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
+            const phaseNames = {
+                diagnostic: 'DIAGNOSTIC PHASE',
+                evaluative: 'EVALUATIVE PHASE',
+                protective: 'PROTECTIVE PHASE',
+                generative: 'GENERATIVE PHASE',
+                implementation: 'IMPLEMENTATION PHASE'
+            };
+            
+            phases.forEach(phase => {
+                const phaseEntries = logEntries.filter(e => e.phase === phase);
+                if (phaseEntries.length > 0) {
+                    content += phaseNames[phase] + '\n';
+                    content += '-'.repeat(60) + '\n\n';
+                    
+                    phaseEntries.forEach(entry => {
+                        content += `${entry.modelName}:\n`;
+                        content += `${entry.response}\n`;
+                        content += `(${entry.timestamp})\n\n`;
+                    });
+                    
+                    content += '\n';
+                }
+            });
+            
+            // Add notepad content if not empty
+            if (!notepadArea.classList.contains('empty')) {
+                content += '=' .repeat(60) + '\n';
+                content += 'COMPILED NOTES:\n';
+                content += '=' .repeat(60) + '\n\n';
+                content += (notepadArea.innerText || notepadArea.textContent) + '\n';
+            }
+            
+            // Create and download file
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `decision-session-${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Reset App to Initial State
+        function resetApp() {
+            // Clear all data
+            logEntries = [];
+            nextLogId = 1;
+            problemDescribed = false;
+            problemType = null;
+            selectedModel = null;
+            currentPhase = 'diagnostic';
+            
+            // Clear localStorage
+            localStorage.removeItem('mentalModelsLog');
+            
+            // Reset UI
+            responseInput.value = '';
+            notepadArea.innerText = 'Drag log entries here to compile your thinking...';
+            notepadArea.classList.add('empty');
+            renderLogEntries();
+            
+            // Hide problem reference and type selector
+            problemReference.classList.remove('visible');
+            problemReferenceText.textContent = '';
+            problemTypeSelector.classList.remove('visible');
+            continueBtn.classList.remove('visible');
+            
+            // Hide sections again
+            phaseNavigation.classList.remove('revealed');
+            modelsSection.classList.remove('revealed');
+            workArea.classList.remove('slide-down');
+            
+            // Close drawers
+            drawer.classList.remove('open');
+            drawerToggle.classList.remove('active');
+            
+            // Reorder DOM back to initial state (work area first)
+            mainContent.insertBefore(workArea, phaseNavigation);
+            
+            // Reset to initial prompt
+            showInitialPrompt();
+            updatePhaseButtons();
+            renderPhaseContent();
+        }
+
+        // Clear Current Response (just the textarea)
+        function clearCurrentResponse() {
+            responseInput.value = '';
+            responseInput.focus();
+        }
+
+        // Edit Entry
+        window.editEntry = function(id) {
+            const entry = logEntries.find(e => e.id === id);
+            if (!entry) return;
+
+            const newResponse = prompt('Edit your response:', entry.response);
+            if (newResponse !== null && newResponse.trim()) {
+                entry.response = newResponse.trim();
+                entry.timestamp = new Date().toLocaleString() + ' (edited)';
+                renderLogEntries();
+                saveToLocalStorage();
+            }
+        };
+
+        // Delete Entry
+        window.deleteEntry = function(id) {
+            if (confirm('Delete this entry?')) {
+                logEntries = logEntries.filter(e => e.id !== id);
+                renderLogEntries();
+                saveToLocalStorage();
+            }
+        };
+
+        // Drag and Drop Handlers
+        function handleDragStart(e) {
+            e.dataTransfer.effectAllowed = 'copy';
+            e.dataTransfer.setData('text/plain', e.target.dataset.entryId);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+            notepadArea.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            if (e.target === notepadArea) {
+                notepadArea.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            notepadArea.classList.remove('drag-over');
+
+            const entryId = parseInt(e.dataTransfer.getData('text/plain'));
+            const entry = logEntries.find(e => e.id === entryId);
+            
+            if (entry) {
+                const currentContent = notepadArea.classList.contains('empty') ? '' : (notepadArea.innerText || notepadArea.textContent);
+                
+                // Format the new entry
+                const newEntryText = `${entry.modelName}:\n${entry.response}\n${'-'.repeat(60)}\n\n`;
+                
+                // If notepad is empty, just add the entry
+                if (notepadArea.classList.contains('empty')) {
+                    notepadArea.innerText = newEntryText.trim();
+                } else {
+                    // If there's a problem description section, append after the divider
+                    if (currentContent.includes('MENTAL MODEL RESPONSES:')) {
+                        notepadArea.innerText = currentContent + newEntryText;
+                    } else {
+                        // Otherwise just append
+                        notepadArea.innerText = `${currentContent}\n\n${newEntryText}`;
+                    }
+                }
+                
+                notepadArea.classList.remove('empty');
+            }
+        }
+
+        // Clear Notepad
+        function clearNotepad() {
+            if (notepadArea.classList.contains('empty')) {
+                return;
+            }
+            
+            if (confirm('Clear notepad? This will remove all compiled responses but keep your problem description in the log.')) {
+                // If there's a problem description saved, keep it
+                if (problemDescribed) {
+                    const problemEntry = logEntries.find(e => e.phase === 'initial');
+                    if (problemEntry) {
+                        notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
+                        notepadArea.classList.remove('empty');
+                    } else {
+                        notepadArea.innerText = 'Drag log entries here to compile your thinking...';
+                        notepadArea.classList.add('empty');
+                    }
+                } else {
+                    notepadArea.innerText = 'Drag log entries here to compile your thinking...';
+                    notepadArea.classList.add('empty');
+                }
+            }
+        }
+
+        // Copy Notepad
+        function copyNotepad() {
+            if (notepadArea.classList.contains('empty')) {
+                alert('Notepad is empty.');
+                return;
+            }
+
+            const text = notepadArea.textContent || notepadArea.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const originalBorder = notepadArea.style.borderColor;
+                notepadArea.style.borderColor = '#4CAF50';
+                setTimeout(() => {
+                    notepadArea.style.borderColor = originalBorder;
+                }, 500);
+            }).catch(() => {
+                alert('Failed to copy. Please select and copy manually.');
+            });
+        }
+
+        // Local Storage
+        function saveToLocalStorage() {
+            localStorage.setItem('mentalModelsLog', JSON.stringify({
+                entries: logEntries,
+                nextId: nextLogId
+            }));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('mentalModelsLog');
+            if (saved) {
+                const data = JSON.parse(saved);
+                logEntries = data.entries || [];
+                nextLogId = data.nextId || 1;
+                
+                // Check if problem was already described
+                const hasProblemDescription = logEntries.some(e => e.phase === 'initial');
+                if (hasProblemDescription) {
+                    problemDescribed = true;
+                    revealSections();
+                    
+                    // Restore notepad with problem description
+                    const problemEntry = logEntries.find(e => e.phase === 'initial');
+                    if (problemEntry) {
+                        // Show problem reference banner
+                        problemReferenceText.textContent = problemEntry.response;
+                        problemReference.classList.add('visible');
+                        
+                        notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
+                        notepadArea.classList.remove('empty');
+                    }
+                }
+                
+                renderLogEntries();
+            }
+        }
+
+        // Initialize App
+        init();
+    </script>
+</body>
+</html>
