@@ -73,7 +73,8 @@
             flex-direction: column;
             gap: 0.75rem;
             flex: 1;
-            margin-right: 60px; /* Space for drawer toggle buttons */
+            margin-left: 50px; /* Space for left toggle button */
+            margin-right: 50px; /* Space for right toggle button */
         }
 
         /* Problem Reference Banner */
@@ -244,12 +245,7 @@
             transition: all 0.3s ease;
             writing-mode: vertical-rl;
             text-orientation: mixed;
-            width: 50px;
-            position: fixed;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 80;
+            width: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -267,7 +263,7 @@
 
         .toggle-btn:hover {
             background: var(--light-teal);
-            transform: translateY(-50%) translateX(-5px);
+            transform: translateX(-5px);
             box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.3);
         }
 
@@ -277,14 +273,194 @@
 
         .toggle-btn.active {
             background: var(--charcoal);
-            transform: translateY(-50%) translateX(-5px);
+            transform: translateX(-5px);
         }
 
         .toggle-btn.active::before {
             content: '▶';
         }
 
-        /* Drawer Panels */
+        /* Left toggle buttons (for notepad) */
+        .toggle-buttons-left {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .toggle-btn-left {
+            background: var(--mauve);
+            color: white;
+            border: none;
+            padding: 0.75rem 0.5rem;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-btn-left::before {
+            content: '◀';
+            font-size: 1rem;
+            display: block;
+            transition: transform 0.3s ease;
+            writing-mode: horizontal-tb;
+            text-orientation: upright;
+        }
+
+        .toggle-btn-left:hover {
+            background: var(--light-mauve);
+            transform: rotate(180deg) translateX(-5px);
+            box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .toggle-btn-left.active {
+            background: var(--charcoal);
+            transform: rotate(180deg) translateX(-5px);
+        }
+
+        .toggle-btn-left.active::before {
+            content: '▶';
+        }
+
+        /* Right Panel - Decision Log */
+        .panel-right {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 350px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+            transition: right 0.3s ease;
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-right.open {
+            right: 0;
+        }
+
+        /* Left Panel - Notepad */
+        .panel-left {
+            position: fixed;
+            top: 0;
+            left: -350px;
+            width: 350px;
+            height: 100vh;
+            background: white;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+            transition: left 0.3s ease;
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-left.open {
+            left: 0;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            background: var(--cream);
+            flex-shrink: 0;
+        }
+
+        .panel-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .panel-header-right h3 {
+            color: var(--teal);
+        }
+
+        .panel-header-left h3 {
+            color: var(--mauve);
+        }
+
+        .panel-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--charcoal);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .panel-close:hover {
+            opacity: 1;
+        }
+
+        .panel-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        /* Responsive main content */
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem;
+            min-height: 100vh;
+            position: relative;
+            transition: margin 0.3s ease, max-width 0.3s ease;
+        }
+
+        body.panel-right-open .container {
+            margin-right: 350px;
+        }
+
+        body.panel-left-open .container {
+            margin-left: 350px;
+        }
+
+        body.panel-right-open.panel-left-open .container {
+            margin-left: 350px;
+            margin-right: 350px;
+        }
+
+        body.panel-right-open .toggle-buttons {
+            right: 350px;
+        }
+
+        body.panel-left-open .toggle-buttons-left {
+            left: 350px;
+        }
+
+        /* Drawer Panels - keeping for backwards compatibility during transition */
         .drawer-panel {
             position: fixed;
             top: 0;
@@ -1233,41 +1409,45 @@
             <p>A systematic approach to better decisions through structured thinking</p>
         </div>
 
-        <!-- Toggle Buttons -->
-        <div class="toggle-buttons">
-            <!-- Single Toggle Button -->
-            <button class="toggle-btn" id="drawerToggle">Log & Notes</button>
+        <!-- Left Toggle Button (Notepad) -->
+        <div class="toggle-buttons-left">
+            <button class="toggle-btn-left" id="notepadToggle">Notepad</button>
         </div>
 
-        <!-- Single Tabbed Drawer -->
-        <div class="drawer-panel" id="drawer">
-            <div class="drawer-header">
-                <div class="drawer-tabs">
-                    <button class="drawer-tab active" id="logTab">Decision Log</button>
-                    <button class="drawer-tab" id="notepadTab">Notepad</button>
-                </div>
-                <button class="drawer-close" id="drawerClose">&times;</button>
+        <!-- Right Toggle Button (Decision Log) -->
+        <div class="toggle-buttons">
+            <button class="toggle-btn" id="logToggle">Decision Log</button>
+        </div>
+
+        <!-- Left Panel - Notepad -->
+        <div class="panel-left" id="panelLeft">
+            <div class="panel-header panel-header-left">
+                <h3>Notepad</h3>
+                <button class="panel-close" id="panelLeftClose">&times;</button>
             </div>
-            <div class="drawer-content">
-                <!-- Decision Log Section -->
-                <div class="drawer-section active" id="logSection">
-                    <div class="decision-log">
-                        <div class="log-entries" id="logEntries">
-                            <div class="empty-state">No entries yet. Start by selecting a mental model and responding.</div>
-                        </div>
+            <div class="panel-content">
+                <div class="notepad">
+                    <div class="notepad-area empty" id="notepadArea" contenteditable="true">
+                        Drag log entries here to compile your thinking...
+                    </div>
+                    <div class="notepad-actions">
+                        <button id="clearNotepad">Clear</button>
+                        <button id="copyNotepad">Copy</button>
                     </div>
                 </div>
-                
-                <!-- Notepad Section -->
-                <div class="drawer-section" id="notepadSection">
-                    <div class="notepad">
-                        <div class="notepad-area empty" id="notepadArea" contenteditable="true">
-                            Drag log entries here to compile your thinking...
-                        </div>
-                        <div class="notepad-actions">
-                            <button id="clearNotepad">Clear</button>
-                            <button id="copyNotepad">Copy</button>
-                        </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Decision Log -->
+        <div class="panel-right" id="panelRight">
+            <div class="panel-header panel-header-right">
+                <h3>Decision Log</h3>
+                <button class="panel-close" id="panelRightClose">&times;</button>
+            </div>
+            <div class="panel-content">
+                <div class="decision-log">
+                    <div class="log-entries" id="logEntries">
+                        <div class="empty-state">No entries yet. Start by selecting a mental model and responding.</div>
                     </div>
                 </div>
             </div>
@@ -1468,37 +1648,128 @@
                     {
                         name: "Opportunity Cost",
                         description: "What you give up for this choice",
-                        prompt: "What are you trading for this choice? What are you giving up?"
+                        explanation: "Opportunity cost is the value of the next-best alternative you give up when making a choice. Every decision has a cost beyond the obvious price tag—the cost of what you could have done instead. This concept, fundamental to economics, reminds us that resources (time, money, attention) spent on one thing cannot be spent on another. The true cost of anything is what you sacrifice to get it.",
+                        example: "You're deciding whether to spend $50,000 on an MBA. The obvious cost is tuition. But the opportunity cost includes: 2 years of salary you won't earn (~$150,000), work experience you won't gain, relationships you won't build at work, and other ways you could invest that $50,000. The real question isn't 'Is an MBA worth $50,000?' but 'Is an MBA worth $200,000+ and two years of your life compared to the alternatives?'",
+                        prompts: [
+                            "If you choose this option, what specifically are you giving up? List the top 3 alternatives.",
+                            "What could you do with the same time, money, or resources instead?",
+                            "What's the best alternative use of this resource? How does it compare?",
+                            "Are you accounting for hidden costs like time, energy, and attention—not just money?"
+                        ],
+                        warnings: [
+                            "Sunk costs are NOT opportunity costs—don't factor in what you've already spent",
+                            "Opportunity cost includes intangibles like learning, relationships, and optionality",
+                            "The comparison should be to your best alternative, not just any alternative"
+                        ],
+                        relatedModels: ["Cost-Benefit Analysis", "Satisficing vs. Optimizing", "Pareto Principle (80/20)"]
                     },
                     {
                         name: "Incentives",
                         description: "What drives the behavior",
-                        prompt: "What drives the behavior you're seeing? Follow the incentives."
+                        explanation: "Incentives are the rewards and punishments that motivate behavior. Charlie Munger famously said, 'Show me the incentive and I will show you the outcome.' People respond predictably to incentives—often in ways that weren't intended. Understanding incentives helps you predict behavior, design better systems, and avoid being manipulated. When behavior seems irrational, you probably don't understand the incentives.",
+                        example: "Wells Fargo created incentives for employees to open new accounts, with bonuses tied to account numbers. The intended outcome: more customer engagement. The actual outcome: employees opened millions of fake accounts without customer consent. The incentive rewarded the metric (account numbers) rather than the goal (customer value). Understanding this would have predicted the scandal.",
+                        prompts: [
+                            "What are the explicit incentives in this situation? Who gets rewarded for what?",
+                            "What are the hidden or implicit incentives? What behavior does the system actually reward?",
+                            "If you follow the incentives to their logical conclusion, what behavior would you predict?",
+                            "Are the incentives aligned with the actual goals? Where might they diverge?"
+                        ],
+                        warnings: [
+                            "People optimize for what's measured, not necessarily what matters",
+                            "Incentives you didn't design still exist—look for them",
+                            "Short-term incentives often conflict with long-term goals"
+                        ],
+                        relatedModels: ["Second-Order Thinking", "Systems Thinking", "Confirmation Bias Recognition"]
                     },
                     {
                         name: "Second-Order Thinking",
                         description: "Consider downstream consequences",
-                        prompt: "What are the downstream consequences? Then what? And then what?"
+                        explanation: "Second-order thinking means considering the consequences of the consequences. First-order thinking asks 'What happens if I do X?' Second-order thinking asks 'And then what?' Most people stop at first-order effects, which is why second-order thinkers have a significant advantage. The immediate effect of a decision is often obvious; the downstream effects are where surprises—and opportunities—live.",
+                        example: "First-order thinking: 'If we cut prices, we'll sell more units.' Second-order thinking: 'If we cut prices, we'll sell more units. Then competitors will cut prices too. Then margins shrink industry-wide. Then we need to cut costs. Then quality suffers. Then customers leave.' The first-order effect (more sales) was positive; the second and third-order effects were devastating.",
+                        prompts: [
+                            "What's the immediate, obvious effect of this decision? (First-order)",
+                            "Then what happens? What do others do in response? (Second-order)",
+                            "And then what? Follow the chain at least 3 steps. (Third-order and beyond)",
+                            "Who else is affected, and how will they respond? What feedback loops exist?"
+                        ],
+                        warnings: [
+                            "Second-order effects often oppose first-order effects",
+                            "The further out you project, the more uncertain—but still valuable to consider",
+                            "Others' responses to your actions create most second-order effects"
+                        ],
+                        relatedModels: ["Systems Thinking", "Incentives", "Pre-mortem"]
                     },
                     {
                         name: "Cost-Benefit Analysis",
                         description: "Does the gain justify the cost",
-                        prompt: "Does the gain justify the investment? List all costs and benefits."
+                        explanation: "Cost-benefit analysis is a systematic approach to weighing the total expected costs against the total expected benefits of a decision. While it sounds simple, the challenge is identifying ALL costs and benefits—including indirect, delayed, and intangible ones. A rigorous cost-benefit analysis forces you to quantify your assumptions and reveals hidden trade-offs.",
+                        example: "A company considers implementing a four-day work week. Obvious costs: 20% less work time. Hidden costs: coordination challenges, customer coverage gaps, potential resentment from those who can't participate. Obvious benefits: employee satisfaction, recruitment advantage. Hidden benefits: forced prioritization, reduced burnout, lower turnover costs, increased productivity per hour. Only by listing all factors can you make an informed decision.",
+                        prompts: [
+                            "List ALL costs: direct, indirect, immediate, delayed, tangible, and intangible.",
+                            "List ALL benefits: direct, indirect, immediate, delayed, tangible, and intangible.",
+                            "Can you quantify these? Even rough estimates force clearer thinking.",
+                            "What costs or benefits might you be missing? What would a critic add to your list?"
+                        ],
+                        warnings: [
+                            "Intangible costs/benefits are real even if hard to quantify—don't ignore them",
+                            "Be wary of motivated reasoning—are you inflating benefits and minimizing costs?",
+                            "Consider who bears the costs vs. who receives the benefits"
+                        ],
+                        relatedModels: ["Opportunity Cost", "Expected Value", "Second-Order Thinking"]
                     },
                     {
                         name: "Expected Value",
                         description: "Probability-weighted outcomes",
-                        prompt: "What's the probability-weighted outcome? (Probability × Outcome for each scenario)"
+                        explanation: "Expected value (EV) is a decision-making framework that accounts for both the magnitude of outcomes and their probability. You calculate it by multiplying each possible outcome by its probability and summing the results. EV helps you make decisions under uncertainty by focusing on long-term average outcomes rather than individual results. A positive expected value decision may lose sometimes, but wins on average.",
+                        example: "You're offered a bet: flip a coin, heads you win $200, tails you lose $100. Should you take it? EV = (50% × $200) + (50% × -$100) = $100 - $50 = $50. The expected value is +$50, so mathematically you should take this bet every time. Even though you'll lose half the time, over many decisions like this, you'll come out ahead.",
+                        prompts: [
+                            "What are all the possible outcomes of this decision? List them.",
+                            "What's your estimated probability for each outcome? (They should sum to 100%)",
+                            "What's the value (positive or negative) of each outcome?",
+                            "Calculate: For each outcome, multiply probability × value, then sum all results."
+                        ],
+                        warnings: [
+                            "Garbage in, garbage out—your EV is only as good as your probability estimates",
+                            "EV assumes you can play multiple times; one-shot decisions may need different thinking",
+                            "EV doesn't account for risk tolerance or ruin—don't bet your entire bankroll on positive EV"
+                        ],
+                        relatedModels: ["Cost-Benefit Analysis", "Margin of Safety", "Reversible vs. Irreversible Decisions"]
                     },
                     {
                         name: "Pareto Principle (80/20)",
                         description: "Find disproportionate impact",
-                        prompt: "Where is the disproportionate impact? What 20% creates 80% of results?"
+                        explanation: "The Pareto Principle observes that roughly 80% of effects come from 20% of causes. This pattern appears everywhere: 80% of sales from 20% of customers, 80% of bugs from 20% of code, 80% of results from 20% of effort. The exact ratio varies, but the insight is universal: inputs and outputs are not evenly distributed. Finding and focusing on the vital few rather than the trivial many is the key to efficiency.",
+                        example: "A software company analyzes customer support tickets and finds that 80% of complaints come from 3 features (out of 50). Instead of spreading improvement efforts across all features equally, they focus intensely on those 3. Six months later, support tickets dropped 60% with only 6% of features improved. The same principle: a small number of causes drive most of the problems.",
+                        prompts: [
+                            "In this situation, what 20% of inputs might be driving 80% of the results?",
+                            "What are the few vital factors vs. the many trivial ones?",
+                            "If you could only work on one thing, which would have the most disproportionate impact?",
+                            "What are you spending time on that contributes little to outcomes?"
+                        ],
+                        warnings: [
+                            "80/20 is a guideline, not a law—the actual ratio varies",
+                            "The vital 20% changes over time; reassess regularly",
+                            "Don't neglect the 'trivial many' entirely—some provide necessary foundation"
+                        ],
+                        relatedModels: ["Leverage", "80/20 Action", "Opportunity Cost"]
                     },
                     {
                         name: "Satisficing vs. Optimizing",
                         description: "Good enough vs. perfect",
-                        prompt: "Is 'good enough' better than 'perfect'? When does more searching hurt?"
+                        explanation: "Satisficing means choosing an option that meets your criteria, even if better options might exist. Optimizing means searching until you find the best possible option. Economist Herbert Simon introduced satisficing, recognizing that optimization has costs: time, energy, and decision fatigue. Often, the search for 'perfect' costs more than the improvement it yields. Knowing when to satisfice and when to optimize is itself an optimization.",
+                        example: "Buying a house: An optimizer visits 50 houses over 6 months, running spreadsheets on each, only to find their top choice sold while they were analyzing. A satisficer defines criteria (3 bedrooms, good schools, under budget), views houses until one meets all criteria, and buys it. The satisficer may not get the 'best' house, but avoids analysis paralysis and opportunity cost of endless searching.",
+                        prompts: [
+                            "What criteria would make an option 'good enough' for this decision?",
+                            "What's the cost of continued searching? Time, stress, missed opportunities?",
+                            "Is this a reversible decision where satisficing is low-risk, or irreversible where optimizing pays off?",
+                            "Are you optimizing because it matters, or because you're avoiding the discomfort of deciding?"
+                        ],
+                        warnings: [
+                            "Satisficing isn't settling—it's strategic acceptance that perfect is costly",
+                            "High-stakes, irreversible decisions may warrant more optimization",
+                            "The best decision made today often beats a perfect decision made too late"
+                        ],
+                        relatedModels: ["Opportunity Cost", "Reversible vs. Irreversible Decisions", "Pareto Principle (80/20)"]
                     }
                 ]
             },
@@ -1511,37 +1782,128 @@
                     {
                         name: "Margin of Safety",
                         description: "Build in extra buffer capacity",
-                        prompt: "What buffer do I need? Build in extra capacity beyond requirements."
+                        explanation: "Margin of safety means building in a buffer between what you need and what you have. Engineers design bridges to hold 10x their expected load. Value investors buy stocks at significant discounts to their calculated worth. The margin accounts for errors in your estimates, unexpected events, and the fundamental uncertainty of the future. The greater the stakes and uncertainty, the larger the margin should be.",
+                        example: "You're planning a product launch with a deadline of March 1st. Your best estimate says you'll finish February 15th. Without margin of safety, you commit to March 1st. With margin of safety, you recognize that estimates are often wrong—unexpected bugs, sick team members, scope changes. You either commit to March 15th (giving yourself buffer) or work backward from March 1st and plan to finish January 15th internally.",
+                        prompts: [
+                            "What's the minimum you need for this to work? Now, what buffer should you add?",
+                            "What could go wrong that would consume your margin? Is your buffer large enough?",
+                            "Where are you cutting it too close? What happens if your estimates are 50% off?",
+                            "How severe would failure be? (Higher stakes = larger margin needed)"
+                        ],
+                        warnings: [
+                            "Too much margin can be wasteful or cause you to miss opportunities",
+                            "Margin of safety is not a substitute for good planning—it's insurance against uncertainty",
+                            "The margin should scale with the stakes and your uncertainty level"
+                        ],
+                        relatedModels: ["Expected Value", "Pre-mortem", "Redundancy"]
                     },
                     {
                         name: "Inversion",
                         description: "Ask how to fail, then avoid that",
-                        prompt: "What guarantees failure? Instead of asking how to succeed, ask how to fail—then avoid that."
+                        explanation: "Inversion means approaching a problem backward. Instead of asking 'How do I achieve success?' ask 'How do I guarantee failure?' Then avoid those things. Carl Jacobi, the mathematician, said 'Invert, always invert.' Many problems are easier to solve in reverse. Avoiding stupidity is often easier than seeking brilliance. If you avoid all the ways to fail, what remains is more likely to succeed.",
+                        example: "Instead of asking 'How do I build a great company?' ask 'How do I guarantee my company fails?' Answers: ignore customers, hire poorly, run out of cash, move slowly, have no clear strategy, let politics dominate. Now you have a clear list of things to avoid. Success isn't guaranteed, but failure becomes less likely.",
+                        prompts: [
+                            "What would guarantee failure in this situation? List at least 5 ways.",
+                            "Which of these failure modes are you currently at risk of?",
+                            "What's the opposite of success here? How do you avoid that?",
+                            "If a competitor wanted to sabotage this, what would they do?"
+                        ],
+                        warnings: [
+                            "Inversion reveals what to avoid, but doesn't automatically tell you what to do",
+                            "Some failure modes are more likely than others—prioritize avoiding the probable ones",
+                            "Don't become so focused on avoiding failure that you become paralyzed"
+                        ],
+                        relatedModels: ["Pre-mortem", "Confirmation Bias Recognition", "First Principles"]
                     },
                     {
                         name: "Reversible vs. Irreversible Decisions",
                         description: "Can you undo this decision",
-                        prompt: "How permanent is this? Can I undo it? How much caution is warranted?"
+                        explanation: "Jeff Bezos distinguishes between Type 1 decisions (irreversible, high-stakes—walk through a one-way door) and Type 2 decisions (reversible, lower-stakes—walk through a two-way door you can return through). Type 1 decisions warrant extensive analysis and caution. Type 2 decisions should be made quickly by individuals or small groups. Most decisions are Type 2, but we often treat them as Type 1, causing slowness and missed opportunities.",
+                        example: "Hiring a senior executive is Type 1—hard to undo, high impact, warrants extensive vetting. Choosing which A/B test to run is Type 2—easily reversible, limited downside, should be decided quickly. Many organizations agonize over Type 2 decisions as if they were Type 1, creating bureaucracy and slowness. Recognize the difference and match your decision-making process to the decision type.",
+                        prompts: [
+                            "If this decision turns out to be wrong, can you reverse it? At what cost?",
+                            "Is this a one-way door (Type 1) or a two-way door (Type 2)?",
+                            "Are you treating a reversible decision with irreversible-level caution? Why?",
+                            "What would make this decision more reversible? Can you structure it that way?"
+                        ],
+                        warnings: [
+                            "Some decisions look reversible but have hidden switching costs",
+                            "Time itself is irreversible—a reversible decision delayed is opportunity lost",
+                            "Don't use 'it's reversible' as an excuse to avoid thinking"
+                        ],
+                        relatedModels: ["Satisficing vs. Optimizing", "Minimum Viable Product (MVP)", "Margin of Safety"]
                     },
                     {
                         name: "Pre-mortem",
                         description: "Identify failure modes in advance",
-                        prompt: "If this failed spectacularly, what would have caused it? Identify failure modes in advance."
+                        explanation: "A pre-mortem is a thought experiment: imagine your project has failed spectacularly, then work backward to identify what caused the failure. Unlike a post-mortem (which analyzes actual failure after the fact), a pre-mortem harnesses hindsight bias proactively. Research by Gary Klein shows that pre-mortems increase the ability to identify reasons for future outcomes by 30%. It's easier to generate reasons for a known outcome than to predict an unknown one.",
+                        example: "Before launching a new product, gather your team and say: 'It's one year from now. The product launch was a disaster. What happened?' Team members write down reasons independently, then share. Common answers: 'We underestimated competitor response,' 'Key engineer quit mid-project,' 'Customer needs changed,' 'We missed a critical bug.' Now you have a risk register and can address these proactively.",
+                        prompts: [
+                            "Imagine this has failed completely. What went wrong? Generate at least 5 reasons.",
+                            "Which of these failure modes are most likely? Most severe?",
+                            "What can you do NOW to prevent or mitigate these failure modes?",
+                            "What early warning signs would indicate you're heading toward failure?"
+                        ],
+                        warnings: [
+                            "Pre-mortems reveal risks but don't eliminate them—you must act on the insights",
+                            "Don't let the exercise create excessive pessimism or paralysis",
+                            "Revisit your pre-mortem periodically as conditions change"
+                        ],
+                        relatedModels: ["Inversion", "Margin of Safety", "Second-Order Thinking"]
                     },
                     {
                         name: "Antifragility",
                         description: "Benefit from volatility",
-                        prompt: "How can I benefit from volatility? What gets stronger under stress?"
+                        explanation: "Antifragility, coined by Nassim Taleb, describes things that gain from disorder, stress, and volatility. Fragile things break under stress (a glass). Robust things resist stress (a rock). Antifragile things get stronger from stress (muscles, immune systems, some businesses). In an uncertain world, being antifragile is better than being robust. Instead of just protecting against volatility, position yourself to benefit from it.",
+                        example: "A restaurant with one location is fragile—a local recession destroys it. A franchise system is robust—problems in one location don't kill the business. A restaurant consulting business is antifragile—during recessions, struggling restaurants need more help, increasing demand. The consultant benefits from the same volatility that harms individual restaurants.",
+                        prompts: [
+                            "Is this fragile (harmed by stress), robust (unaffected), or antifragile (benefits from stress)?",
+                            "How could you restructure to benefit from volatility rather than just survive it?",
+                            "What stressors or challenges could actually make this stronger?",
+                            "Where are you exposed to fragility? How can you reduce that exposure?"
+                        ],
+                        warnings: [
+                            "Antifragility often requires accepting small losses to gain from big volatility",
+                            "Not everything can or should be antifragile—sometimes robust is the right goal",
+                            "Building antifragility takes time; fragile systems fail before they adapt"
+                        ],
+                        relatedModels: ["Margin of Safety", "Redundancy", "Optionality"]
                     },
                     {
                         name: "Redundancy",
                         description: "Prevent single points of failure",
-                        prompt: "What backup systems prevent single points of failure? Where do I need duplicates?"
+                        explanation: "Redundancy means having backup systems, people, or resources that can take over if the primary fails. Single points of failure—where one component's failure brings down the whole system—are dangerous. Engineers build redundancy into critical systems: backup generators, RAID storage, multiple data centers. The cost of redundancy is usually far less than the cost of total failure.",
+                        example: "A startup's CTO is the only person who understands the core codebase. If they get sick, quit, or get hit by a bus, the company is paralyzed. This is a single point of failure. Solutions: documentation, cross-training other engineers, pair programming, code reviews. The 'bus factor' asks: how many people would need to be hit by a bus before the project fails? You want that number to be high.",
+                        prompts: [
+                            "What are the single points of failure in this situation? (People, systems, resources)",
+                            "If [critical component] failed, what would happen? How would you recover?",
+                            "What's the cost of adding redundancy vs. the cost of failure?",
+                            "What's your 'bus factor'? What happens if key people become unavailable?"
+                        ],
+                        warnings: [
+                            "Redundancy costs money, time, and complexity—don't over-engineer",
+                            "Redundant systems need testing; unused backups may not work when needed",
+                            "Perfect redundancy is impossible; prioritize the most critical failure points"
+                        ],
+                        relatedModels: ["Margin of Safety", "Antifragility", "Critical Path"]
                     },
                     {
                         name: "Precautionary Principle",
                         description: "When unknown risks are too great",
-                        prompt: "When is caution warranted despite uncertainty? When are unknown risks too great?"
+                        explanation: "The Precautionary Principle states that when an action raises threats of harm that are uncertain but potentially catastrophic, precautionary measures should be taken even without full scientific certainty. It's asymmetric risk management: when the downside is unbounded or irreversible, the burden of proof should be on those claiming safety, not those claiming danger. This applies when you don't know what you don't know.",
+                        example: "A pharmaceutical company has a drug that shows promising early results. Long-term effects are unknown. The precautionary principle suggests: don't rush to market based on short-term data when the downside (unforeseen side effects affecting millions) could be catastrophic and irreversible. The potential benefit of being first must be weighed against the potential harm of being wrong.",
+                        prompts: [
+                            "What's the worst-case scenario? Is it catastrophic or irreversible?",
+                            "How well do you understand the risks? What are the known unknowns and unknown unknowns?",
+                            "Who bears the burden of proof—those claiming safety or those claiming danger?",
+                            "Is the potential upside worth the potential (even if uncertain) catastrophic downside?"
+                        ],
+                        warnings: [
+                            "Over-application leads to paralysis; not every risk warrants extreme caution",
+                            "The precautionary principle itself has costs—delayed benefits, missed opportunities",
+                            "Use for potentially catastrophic/irreversible outcomes, not routine decisions"
+                        ],
+                        relatedModels: ["Margin of Safety", "Reversible vs. Irreversible Decisions", "Expected Value"]
                     }
                 ]
             },
@@ -1554,37 +1916,128 @@
                     {
                         name: "First Principles (Generative)",
                         description: "Rebuild from scratch differently",
-                        prompt: "Can we rebuild this differently from scratch? Ignore 'how it's always been done.'"
+                        explanation: "First Principles thinking in its generative form asks: if we were starting from scratch with no legacy constraints, how would we build this? It's the creative counterpart to diagnostic First Principles. While the diagnostic version breaks down what exists, the generative version reimagines what could be. This is how breakthroughs happen—by refusing to accept inherited constraints that may no longer apply.",
+                        example: "Traditional car companies asked: 'How do we make better gas stations?' Tesla asked: 'If we were starting from scratch, would we build gas stations at all?' The answer was home charging and superchargers strategically placed. They didn't improve the existing solution; they rebuilt the problem from first principles. The result was a fundamentally different (and better) fueling infrastructure.",
+                        prompts: [
+                            "If you were starting completely from scratch today, how would you design this?",
+                            "What legacy constraints are you accepting that a new entrant wouldn't have?",
+                            "What would a solution look like if you ignored 'how it's always been done'?",
+                            "If this industry/problem didn't exist, and you were inventing it today, what would you build?"
+                        ],
+                        warnings: [
+                            "Existing solutions often have good reasons—understand before discarding",
+                            "From-scratch thinking ignores switching costs and adoption challenges",
+                            "Revolutionary ideas need evolutionary implementation plans"
+                        ],
+                        relatedModels: ["First Principles", "Constraint Removal", "Reframing"]
                     },
                     {
                         name: "Lateral Thinking",
                         description: "Approach from different angle",
-                        prompt: "What if we approached from a different angle? What's an indirect path?"
+                        explanation: "Lateral thinking, coined by Edward de Bono, means approaching problems indirectly and creatively rather than through traditional step-by-step logic. While vertical thinking digs deeper in the same hole, lateral thinking digs a new hole in a different location. It involves deliberately moving sideways from the expected path to discover new approaches that wouldn't emerge from linear analysis.",
+                        example: "A hospital struggled with slow elevators and patient complaints. The obvious solution: faster elevators (expensive, disruptive). The lateral solution: install mirrors on each floor. Patients stopped complaining—not because elevators were faster, but because they were distracted checking their appearance. The actual problem wasn't elevator speed; it was perceived wait time.",
+                        prompts: [
+                            "What if you approached this from a completely different direction?",
+                            "What's an indirect path to the same goal? What would a non-expert try?",
+                            "What assumptions are you making about HOW this must be solved?",
+                            "What would you do if the obvious approach were impossible?"
+                        ],
+                        warnings: [
+                            "Lateral thinking complements, not replaces, logical analysis",
+                            "Not every problem needs a creative solution—sometimes the obvious answer is correct",
+                            "Novelty isn't inherently valuable; the lateral solution must actually work"
+                        ],
+                        relatedModels: ["Reframing", "Constraint Removal", "Analogical Thinking"]
                     },
                     {
                         name: "Combinatorial Thinking",
                         description: "Merge X and Y for new combinations",
-                        prompt: "What happens if we merge X and Y? What new combinations are possible?"
+                        explanation: "Combinatorial thinking creates new ideas by combining existing elements in novel ways. Most innovations aren't created from nothing—they're new combinations of existing ideas, technologies, or concepts. The iPhone combined a phone, music player, and internet device. Uber combined GPS, smartphones, and ride services. The power comes from seeing connections others miss.",
+                        example: "Netflix started as a combination: DVD rental (existing) + mail delivery (existing) + no late fees (existing concept, new application). Later, they combined streaming technology + original content production + data-driven recommendations. Each evolution was a new combination of existing elements. What existing elements in your domain could be combined differently?",
+                        prompts: [
+                            "What two existing things could you combine to create something new?",
+                            "What works well in adjacent industries that you could adapt?",
+                            "If you merged your solution with [random other concept], what would result?",
+                            "What are the individual components here? What happens if you recombine them?"
+                        ],
+                        warnings: [
+                            "Not all combinations are valuable—the combination must solve a real need",
+                            "Combination complexity can create integration challenges",
+                            "The best combinations often seem obvious in retrospect"
+                        ],
+                        relatedModels: ["Analogical Thinking", "First Principles (Generative)", "Blue Ocean Strategy"]
                     },
                     {
                         name: "Constraint Removal",
                         description: "Challenge assumed limitations",
-                        prompt: "What if this limitation didn't exist? Challenge your assumptions about what's fixed."
+                        explanation: "Constraint removal asks: what if a perceived limitation didn't exist? Many constraints we accept are assumptions, not laws of physics. By systematically questioning each constraint, we often discover that limits are self-imposed or outdated. Even constraints that can't be removed can often be worked around once you see them clearly. The first step to removing a constraint is recognizing you've accepted one.",
+                        example: "For decades, the assumption was 'people won't pay for bottled water—it's free from the tap.' This constraint was an assumption, not a fact. By questioning it, entrepreneurs created a multi-billion dollar industry. The constraint 'people won't pay for X' is almost always worth challenging. What constraints are you accepting that might not be real?",
+                        prompts: [
+                            "What constraints are you assuming? List them all—budget, time, resources, rules, physics.",
+                            "For each constraint: Is this truly fixed, or is it an assumption?",
+                            "What would you do if [constraint X] didn't exist?",
+                            "Which constraint, if removed, would change everything? Can you challenge it?"
+                        ],
+                        warnings: [
+                            "Some constraints are real and important—don't ignore physics or ethics",
+                            "Removing constraints often shifts problems rather than solving them",
+                            "Social and organizational constraints may be harder to change than technical ones"
+                        ],
+                        relatedModels: ["First Principles (Generative)", "Reframing", "Lateral Thinking"]
                     },
                     {
                         name: "Analogical Thinking",
                         description: "Learn from different domains",
-                        prompt: "How is this like something else entirely? What can we learn from different domains?"
+                        explanation: "Analogical thinking transfers solutions from one domain to another. Many breakthroughs come from asking 'How did they solve a similar problem in a completely different field?' Resistance to this is common—'our industry is different'—but the underlying patterns often transfer. The key is finding the right level of abstraction where the analogy holds.",
+                        example: "The designers of the Shinkansen bullet train faced a problem: sonic booms when exiting tunnels. An engineer who was also a birdwatcher noticed kingfishers dive into water without a splash. The kingfisher's beak shape was adapted for the train's nose, solving the sonic boom problem and improving efficiency by 15%. A solution from ornithology applied to engineering.",
+                        prompts: [
+                            "What's a similar problem that's been solved in a completely different field?",
+                            "How would [different industry/discipline] approach this problem?",
+                            "What's the abstract structure of this problem? Where else does that structure appear?",
+                            "If a biologist/engineer/artist/economist looked at this, what would they see?"
+                        ],
+                        warnings: [
+                            "Analogies can mislead—not all similarities are relevant",
+                            "The analogy may transfer the solution but not the implementation details",
+                            "'Our industry is different' is often wrong, but sometimes right"
+                        ],
+                        relatedModels: ["Combinatorial Thinking", "Lateral Thinking", "Reframing"]
                     },
                     {
                         name: "Reframing",
                         description: "Define the problem differently",
-                        prompt: "What changes if we define the problem differently? Is there another way to see this?"
+                        explanation: "Reframing changes how you define the problem itself. A different frame leads to different solutions. Most problem-solving assumes the problem is correctly defined, but often the definition is the problem. Einstein allegedly said, 'If I had an hour to solve a problem, I'd spend 55 minutes defining the problem and 5 minutes solving it.' The way you frame a problem determines which solutions are visible.",
+                        example: "A dog food company struggled to increase market share. Original frame: 'How do we make dog food that dogs like more?' Reframe: 'How do we make dog food that dog OWNERS feel good about buying?' The problem wasn't canine preference—dogs will eat almost anything. The problem was owner guilt and identity. The reframe led to premium, 'healthy' dog food with human-grade ingredients.",
+                        prompts: [
+                            "How are you currently defining this problem? Write it down explicitly.",
+                            "What are three other ways you could define the same situation?",
+                            "Who else has a stake in this? How would they frame the problem?",
+                            "What if the problem is actually [different than you assumed]?"
+                        ],
+                        warnings: [
+                            "Reframing can be used to avoid hard truths—make sure the new frame is honest",
+                            "Some problems are correctly framed; reframing isn't always necessary",
+                            "Multiple frames can coexist; you don't have to choose just one"
+                        ],
+                        relatedModels: ["First Principles", "Lateral Thinking", "Constraint Removal"]
                     },
                     {
                         name: "Blue Ocean Strategy",
                         description: "Find uncontested market space",
-                        prompt: "Where is the uncontested market space? How can we make competition irrelevant?"
+                        explanation: "Blue Ocean Strategy, from the book by Kim and Mauborgne, contrasts 'red oceans' (existing markets with fierce competition, bloody with rivalry) with 'blue oceans' (new market spaces where competition is irrelevant). Instead of fighting over existing demand, blue ocean thinking creates new demand. It asks: how do we make the competition irrelevant by creating a new value proposition?",
+                        example: "Cirque du Soleil didn't try to out-compete Ringling Brothers for circus customers. They created a blue ocean by combining circus arts with theater, targeting adults willing to pay premium prices for sophisticated entertainment. They eliminated costly elements (animals, star performers, multiple show arenas) and added new ones (artistic themes, refined environment, multiple productions). They didn't win the circus industry; they made it irrelevant.",
+                        prompts: [
+                            "What industry factors could you eliminate that the industry takes for granted?",
+                            "What factors could you reduce well below the industry standard?",
+                            "What factors could you raise well above the industry standard?",
+                            "What factors could you create that the industry has never offered?"
+                        ],
+                        warnings: [
+                            "Blue oceans don't stay blue forever—success attracts competition",
+                            "Creating new markets is riskier than competing in known ones",
+                            "Customers may not know they want something that doesn't exist yet"
+                        ],
+                        relatedModels: ["First Principles (Generative)", "Reframing", "Combinatorial Thinking"]
                     }
                 ]
             },
@@ -1597,37 +2050,128 @@
                     {
                         name: "Minimum Viable Product (MVP)",
                         description: "Smallest testable version",
-                        prompt: "What's the smallest testable version? Start with the minimum that provides learning."
+                        explanation: "An MVP is the smallest version of your idea that lets you learn whether you're on the right track. It's not about building something minimal and bad—it's about finding the fastest path to validated learning. The goal isn't to ship; it's to learn. What's the smallest thing you can build to test your most critical assumption? Build that, learn, then iterate.",
+                        example: "Dropbox's MVP wasn't a working product—it was a 3-minute video demonstrating how the product would work. This tested the critical assumption: 'Do people want simple file syncing?' The video went viral, proving demand before a single line of code was written. The MVP matched the learning need, not the eventual product vision.",
+                        prompts: [
+                            "What's the riskiest assumption in your plan? How could you test it quickly?",
+                            "What's the smallest version that would teach you something valuable?",
+                            "What can you remove from the plan and still learn what you need?",
+                            "If you only had one week, what would you build to validate the core idea?"
+                        ],
+                        warnings: [
+                            "MVP doesn't mean 'crappy first version'—it should still deliver value",
+                            "Some things (safety-critical, trust-dependent) can't be MVP'd",
+                            "Learning requires actually launching and getting real feedback, not just building"
+                        ],
+                        relatedModels: ["Feedback Loops", "Reversible vs. Irreversible Decisions", "80/20 Action"]
                     },
                     {
                         name: "Feedback Loops",
                         description: "Track if this is working",
-                        prompt: "How do I know if this is working? What metrics tell me I'm on track?"
+                        explanation: "Feedback loops are systems where outputs cycle back as inputs, allowing for adjustment and improvement. Fast, accurate feedback is essential for learning and course-correction. Without feedback, you can't know if you're succeeding or failing. The key questions are: What signals tell me this is working? How quickly do I get them? How reliable are they?",
+                        example: "A sales team implementing a new script needs feedback loops. Lagging indicator: quarterly revenue (too slow). Leading indicators: call-to-meeting conversion rate (weekly), meeting-to-close rate (weekly), customer satisfaction scores (monthly). By tracking leading indicators, they can adjust the script before quarterly results reveal problems.",
+                        prompts: [
+                            "How will you know if this is working? What specific metrics or signals?",
+                            "How quickly will you get feedback? Can you shorten that cycle?",
+                            "What's the difference between leading indicators (early signals) and lagging indicators (final results)?",
+                            "What feedback mechanisms need to be built into this plan?"
+                        ],
+                        warnings: [
+                            "Measuring the wrong thing creates bad feedback loops—choose metrics carefully",
+                            "Feedback can be gamed; look at multiple signals",
+                            "Too much feedback can cause overreaction; not every signal needs a response"
+                        ],
+                        relatedModels: ["Minimum Viable Product (MVP)", "Systems Thinking", "Compound Interest"]
                     },
                     {
                         name: "Compound Interest",
                         description: "Small actions, exponential results",
-                        prompt: "What small thing, repeated, creates exponential results? What compounds over time?"
+                        explanation: "Compound interest isn't just financial—it's a universal principle. Small, consistent actions compound over time into exponential results. The effects are non-linear: 1% improvement daily = 37x improvement annually. The key insight is that early results feel insignificantly small, but the back end of compounding is dramatic. Patience and consistency are required to reach the hockey stick.",
+                        example: "Writing for 30 minutes daily seems trivial. Day 1: 500 words. Day 30: 15,000 words. Day 365: 180,000 words—two full books. Plus, your writing skill improves, making each session more productive. The compounding isn't just in output but in capability. Most people overestimate what they can do in a day and underestimate what they can do in a year.",
+                        prompts: [
+                            "What small action, repeated consistently, would compound over time?",
+                            "Where are you expecting immediate results when compounding requires patience?",
+                            "What skills, relationships, or assets could you build that grow exponentially?",
+                            "What's the 1% improvement you could make today that compounds?"
+                        ],
+                        warnings: [
+                            "Compounding requires consistency—interrupted compound growth resets to zero",
+                            "Negative behaviors compound too—bad habits, debt, toxic relationships",
+                            "Early compounding feels like nothing is happening; don't give up"
+                        ],
+                        relatedModels: ["Habit Stacking", "Leverage", "Feedback Loops"]
                     },
                     {
                         name: "Leverage",
                         description: "Small effort, big impact",
-                        prompt: "Where does small effort create disproportionate impact? Find the highest-leverage activities."
+                        explanation: "Leverage is getting more output per unit of input. Archimedes said, 'Give me a lever long enough and I shall move the world.' Leverage comes in many forms: tools that multiply effort, skills that command premium value, systems that work while you sleep, relationships that open doors. The highest performers don't work hardest—they find the highest-leverage activities and focus there.",
+                        example: "A consultant can trade time for money (low leverage) or create a course that sells while they sleep (high leverage). The course requires the same expertise but scales infinitely. Other leverage: hiring (multiply through others), code (multiply through software), media (multiply through audience), capital (multiply through investment).",
+                        prompts: [
+                            "Where could you get 10x results from the same effort? What's the leverage point?",
+                            "What tools, systems, or relationships could multiply your effectiveness?",
+                            "Are you doing high-leverage work, or are you busy with low-leverage tasks?",
+                            "What's the one activity where your effort would have disproportionate impact?"
+                        ],
+                        warnings: [
+                            "Leverage amplifies both good and bad decisions—be sure you're right",
+                            "High-leverage positions often require building skills or assets first",
+                            "Not everything can or should be leveraged—some things require direct effort"
+                        ],
+                        relatedModels: ["Pareto Principle (80/20)", "80/20 Action", "Compound Interest"]
                     },
                     {
                         name: "Critical Path",
                         description: "Sequence and dependencies",
-                        prompt: "What must happen in what sequence? Identify dependencies and bottlenecks."
+                        explanation: "The critical path is the longest sequence of dependent tasks that determines the minimum project duration. Tasks on the critical path have zero slack—if any of them slip, the whole project slips. Understanding the critical path reveals where to focus attention, what can be done in parallel, and where delays are fatal. Not all tasks are equal; critical path tasks deserve disproportionate attention.",
+                        example: "Building a house: you can't install electrical until walls are up; can't paint until electrical is done; can't move in until paint dries. This is the critical path. Meanwhile, landscaping can happen in parallel—it's not on the critical path. A delay in landscaping doesn't delay move-in; a delay in electrical delays everything downstream.",
+                        prompts: [
+                            "What tasks must be completed before others can start? Map the dependencies.",
+                            "What's the longest chain of dependent tasks? That's your critical path.",
+                            "What can be done in parallel while waiting for critical path tasks?",
+                            "Where are the bottlenecks? What would happen if they were delayed?"
+                        ],
+                        warnings: [
+                            "The critical path can change as the project evolves—reassess regularly",
+                            "Near-critical paths can become critical if they slip",
+                            "Dependencies aren't always obvious—hidden dependencies cause surprises"
+                        ],
+                        relatedModels: ["Redundancy", "Feedback Loops", "80/20 Action"]
                     },
                     {
                         name: "80/20 Action",
                         description: "Focus on highest-impact actions",
-                        prompt: "What 20% of actions drive 80% of results? Focus ruthlessly."
+                        explanation: "80/20 Action applies the Pareto Principle to execution: identify and focus ruthlessly on the 20% of actions that will drive 80% of results. Most people spread effort evenly across tasks, but impact is not evenly distributed. The discipline is saying no to the merely good so you can say yes to the truly important. Ruthless prioritization beats scattered effort.",
+                        example: "A startup founder's to-do list has 50 items. 80/20 analysis reveals: 10 items relate to closing the next big customer (potential: company survival). 40 items are 'nice to have' operational improvements. Focus intensely on the 10 items. The 40 can wait or be delegated. The founder who does everything does nothing important.",
+                        prompts: [
+                            "Of all the things you could do, which few will drive most of the results?",
+                            "What's on your list that feels productive but doesn't actually move the needle?",
+                            "If you could only accomplish 3 things this week, which would matter most?",
+                            "What would you stop doing if you were forced to cut half your activities?"
+                        ],
+                        warnings: [
+                            "The vital few change over time; what was 80/20 yesterday may not be today",
+                            "Some foundational work doesn't show immediate results but enables later 80/20",
+                            "Extreme focus can cause you to miss important but non-obvious opportunities"
+                        ],
+                        relatedModels: ["Pareto Principle (80/20)", "Leverage", "Critical Path"]
                     },
                     {
                         name: "Habit Stacking",
                         description: "Link to established routines",
-                        prompt: "How do I attach new behaviors to existing ones? Link to established routines."
+                        explanation: "Habit stacking links new behaviors to existing habits, using established routines as triggers for new ones. The formula: 'After I [existing habit], I will [new habit].' This works because existing habits are already wired into your brain's autopilot. By attaching new behaviors to existing ones, you borrow the existing habit's triggering power. The chain of habits becomes a single automatic routine.",
+                        example: "Goal: daily journaling. Existing habit: morning coffee. Stack: 'After I pour my morning coffee, I will write in my journal for 5 minutes.' The coffee triggers the journaling automatically. Over time, the stack becomes: coffee → journal → review calendar → start top priority task. One anchor habit can trigger an entire morning routine.",
+                        prompts: [
+                            "What habits do you already do reliably every day? List them.",
+                            "What new behavior do you want to establish?",
+                            "After which existing habit could you naturally insert the new behavior?",
+                            "What's the smallest version of the new habit you could stack? (Start tiny)"
+                        ],
+                        warnings: [
+                            "The trigger habit must be reliable—don't stack on inconsistent behaviors",
+                            "Start with tiny habits; don't stack ambitious behaviors onto existing routines",
+                            "If the stack breaks, rebuild from the most reliable anchor habit"
+                        ],
+                        relatedModels: ["Compound Interest", "Feedback Loops", "Minimum Viable Product (MVP)"]
                     }
                 ]
             }
@@ -1735,16 +2279,13 @@
         const clearNotepadBtn = document.getElementById('clearNotepad');
         const copyNotepadBtn = document.getElementById('copyNotepad');
         
-        // Drawer elements
+        // Panel elements
+        const panelLeft = document.getElementById('panelLeft');
+        const panelRight = document.getElementById('panelRight');
         const logToggle = document.getElementById('logToggle');
         const notepadToggle = document.getElementById('notepadToggle');
-        const drawer = document.getElementById('drawer');
-        const drawerToggle = document.getElementById('drawerToggle');
-        const drawerClose = document.getElementById('drawerClose');
-        const logTab = document.getElementById('logTab');
-        const notepadTab = document.getElementById('notepadTab');
-        const logSection = document.getElementById('logSection');
-        const notepadSection = document.getElementById('notepadSection');
+        const panelLeftClose = document.getElementById('panelLeftClose');
+        const panelRightClose = document.getElementById('panelRightClose');
 
         // Render Problem Type Selector
         function renderProblemTypeSelector() {
@@ -1809,36 +2350,48 @@
             saveBtn.textContent = 'Add to Log';
         }
 
-        // Setup Drawer Controls
+        // Setup Panel Controls
         function setupDrawers() {
-            drawerToggle.addEventListener('click', toggleDrawer);
-            drawerClose.addEventListener('click', closeDrawer);
-            logTab.addEventListener('click', () => switchTab('log'));
-            notepadTab.addEventListener('click', () => switchTab('notepad'));
+            logToggle.addEventListener('click', toggleRightPanel);
+            notepadToggle.addEventListener('click', toggleLeftPanel);
+            panelRightClose.addEventListener('click', closeRightPanel);
+            panelLeftClose.addEventListener('click', closeLeftPanel);
         }
 
-        function toggleDrawer() {
-            drawer.classList.toggle('open');
-            drawerToggle.classList.toggle('active');
+        function toggleRightPanel() {
+            panelRight.classList.toggle('open');
+            logToggle.classList.toggle('active');
+            document.body.classList.toggle('panel-right-open');
         }
 
-        function closeDrawer() {
-            drawer.classList.remove('open');
-            drawerToggle.classList.remove('active');
+        function toggleLeftPanel() {
+            panelLeft.classList.toggle('open');
+            notepadToggle.classList.toggle('active');
+            document.body.classList.toggle('panel-left-open');
         }
 
-        function switchTab(tab) {
-            if (tab === 'log') {
-                logTab.classList.add('active');
-                notepadTab.classList.remove('active');
-                logSection.classList.add('active');
-                notepadSection.classList.remove('active');
-            } else {
-                notepadTab.classList.add('active');
-                logTab.classList.remove('active');
-                notepadSection.classList.add('active');
-                logSection.classList.remove('active');
-            }
+        function closeRightPanel() {
+            panelRight.classList.remove('open');
+            logToggle.classList.remove('active');
+            document.body.classList.remove('panel-right-open');
+        }
+
+        function closeLeftPanel() {
+            panelLeft.classList.remove('open');
+            notepadToggle.classList.remove('active');
+            document.body.classList.remove('panel-left-open');
+        }
+
+        function openRightPanel() {
+            panelRight.classList.add('open');
+            logToggle.classList.add('active');
+            document.body.classList.add('panel-right-open');
+        }
+
+        function openLeftPanel() {
+            panelLeft.classList.add('open');
+            notepadToggle.classList.add('active');
+            document.body.classList.add('panel-left-open');
         }
 
         // Setup Event Listeners
@@ -2117,15 +2670,13 @@
                 problemReference.classList.add('visible');
             }, 100);
             
-            // Delay log rendering and drawer opening to sync with animation
+            // Delay log rendering and panel opening to sync with animation
             setTimeout(() => {
                 renderLogEntries();
                 saveToLocalStorage();
-                
-                // Open drawer and show log tab
-                drawer.classList.add('open');
-                drawerToggle.classList.add('active');
-                switchTab('log');
+
+                // Open decision log panel
+                openRightPanel();
             }, 400);
             
             // Add problem description to notepad automatically
@@ -2189,11 +2740,9 @@
             renderLogEntries();
             clearCurrentResponse();
             saveToLocalStorage();
-            
-            // Open drawer and show log tab
-            drawer.classList.add('open');
-            drawerToggle.classList.add('active');
-            switchTab('log');
+
+            // Open decision log panel
+            openRightPanel();
         }
 
         // Render Log Entries
@@ -2339,11 +2888,11 @@
             phaseNavigation.classList.remove('revealed');
             modelsSection.classList.remove('revealed');
             workArea.classList.remove('slide-down');
-            
-            // Close drawers
-            drawer.classList.remove('open');
-            drawerToggle.classList.remove('active');
-            
+
+            // Close panels
+            closeRightPanel();
+            closeLeftPanel();
+
             // Reorder DOM back to initial state (work area first)
             mainContent.insertBefore(workArea, phaseNavigation);
             
