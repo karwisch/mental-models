@@ -711,6 +711,164 @@
             font-size: 0.8rem;
         }
 
+        /* Expanded Model Content Styles */
+        .selected-model-display.expanded {
+            padding: 1rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .model-header {
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--teal);
+        }
+
+        .model-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: var(--teal);
+            margin-bottom: 0.25rem;
+        }
+
+        .model-header .model-tagline {
+            font-size: 0.85rem;
+            color: var(--charcoal);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .model-section {
+            margin-bottom: 1rem;
+        }
+
+        .model-section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--mauve);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .model-section-title::before {
+            content: '';
+            width: 3px;
+            height: 14px;
+            background: var(--mauve);
+            border-radius: 2px;
+        }
+
+        .model-explanation {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--charcoal);
+        }
+
+        .model-example {
+            background: linear-gradient(135deg, rgba(27, 127, 146, 0.08), rgba(27, 127, 146, 0.03));
+            border-left: 3px solid var(--teal);
+            padding: 0.75rem;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--charcoal);
+        }
+
+        .model-prompts-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .model-prompts-list li {
+            position: relative;
+            padding: 0.5rem 0.75rem 0.5rem 1.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--cream);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .model-prompts-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0.5rem;
+            color: var(--teal);
+            font-weight: bold;
+        }
+
+        .model-prompts-list li:hover {
+            background: linear-gradient(135deg, rgba(27, 127, 146, 0.1), var(--cream));
+            border-color: var(--teal);
+        }
+
+        .model-prompts-list li.selected-prompt {
+            background: linear-gradient(135deg, rgba(27, 127, 146, 0.15), rgba(27, 127, 146, 0.08));
+            border-color: var(--teal);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.15);
+        }
+
+        .model-warnings {
+            background: linear-gradient(135deg, rgba(179, 98, 120, 0.08), rgba(179, 98, 120, 0.03));
+            border-left: 3px solid var(--mauve);
+            padding: 0.75rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .model-warnings ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .model-warnings li {
+            font-size: 0.75rem;
+            color: var(--charcoal);
+            padding: 0.25rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .model-warnings li::before {
+            content: '⚠';
+            position: absolute;
+            left: 0;
+            color: var(--mauve);
+        }
+
+        .model-related {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .model-related-tag {
+            background: var(--cream);
+            border: 1px solid #ddd;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: var(--charcoal);
+            opacity: 0.8;
+        }
+
+        .prompt-instruction {
+            font-size: 0.75rem;
+            color: var(--teal);
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
         textarea {
             width: 100%;
             min-height: 80px;
@@ -1194,32 +1352,110 @@
                     {
                         name: "Circle of Competence",
                         description: "Know what you know vs. what you assume",
-                        prompt: "Are you qualified to assess this? What do you truly understand vs. what are you assuming?"
+                        explanation: "The Circle of Competence, popularized by Warren Buffett and Charlie Munger, helps you identify the boundaries of your true knowledge. Inside your circle are areas where you have genuine expertise through study, experience, or training. Outside are areas where you may have opinions but lack deep understanding. The key insight is that the size of your circle matters less than knowing its boundaries.",
+                        example: "A successful software engineer is asked to evaluate a commercial real estate investment. Despite being intelligent and analytical, real estate requires understanding of local markets, zoning laws, property management, and financing structures they've never studied. Their technical success doesn't transfer. Recognizing this, they either decline, find an expert partner, or invest significant time learning before deciding.",
+                        prompts: [
+                            "What specific expertise or experience do you have that's directly relevant to this situation?",
+                            "Where are you relying on assumptions, analogies, or 'common sense' rather than verified knowledge?",
+                            "If you had to teach someone the fundamentals of this domain, could you? What gaps would appear?",
+                            "Who has genuine expertise here that you could consult or defer to?"
+                        ],
+                        warnings: [
+                            "Confidence is not competence—feeling certain doesn't mean you're right",
+                            "Success in one domain doesn't automatically transfer to another",
+                            "The Dunning-Kruger effect: those with limited knowledge often overestimate their competence"
+                        ],
+                        relatedModels: ["First Principles", "Confirmation Bias Recognition"]
                     },
                     {
                         name: "Occam's Razor",
                         description: "The simplest explanation is usually correct",
-                        prompt: "What's the simplest explanation that fits the evidence?"
+                        explanation: "Occam's Razor (also called the principle of parsimony) states that when you have competing explanations for something, the one with the fewest assumptions is usually correct. This doesn't mean the simplest explanation is always right, but that you shouldn't add complexity without evidence. Each additional assumption multiplies the chances of error.",
+                        example: "Your laptop won't turn on. You could theorize: (A) the battery is dead, or (B) a power surge damaged the motherboard, which triggered a firmware corruption, which disabled the power button circuit. Occam's Razor says try charging the battery first. Don't assume a complex chain of failures when a simple explanation fits.",
+                        prompts: [
+                            "What is the simplest explanation that accounts for all the evidence you're seeing?",
+                            "How many assumptions does your current theory require? Can you list them?",
+                            "Are you adding complexity because of evidence, or because of anxiety, ego, or narrative appeal?",
+                            "What would you need to see to rule out the simpler explanation?"
+                        ],
+                        warnings: [
+                            "Simple doesn't mean easy or obvious—it means fewer moving parts",
+                            "Don't oversimplify: the explanation must still fit all the evidence",
+                            "Sometimes reality is genuinely complex; Occam's Razor is a starting point, not a conclusion"
+                        ],
+                        relatedModels: ["First Principles", "Root Cause Analysis"]
                     },
                     {
                         name: "First Principles",
                         description: "Break down to fundamental truths",
-                        prompt: "What are the fundamental truths here? Strip away assumptions and conventions."
+                        explanation: "First Principles thinking means breaking down a problem into its most basic, foundational truths—things you know to be true independent of convention, assumption, or analogy—and then building up from there. Instead of reasoning by analogy ('this is how it's always been done'), you ask 'what do we know for certain?' This approach, used by scientists and innovators from Aristotle to Elon Musk, often reveals that conventional limits are actually just conventions.",
+                        example: "When SpaceX started, rockets cost $65 million. Instead of accepting this, Musk asked: what are rockets made of? Aluminum, titanium, copper, carbon fiber. What do those materials cost on the commodity market? About 2% of the rocket price. The rest was inefficiency, tradition, and markup. By building from first principles rather than industry convention, SpaceX cut costs by 90%.",
+                        prompts: [
+                            "What are the fundamental truths or facts in this situation that you know to be true?",
+                            "What assumptions are you inheriting from convention, tradition, or 'how things are done'?",
+                            "If you had to explain this problem to someone with no context, what are the irreducible components?",
+                            "What would you do differently if you were starting from scratch with no constraints?"
+                        ],
+                        warnings: [
+                            "First principles thinking is mentally taxing—don't use it for every minor decision",
+                            "Be careful not to dismiss useful conventions just because they're conventional",
+                            "You still need domain knowledge to identify what the true fundamentals are"
+                        ],
+                        relatedModels: ["Circle of Competence", "Root Cause Analysis", "Systems Thinking"]
                     },
                     {
                         name: "Confirmation Bias Recognition",
                         description: "Challenge your assumptions",
-                        prompt: "Are you seeing reality or your assumptions? What evidence contradicts your view?"
+                        explanation: "Confirmation bias is our tendency to search for, interpret, favor, and recall information in a way that confirms our existing beliefs. We literally see what we expect to see. This isn't a character flaw—it's how human cognition works. The only defense is actively seeking disconfirmation: looking for evidence that proves you wrong, not right. Scientists call this 'falsification' and it's the foundation of the scientific method.",
+                        example: "A manager believes a team member is unmotivated. They start noticing every time the person arrives late or seems disengaged, while overlooking the quality work produced and the personal challenges the person may be facing. Each observation 'confirms' their belief. To counter this, they should actively look for evidence of motivation: projects completed, problems solved, ideas contributed.",
+                        prompts: [
+                            "What do you believe about this situation? State it clearly as a hypothesis.",
+                            "What evidence would prove your belief WRONG? Have you looked for it?",
+                            "Who disagrees with your view? What's the strongest version of their argument?",
+                            "If you woke up tomorrow and discovered you were completely wrong about this, what would be the first clue?"
+                        ],
+                        warnings: [
+                            "Seeking disconfirming evidence feels uncomfortable—that discomfort is a feature, not a bug",
+                            "You can't eliminate confirmation bias, only manage it through deliberate practice",
+                            "Being aware of the bias doesn't automatically protect you from it"
+                        ],
+                        relatedModels: ["Circle of Competence", "First Principles", "Inversion"]
                     },
                     {
                         name: "Root Cause Analysis",
                         description: "Find underlying causes, not symptoms",
-                        prompt: "What's the underlying cause vs. symptoms? Keep asking 'why' until you hit bedrock."
+                        explanation: "Root Cause Analysis is a systematic process of identifying the fundamental reason why a problem occurred, rather than just addressing surface symptoms. The most common technique is '5 Whys'—asking 'why' repeatedly until you reach a cause that, if addressed, would prevent recurrence. Treating symptoms provides temporary relief; treating root causes provides lasting solutions.",
+                        example: "A website keeps crashing. Symptom: server runs out of memory. Why? Too many database connections. Why? Connections aren't being closed properly. Why? Developers aren't following the connection pooling standard. Why? The standard isn't documented or enforced. Why? No code review process exists. Root cause: missing development process, not a technical bug. Fix the process, fix the problem permanently.",
+                        prompts: [
+                            "What is the immediate problem? Now ask: WHY is this happening?",
+                            "Take your answer and ask WHY again. Repeat at least 5 times.",
+                            "At what level of 'why' do you find something you can actually change or control?",
+                            "If you fixed this root cause, would the original problem be impossible or unlikely to recur?"
+                        ],
+                        warnings: [
+                            "Don't stop at the first 'why'—surface causes are rarely root causes",
+                            "There may be multiple root causes; don't assume there's only one",
+                            "Sometimes you need to treat symptoms urgently while working on root causes in parallel"
+                        ],
+                        relatedModels: ["First Principles", "Systems Thinking", "Occam's Razor"]
                     },
                     {
                         name: "Systems Thinking",
                         description: "See how parts interact",
-                        prompt: "How do the parts interact to create the whole? What feedback loops exist?"
+                        explanation: "Systems Thinking is a holistic approach that focuses on how components interrelate and work together over time within larger systems. Instead of analyzing parts in isolation, you examine feedback loops, delays, unintended consequences, and emergent behaviors. Many problems persist because solutions address components without understanding the system dynamics that created and maintain the problem.",
+                        example: "A city tries to reduce traffic by adding highway lanes. Initially traffic improves, but within two years it's worse than before. Why? The system responded: easier commutes attracted more drivers, developers built more suburbs, and the induced demand filled the new capacity. A systems view would have predicted this and suggested alternatives like congestion pricing or transit investment that change the feedback loops.",
+                        prompts: [
+                            "What are all the components or stakeholders in this system? How are they connected?",
+                            "What feedback loops exist? Are they reinforcing (amplifying) or balancing (stabilizing)?",
+                            "What are the delays in this system? How long before actions produce effects?",
+                            "If you made your proposed change, what secondary effects might ripple through the system?"
+                        ],
+                        warnings: [
+                            "Systems are often counter-intuitive: obvious solutions can backfire",
+                            "Delays between action and effect make it hard to learn from feedback",
+                            "You can't understand a system just by understanding its parts—emergence is real"
+                        ],
+                        relatedModels: ["Second-Order Thinking", "Root Cause Analysis", "First Principles"]
                     }
                 ]
             },
@@ -1689,25 +1925,126 @@
 
             // Clear previous selection
             document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
-            
+
             // Set new selection
             card.classList.add('selected');
             selectedModel = { ...model, phase: currentPhase };
 
-            // Update display
-            selectedModelDisplay.className = 'selected-model-display';
-            selectedModelDisplay.innerHTML = `
-                <div class="model-prompt"><strong>${model.name}</strong></div>
-                <div>${model.prompt}</div>
-            `;
+            // Check if this model has expanded content
+            if (model.prompts && model.explanation) {
+                // Render expanded model display
+                selectedModelDisplay.className = 'selected-model-display expanded';
+                selectedModelDisplay.innerHTML = renderExpandedModel(model);
+
+                // Set up prompt selection handlers
+                setupPromptSelection();
+            } else {
+                // Fallback to simple display for models not yet expanded
+                selectedModelDisplay.className = 'selected-model-display';
+                selectedModelDisplay.innerHTML = `
+                    <div class="model-prompt"><strong>${model.name}</strong></div>
+                    <div>${model.prompt}</div>
+                `;
+            }
 
             // Reset placeholder and button for model response
             responseInput.placeholder = "Apply this mental model to your situation...";
             responseInput.classList.remove('initial-entry');
             saveBtn.textContent = 'Add to Log';
-            
+
             // Focus textarea
             responseInput.focus();
+        }
+
+        // Render expanded model content
+        function renderExpandedModel(model) {
+            const promptsHtml = model.prompts.map((prompt, index) =>
+                `<li data-prompt="${escapeHtml(prompt)}">${prompt}</li>`
+            ).join('');
+
+            const warningsHtml = model.warnings ? model.warnings.map(w =>
+                `<li>${w}</li>`
+            ).join('') : '';
+
+            const relatedHtml = model.relatedModels ? model.relatedModels.map(r =>
+                `<span class="model-related-tag">${r}</span>`
+            ).join('') : '';
+
+            return `
+                <div class="model-header">
+                    <h3>${model.name}</h3>
+                    <div class="model-tagline">${model.description}</div>
+                </div>
+
+                <div class="model-section">
+                    <div class="model-section-title">What It Is</div>
+                    <div class="model-explanation">${model.explanation}</div>
+                </div>
+
+                <div class="model-section">
+                    <div class="model-section-title">Example</div>
+                    <div class="model-example">${model.example}</div>
+                </div>
+
+                <div class="model-section">
+                    <div class="model-section-title">Questions to Ask</div>
+                    <div class="prompt-instruction">Click a question to use it as your prompt:</div>
+                    <ul class="model-prompts-list">
+                        ${promptsHtml}
+                    </ul>
+                </div>
+
+                ${model.warnings ? `
+                <div class="model-section">
+                    <div class="model-section-title">Watch Out For</div>
+                    <div class="model-warnings">
+                        <ul>${warningsHtml}</ul>
+                    </div>
+                </div>
+                ` : ''}
+
+                ${model.relatedModels ? `
+                <div class="model-section">
+                    <div class="model-section-title">Related Models</div>
+                    <div class="model-related">${relatedHtml}</div>
+                </div>
+                ` : ''}
+            `;
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Set up click handlers for prompt selection
+        function setupPromptSelection() {
+            const promptItems = document.querySelectorAll('.model-prompts-list li');
+            promptItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove selection from others
+                    promptItems.forEach(p => p.classList.remove('selected-prompt'));
+                    // Add selection to clicked
+                    this.classList.add('selected-prompt');
+
+                    // Update the selected model's active prompt
+                    const selectedPrompt = this.getAttribute('data-prompt');
+                    if (selectedModel) {
+                        selectedModel.activePrompt = selectedPrompt;
+                    }
+
+                    // Update placeholder to show the selected question
+                    responseInput.placeholder = `Respond to: "${selectedPrompt.substring(0, 60)}${selectedPrompt.length > 60 ? '...' : ''}"`;
+                    responseInput.focus();
+                });
+            });
+
+            // Auto-select first prompt
+            if (promptItems.length > 0) {
+                promptItems[0].click();
+            }
         }
 
         // Create Flying Entry Animation
@@ -1843,7 +2180,7 @@
                 id: nextLogId++,
                 phase: selectedModel.phase,
                 modelName: selectedModel.name,
-                modelPrompt: selectedModel.prompt,
+                modelPrompt: selectedModel.activePrompt || selectedModel.prompt,
                 response: responseInput.value.trim(),
                 timestamp: new Date().toLocaleString()
             };
