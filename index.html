@@ -460,100 +460,6 @@
             left: 350px;
         }
 
-        /* Drawer Panels - keeping for backwards compatibility during transition */
-        .drawer-panel {
-            position: fixed;
-            top: 0;
-            right: -450px;
-            width: 450px;
-            height: 100vh;
-            background: white;
-            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
-            transition: right 0.3s ease;
-            z-index: 90;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .drawer-panel.open {
-            right: 0;
-        }
-
-        .drawer-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem;
-            border-bottom: 1px solid #e0e0e0;
-            background: var(--cream);
-            flex-shrink: 0;
-        }
-
-        .drawer-tabs {
-            display: flex;
-            gap: 0.5rem;
-            flex: 1;
-        }
-
-        .drawer-tab {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid transparent;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--charcoal);
-            opacity: 0.6;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .drawer-tab:hover {
-            opacity: 0.8;
-        }
-
-        .drawer-tab.active {
-            opacity: 1;
-            border-bottom-color: var(--teal);
-            color: var(--teal);
-        }
-
-        .drawer-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--charcoal);
-            opacity: 0.6;
-            transition: opacity 0.3s ease;
-            padding: 0;
-            line-height: 1;
-        }
-
-        .drawer-close:hover {
-            opacity: 1;
-        }
-
-        .drawer-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .drawer-section {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .drawer-section.active {
-            display: flex;
-        }
-
         /* Phase Navigation */
         .phase-navigation {
             background: white;
@@ -840,6 +746,48 @@
             opacity: 0.7;
         }
 
+        /* Split-pane layout for work area */
+        .work-area-content {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .work-area-content.split-pane {
+            flex-wrap: nowrap;
+        }
+
+        .work-area-left {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .work-area-right {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .work-area-content:not(.split-pane) .work-area-left {
+            flex: 1 1 100%;
+        }
+
+        .work-area-content:not(.split-pane) .work-area-right {
+            flex: 1 1 100%;
+        }
+
+        .response-section {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .response-section textarea {
+            flex: 1;
+            min-height: 150px;
+        }
+
         .selected-model-display {
             padding: 0.5rem;
             background: var(--cream);
@@ -890,7 +838,7 @@
         /* Expanded Model Content Styles */
         .selected-model-display.expanded {
             padding: 1rem;
-            max-height: 60vh;
+            max-height: 50vh;
             overflow-y: auto;
         }
 
@@ -1034,7 +982,14 @@
             border-radius: 12px;
             font-size: 0.7rem;
             color: var(--charcoal);
-            opacity: 0.8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .model-related-tag:hover {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
         }
 
         .prompt-instruction {
@@ -1043,6 +998,265 @@
             opacity: 0.8;
             margin-bottom: 0.5rem;
             font-style: italic;
+        }
+
+        /* Collapsible Accordion Sections */
+        .model-section.collapsible {
+            margin-bottom: 0.5rem;
+        }
+
+        .model-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 0.5rem;
+            background: var(--cream);
+            border-radius: 6px;
+            margin-bottom: 0;
+            transition: all 0.2s ease;
+        }
+
+        .model-section-header:hover {
+            background: linear-gradient(135deg, rgba(27, 127, 146, 0.1), var(--cream));
+        }
+
+        .model-section-header .model-section-title {
+            margin-bottom: 0;
+        }
+
+        .model-section-toggle {
+            font-size: 0.8rem;
+            color: var(--teal);
+            transition: transform 0.3s ease;
+        }
+
+        .model-section-header.collapsed .model-section-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .model-section-body {
+            padding: 0.75rem;
+            max-height: 500px;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .model-section-header.collapsed + .model-section-body {
+            max-height: 0;
+            padding: 0 0.75rem;
+            opacity: 0;
+        }
+
+        /* Confirmation Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: var(--charcoal);
+            margin-bottom: 0.75rem;
+        }
+
+        .modal p {
+            font-size: 0.85rem;
+            color: var(--charcoal);
+            opacity: 0.8;
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 0.6rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn-cancel {
+            background: var(--cream);
+            color: var(--charcoal);
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        .modal-btn-confirm {
+            background: var(--mauve);
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background: var(--light-mauve);
+        }
+
+        /* Decision Summary Section */
+        .decision-summary {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.08), white);
+            border: 2px solid var(--implementation-color);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 0.75rem;
+            display: none;
+        }
+
+        .decision-summary.visible {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .decision-summary h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: var(--implementation-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .decision-summary h3::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--implementation-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.75rem;
+        }
+
+        .decision-summary-intro {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+            opacity: 0.8;
+            margin-bottom: 0.75rem;
+        }
+
+        .decision-summary textarea {
+            min-height: 120px;
+            border-color: var(--implementation-color);
+        }
+
+        .decision-summary textarea:focus {
+            border-color: var(--implementation-color);
+            box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.1);
+        }
+
+        .decision-summary-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .btn-summary {
+            background: var(--implementation-color);
+            color: white;
+        }
+
+        .btn-summary:hover {
+            background: #7B1FA2;
+            box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
+        }
+
+        /* Log Sort Toggle */
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .log-header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .log-sort-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            color: var(--charcoal);
+            opacity: 0.7;
+        }
+
+        .log-sort-toggle button {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .log-sort-toggle button:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .log-sort-toggle button.active {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
         }
 
         textarea {
@@ -1184,6 +1398,11 @@
             background: rgba(42, 42, 42, 0.02);
         }
 
+        .log-entry.summary {
+            border-left: 3px solid gold;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 215, 0, 0.02));
+        }
+
         .log-entry-header {
             display: flex;
             justify-content: space-between;
@@ -1213,6 +1432,17 @@
 
         .log-action-btn:hover {
             opacity: 1;
+        }
+
+        .log-prompt {
+            font-size: 0.7rem;
+            font-style: italic;
+            color: var(--teal);
+            margin-bottom: 0.4rem;
+            padding: 0.3rem 0.5rem;
+            background: rgba(27, 127, 146, 0.08);
+            border-radius: 4px;
+            line-height: 1.3;
         }
 
         .log-content {
@@ -1385,6 +1615,39 @@
             .sidebar {
                 order: 2;
             }
+
+            /* Panels take more space on medium screens */
+            .panel-left, .panel-right {
+                width: 300px;
+            }
+
+            body.panel-right-open .container {
+                margin-right: 300px;
+            }
+
+            body.panel-left-open .container {
+                margin-left: 300px;
+            }
+
+            body.panel-right-open .toggle-buttons {
+                right: 300px;
+            }
+
+            body.panel-left-open .toggle-buttons-left {
+                left: 300px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            /* Split pane becomes stacked on smaller screens */
+            .work-area-content.split-pane {
+                flex-wrap: wrap;
+            }
+
+            .work-area-content.split-pane .work-area-left,
+            .work-area-content.split-pane .work-area-right {
+                flex: 1 1 100%;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1398,6 +1661,89 @@
 
             .models-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* Panels become full-width bottom sheets on mobile */
+            .panel-left, .panel-right {
+                width: 100%;
+                height: 70vh;
+                top: auto;
+                bottom: -70vh;
+                left: 0;
+                right: 0;
+                transition: bottom 0.3s ease;
+                border-radius: 16px 16px 0 0;
+            }
+
+            .panel-left.open, .panel-right.open {
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+
+            /* Don't shift container on mobile, panels overlay */
+            body.panel-right-open .container,
+            body.panel-left-open .container,
+            body.panel-right-open.panel-left-open .container {
+                margin-left: 50px;
+                margin-right: 50px;
+            }
+
+            /* Toggle buttons stay in place */
+            body.panel-right-open .toggle-buttons {
+                right: 0;
+            }
+
+            body.panel-left-open .toggle-buttons-left {
+                left: 0;
+            }
+
+            /* Main content margins */
+            .main-content {
+                margin-left: 45px;
+                margin-right: 45px;
+            }
+
+            /* Toggle buttons smaller on mobile */
+            .toggle-btn, .toggle-btn-left {
+                width: 35px;
+                font-size: 0.65rem;
+                padding: 0.5rem 0.3rem;
+            }
+
+            /* Modal adjustments */
+            .modal {
+                width: 95%;
+                margin: 1rem;
+            }
+
+            /* Action buttons stack on mobile */
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+
+            .action-buttons .btn {
+                flex: 1 1 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .header p {
+                font-size: 0.75rem;
+            }
+
+            .main-content {
+                margin-left: 40px;
+                margin-right: 40px;
+            }
+
+            .toggle-btn, .toggle-btn-left {
+                width: 32px;
+                font-size: 0.6rem;
             }
         }
     </style>
@@ -1446,9 +1792,29 @@
             </div>
             <div class="panel-content">
                 <div class="decision-log">
+                    <div class="log-header">
+                        <span class="log-header-title">Entries</span>
+                        <div class="log-sort-toggle">
+                            <span>Sort:</span>
+                            <button id="sortNewest" class="active">Newest</button>
+                            <button id="sortOldest">Oldest</button>
+                        </div>
+                    </div>
                     <div class="log-entries" id="logEntries">
                         <div class="empty-state">No entries yet. Start by selecting a mental model and responding.</div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal-overlay" id="confirmModal">
+            <div class="modal">
+                <h3>Start Over?</h3>
+                <p>This will clear all your work including your problem description, all log entries, and notepad content. This action cannot be undone.</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-cancel" id="modalCancel">Cancel</button>
+                    <button class="modal-btn modal-btn-confirm" id="modalConfirm">Yes, Start Over</button>
                 </div>
             </div>
         </div>
@@ -1473,14 +1839,43 @@
             <!-- Work Area - appears first, at top -->
             <div class="work-area">
                 <h3>Your Response</h3>
-                <div class="selected-model-display empty" id="selectedModelDisplay">
-                    Select a mental model to begin...
+                <div class="work-area-content" id="workAreaContent">
+                    <div class="work-area-left">
+                        <div class="selected-model-display empty" id="selectedModelDisplay">
+                            Select a mental model to begin...
+                        </div>
+                    </div>
+                    <div class="work-area-right">
+                        <div class="response-section">
+                            <textarea id="responseInput" placeholder="Apply this mental model to your situation..."></textarea>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" id="saveBtn">Add to Log</button>
+                                <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
+                                <button class="btn btn-warning" id="startOverBtn">Start Over</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <textarea id="responseInput" placeholder="Apply this mental model to your situation..."></textarea>
-                <div class="action-buttons">
-                    <button class="btn btn-primary" id="saveBtn">Add to Log</button>
-                    <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
-                    <button class="btn btn-warning" id="startOverBtn">Start Over</button>
+            </div>
+
+            <!-- Decision Summary Section -->
+            <div class="decision-summary" id="decisionSummary">
+                <h3>Decision Summary</h3>
+                <p class="decision-summary-intro">
+                    You've applied multiple mental models to your problem. Now synthesize your insights into a clear decision or action plan.
+                </p>
+                <textarea id="summaryInput" placeholder="Based on my analysis, my decision is...
+
+Key insights:
+1.
+2.
+3.
+
+Next steps:
+- "></textarea>
+                <div class="decision-summary-actions">
+                    <button class="btn btn-summary" id="saveSummaryBtn">Save Summary to Log</button>
+                    <button class="btn btn-secondary" id="exportSessionBtn">Export Full Session</button>
                 </div>
             </div>
 
@@ -2287,6 +2682,21 @@
         const panelLeftClose = document.getElementById('panelLeftClose');
         const panelRightClose = document.getElementById('panelRightClose');
 
+        // New UI elements
+        const workAreaContent = document.getElementById('workAreaContent');
+        const confirmModal = document.getElementById('confirmModal');
+        const modalCancel = document.getElementById('modalCancel');
+        const modalConfirm = document.getElementById('modalConfirm');
+        const decisionSummary = document.getElementById('decisionSummary');
+        const summaryInput = document.getElementById('summaryInput');
+        const saveSummaryBtn = document.getElementById('saveSummaryBtn');
+        const exportSessionBtn = document.getElementById('exportSessionBtn');
+        const sortNewestBtn = document.getElementById('sortNewest');
+        const sortOldestBtn = document.getElementById('sortOldest');
+
+        // State
+        let logSortOrder = 'newest'; // 'newest' or 'oldest'
+
         // Render Problem Type Selector
         function renderProblemTypeSelector() {
             problemTypesGrid.innerHTML = '';
@@ -2356,6 +2766,80 @@
             notepadToggle.addEventListener('click', toggleLeftPanel);
             panelRightClose.addEventListener('click', closeRightPanel);
             panelLeftClose.addEventListener('click', closeLeftPanel);
+
+            // Sort button listeners
+            sortNewestBtn.addEventListener('click', () => {
+                logSortOrder = 'newest';
+                sortNewestBtn.classList.add('active');
+                sortOldestBtn.classList.remove('active');
+                renderLogEntries();
+            });
+
+            sortOldestBtn.addEventListener('click', () => {
+                logSortOrder = 'oldest';
+                sortOldestBtn.classList.add('active');
+                sortNewestBtn.classList.remove('active');
+                renderLogEntries();
+            });
+
+            // Modal listeners
+            modalCancel.addEventListener('click', closeConfirmModal);
+            modalConfirm.addEventListener('click', confirmStartOver);
+
+            // Decision summary listeners
+            saveSummaryBtn.addEventListener('click', saveSummaryToLog);
+            exportSessionBtn.addEventListener('click', downloadSession);
+        }
+
+        // Modal functions
+        function showConfirmModal() {
+            confirmModal.classList.add('visible');
+        }
+
+        function closeConfirmModal() {
+            confirmModal.classList.remove('visible');
+        }
+
+        function confirmStartOver() {
+            closeConfirmModal();
+            resetApp();
+        }
+
+        // Save summary to log
+        function saveSummaryToLog() {
+            const summaryText = summaryInput.value.trim();
+            if (!summaryText) {
+                alert('Please write your decision summary before saving.');
+                return;
+            }
+
+            const entry = {
+                id: nextLogId++,
+                phase: 'summary',
+                modelName: 'Decision Summary',
+                modelPrompt: 'Final synthesis of mental model analysis',
+                response: summaryText,
+                timestamp: new Date().toLocaleString()
+            };
+
+            logEntries.unshift(entry);
+            renderLogEntries();
+            saveToLocalStorage();
+            openRightPanel();
+
+            // Clear the summary input
+            summaryInput.value = '';
+
+            alert('Decision summary saved to log!');
+        }
+
+        // Show decision summary after enough log entries
+        function checkShowDecisionSummary() {
+            // Show decision summary when user has at least 3 log entries from different phases
+            const uniquePhases = new Set(logEntries.map(e => e.phase));
+            if (uniquePhases.size >= 2 && logEntries.length >= 3) {
+                decisionSummary.classList.add('visible');
+            }
         }
 
         function toggleRightPanel() {
@@ -2485,13 +2969,25 @@
 
             // Check if this model has expanded content
             if (model.prompts && model.explanation) {
+                // Enable split-pane layout
+                workAreaContent.classList.add('split-pane');
+
                 // Render expanded model display
                 selectedModelDisplay.className = 'selected-model-display expanded';
                 selectedModelDisplay.innerHTML = renderExpandedModel(model);
 
                 // Set up prompt selection handlers
                 setupPromptSelection();
+
+                // Set up collapsible section handlers
+                setupCollapsibleSections();
+
+                // Set up related model click handlers
+                setupRelatedModelLinks();
             } else {
+                // Remove split-pane for simple models
+                workAreaContent.classList.remove('split-pane');
+
                 // Fallback to simple display for models not yet expanded
                 selectedModelDisplay.className = 'selected-model-display';
                 selectedModelDisplay.innerHTML = `
@@ -2520,7 +3016,7 @@
             ).join('') : '';
 
             const relatedHtml = model.relatedModels ? model.relatedModels.map(r =>
-                `<span class="model-related-tag">${r}</span>`
+                `<span class="model-related-tag" data-model="${escapeHtml(r)}">${r}</span>`
             ).join('') : '';
 
             return `
@@ -2529,37 +3025,62 @@
                     <div class="model-tagline">${model.description}</div>
                 </div>
 
-                <div class="model-section">
-                    <div class="model-section-title">What It Is</div>
-                    <div class="model-explanation">${model.explanation}</div>
+                <div class="model-section collapsible">
+                    <div class="model-section-header" data-section="explanation">
+                        <div class="model-section-title">What It Is</div>
+                        <span class="model-section-toggle">▼</span>
+                    </div>
+                    <div class="model-section-body">
+                        <div class="model-explanation">${model.explanation}</div>
+                    </div>
                 </div>
 
-                <div class="model-section">
-                    <div class="model-section-title">Example</div>
-                    <div class="model-example">${model.example}</div>
+                <div class="model-section collapsible">
+                    <div class="model-section-header" data-section="example">
+                        <div class="model-section-title">Example</div>
+                        <span class="model-section-toggle">▼</span>
+                    </div>
+                    <div class="model-section-body">
+                        <div class="model-example">${model.example}</div>
+                    </div>
                 </div>
 
-                <div class="model-section">
-                    <div class="model-section-title">Questions to Ask</div>
-                    <div class="prompt-instruction">Click a question to use it as your prompt:</div>
-                    <ul class="model-prompts-list">
-                        ${promptsHtml}
-                    </ul>
+                <div class="model-section collapsible">
+                    <div class="model-section-header" data-section="prompts">
+                        <div class="model-section-title">Questions to Ask</div>
+                        <span class="model-section-toggle">▼</span>
+                    </div>
+                    <div class="model-section-body">
+                        <div class="prompt-instruction">Click a question to use it as your prompt:</div>
+                        <ul class="model-prompts-list">
+                            ${promptsHtml}
+                        </ul>
+                    </div>
                 </div>
 
                 ${model.warnings ? `
-                <div class="model-section">
-                    <div class="model-section-title">Watch Out For</div>
-                    <div class="model-warnings">
-                        <ul>${warningsHtml}</ul>
+                <div class="model-section collapsible">
+                    <div class="model-section-header collapsed" data-section="warnings">
+                        <div class="model-section-title">Watch Out For</div>
+                        <span class="model-section-toggle">▼</span>
+                    </div>
+                    <div class="model-section-body">
+                        <div class="model-warnings">
+                            <ul>${warningsHtml}</ul>
+                        </div>
                     </div>
                 </div>
                 ` : ''}
 
                 ${model.relatedModels ? `
-                <div class="model-section">
-                    <div class="model-section-title">Related Models</div>
-                    <div class="model-related">${relatedHtml}</div>
+                <div class="model-section collapsible">
+                    <div class="model-section-header collapsed" data-section="related">
+                        <div class="model-section-title">Related Models</div>
+                        <span class="model-section-toggle">▼</span>
+                    </div>
+                    <div class="model-section-body">
+                        <div class="model-related">${relatedHtml}</div>
+                    </div>
                 </div>
                 ` : ''}
             `;
@@ -2597,6 +3118,53 @@
             // Auto-select first prompt
             if (promptItems.length > 0) {
                 promptItems[0].click();
+            }
+        }
+
+        // Set up collapsible section handlers
+        function setupCollapsibleSections() {
+            const sectionHeaders = document.querySelectorAll('.model-section-header');
+            sectionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('collapsed');
+                });
+            });
+        }
+
+        // Set up related model click handlers
+        function setupRelatedModelLinks() {
+            const relatedTags = document.querySelectorAll('.model-related-tag');
+            relatedTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const modelName = this.getAttribute('data-model');
+                    navigateToModel(modelName);
+                });
+            });
+        }
+
+        // Navigate to a model by name
+        function navigateToModel(modelName) {
+            // Search through all phases to find the model
+            for (const [phaseKey, phaseData] of Object.entries(mentalModelsData)) {
+                const model = phaseData.models.find(m => m.name === modelName);
+                if (model) {
+                    // Switch to that phase
+                    currentPhase = phaseKey;
+                    updatePhaseButtons();
+                    renderPhaseContent();
+
+                    // Find and click the model card after a short delay for rendering
+                    setTimeout(() => {
+                        const modelCards = document.querySelectorAll('.model-card');
+                        modelCards.forEach(card => {
+                            if (card.querySelector('.model-name').textContent === modelName) {
+                                card.click();
+                                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        });
+                    }, 100);
+                    return;
+                }
             }
         }
 
@@ -2743,6 +3311,9 @@
 
             // Open decision log panel
             openRightPanel();
+
+            // Check if we should show decision summary
+            checkShowDecisionSummary();
         }
 
         // Render Log Entries
@@ -2752,12 +3323,25 @@
                 return;
             }
 
+            // Sort entries based on current sort order
+            const sortedEntries = [...logEntries].sort((a, b) => {
+                if (logSortOrder === 'oldest') {
+                    return a.id - b.id;
+                }
+                return b.id - a.id; // newest first (default)
+            });
+
             logEntriesContainer.innerHTML = '';
-            logEntries.forEach(entry => {
+            sortedEntries.forEach(entry => {
                 const logEntry = document.createElement('div');
                 logEntry.className = `log-entry ${entry.phase}`;
                 logEntry.draggable = true;
                 logEntry.dataset.entryId = entry.id;
+
+                // Show prompt if available
+                const promptHtml = entry.modelPrompt ?
+                    `<div class="log-prompt">"${entry.modelPrompt}"</div>` : '';
+
                 logEntry.innerHTML = `
                     <div class="log-entry-header">
                         <div class="log-model-name">${entry.modelName}</div>
@@ -2766,6 +3350,7 @@
                             <button class="log-action-btn" onclick="deleteEntry(${entry.id})" title="Delete">🗑️</button>
                         </div>
                     </div>
+                    ${promptHtml}
                     <div class="log-content">${entry.response}</div>
                     <div class="log-timestamp">${entry.timestamp}</div>
                 `;
@@ -2776,27 +3361,9 @@
             });
         }
 
-        // Start Over - Save and Reset
+        // Start Over - Show confirmation modal
         function startOver() {
-            if (logEntries.length === 0 && notepadArea.classList.contains('empty')) {
-                if (confirm('Start over? This will reset the app to the beginning.')) {
-                    resetApp();
-                }
-                return;
-            }
-            
-            // Prompt to save work before resetting
-            const shouldSave = confirm('Would you like to save your decision-making session before starting over?\n\nClick OK to download a text file with all your work, or Cancel to start over without saving.');
-            
-            if (shouldSave) {
-                downloadSession();
-            }
-            
-            // Confirm reset
-            const shouldReset = confirm('Ready to start over? This will clear all your entries and reset the app.');
-            if (shouldReset) {
-                resetApp();
-            }
+            showConfirmModal();
         }
 
         // Download Session as Text File
