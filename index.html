@@ -2833,12 +2833,19 @@ Next steps:
             alert('Decision summary saved to log!');
         }
 
-        // Show decision summary after enough log entries
+        // Show decision summary after enough meaningful work is done
         function checkShowDecisionSummary() {
-            // Show decision summary when user has at least 3 log entries from different phases
-            const uniquePhases = new Set(logEntries.map(e => e.phase));
-            if (uniquePhases.size >= 2 && logEntries.length >= 3) {
+            // Filter out initial problem description and summary entries
+            const workEntries = logEntries.filter(e => e.phase !== 'initial' && e.phase !== 'summary');
+
+            // Get unique phases from work entries
+            const uniquePhases = new Set(workEntries.map(e => e.phase));
+
+            // Show decision summary when user has applied at least 3 mental models from at least 2 different phases
+            if (uniquePhases.size >= 2 && workEntries.length >= 3) {
                 decisionSummary.classList.add('visible');
+            } else {
+                decisionSummary.classList.remove('visible');
             }
         }
 
@@ -3435,22 +3442,29 @@ Next steps:
             problemType = null;
             selectedModel = null;
             currentPhase = 'diagnostic';
-            
+
             // Clear localStorage
             localStorage.removeItem('mentalModelsLog');
-            
+
             // Reset UI
             responseInput.value = '';
             notepadArea.innerText = 'Drag log entries here to compile your thinking...';
             notepadArea.classList.add('empty');
             renderLogEntries();
-            
+
             // Hide problem reference and type selector
             problemReference.classList.remove('visible');
             problemReferenceText.textContent = '';
             problemTypeSelector.classList.remove('visible');
             continueBtn.classList.remove('visible');
-            
+
+            // Hide decision summary
+            decisionSummary.classList.remove('visible');
+            summaryInput.value = '';
+
+            // Remove split-pane layout
+            workAreaContent.classList.remove('split-pane');
+
             // Hide sections again
             phaseNavigation.classList.remove('revealed');
             modelsSection.classList.remove('revealed');
@@ -3462,7 +3476,7 @@ Next steps:
 
             // Reorder DOM back to initial state (work area first)
             mainContent.insertBefore(workArea, phaseNavigation);
-            
+
             // Reset to initial prompt
             showInitialPrompt();
             updatePhaseButtons();
@@ -3604,26 +3618,29 @@ Next steps:
                 const data = JSON.parse(saved);
                 logEntries = data.entries || [];
                 nextLogId = data.nextId || 1;
-                
+
                 // Check if problem was already described
                 const hasProblemDescription = logEntries.some(e => e.phase === 'initial');
                 if (hasProblemDescription) {
                     problemDescribed = true;
                     revealSections();
-                    
+
                     // Restore notepad with problem description
                     const problemEntry = logEntries.find(e => e.phase === 'initial');
                     if (problemEntry) {
                         // Show problem reference banner
                         problemReferenceText.textContent = problemEntry.response;
                         problemReference.classList.add('visible');
-                        
+
                         notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
                         notepadArea.classList.remove('empty');
                     }
                 }
-                
+
                 renderLogEntries();
+
+                // Check if decision summary should be shown
+                checkShowDecisionSummary();
             }
         }
 
