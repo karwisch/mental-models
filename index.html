@@ -37,13 +37,491 @@
             min-height: 100vh;
         }
 
+        /* App Layout with Persistent Sidebar */
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Persistent Left Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid #e0e0e0;
+            background: linear-gradient(135deg, rgba(27, 127, 146, 0.08), white);
+        }
+
+        .sidebar-greeting {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-subgreeting {
+            font-size: 0.8rem;
+            color: var(--teal);
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--charcoal);
+            opacity: 0.5;
+            padding: 0 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: var(--cream);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(90deg, rgba(27, 127, 146, 0.1), transparent);
+            border-left-color: var(--teal);
+        }
+
+        .sidebar-item-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .sidebar-item-content {
+            flex: 1;
+        }
+
+        .sidebar-item-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--charcoal);
+        }
+
+        .sidebar-item-sublabel {
+            font-size: 0.7rem;
+            color: var(--charcoal);
+            opacity: 0.6;
+        }
+
+        /* Phase Items in Sidebar */
+        .phase-sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .phase-sidebar-item:hover {
+            background: var(--cream);
+        }
+
+        .phase-sidebar-item.active {
+            border-left-color: var(--teal);
+            background: linear-gradient(90deg, rgba(27, 127, 146, 0.08), transparent);
+        }
+
+        .phase-sidebar-item.completed {
+            opacity: 0.7;
+        }
+
+        .phase-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .phase-icon.diagnostic { background: var(--diagnostic-color); }
+        .phase-icon.evaluative { background: var(--evaluative-color); }
+        .phase-icon.protective { background: var(--protective-color); }
+        .phase-icon.generative { background: var(--generative-color); }
+        .phase-icon.implementation { background: var(--implementation-color); }
+
+        .phase-sidebar-content {
+            flex: 1;
+        }
+
+        .phase-sidebar-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.2rem;
+        }
+
+        .phase-progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .phase-progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .phase-progress-fill.diagnostic { background: var(--diagnostic-color); }
+        .phase-progress-fill.evaluative { background: var(--evaluative-color); }
+        .phase-progress-fill.protective { background: var(--protective-color); }
+        .phase-progress-fill.generative { background: var(--generative-color); }
+        .phase-progress-fill.implementation { background: var(--implementation-color); }
+
+        .phase-progress-text {
+            font-size: 0.65rem;
+            color: var(--charcoal);
+            opacity: 0.6;
+            margin-top: 0.2rem;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .status-badge.not-started {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .status-badge.in-progress {
+            background: rgba(27, 127, 146, 0.15);
+            color: var(--teal);
+        }
+
+        .status-badge.completed {
+            background: rgba(76, 175, 80, 0.15);
+            color: #4CAF50;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #e0e0e0;
+            background: var(--cream);
+        }
+
+        .sidebar-footer-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.6rem;
+            background: var(--teal);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-footer-btn:hover {
+            background: var(--light-teal);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.3);
+        }
+
+        /* Main Content Area - adjusted for sidebar */
+        .main-area {
+            flex: 1;
+            margin-left: 280px;
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        /* Quick Actions Bar */
+        .quick-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.15);
+        }
+
+        .quick-action-btn.primary {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: white;
+        }
+
+        .quick-action-btn.primary:hover {
+            background: var(--light-teal);
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e8e8e8;
+        }
+
+        .dashboard-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .dashboard-card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dashboard-card-action {
+            font-size: 0.7rem;
+            color: var(--teal);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .dashboard-card-action:hover {
+            text-decoration: underline;
+        }
+
+        /* Progress Overview Card */
+        .progress-overview {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .progress-phase-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-phase-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .progress-phase-info {
+            flex: 1;
+        }
+
+        .progress-phase-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.2rem;
+        }
+
+        .progress-phase-bar {
+            height: 6px;
+            background: #e8e8e8;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-phase-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-phase-percent {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            min-width: 35px;
+            text-align: right;
+        }
+
+        /* Right Panel for Notes/Log */
+        .right-panel {
+            position: fixed;
+            top: 0;
+            right: -380px;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-panel.open {
+            right: 0;
+        }
+
+        .right-panel-toggle {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--teal);
+            color: white;
+            border: none;
+            padding: 1rem 0.5rem;
+            border-radius: 8px 0 0 8px;
+            cursor: pointer;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            z-index: 99;
+            transition: all 0.3s ease;
+        }
+
+        .right-panel-toggle:hover {
+            background: var(--light-teal);
+            padding-right: 0.75rem;
+        }
+
+        .right-panel-toggle.active {
+            right: 380px;
+        }
+
+        /* Panel Tabs */
+        .panel-tabs {
+            display: flex;
+            gap: 0;
+        }
+
+        .panel-tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--charcoal);
+            opacity: 0.5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .panel-tab:hover {
+            opacity: 0.8;
+        }
+
+        .panel-tab.active {
+            opacity: 1;
+            color: var(--teal);
+            border-bottom-color: var(--teal);
+        }
+
+        .panel-section {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .panel-section.active {
+            display: flex;
+        }
+
         .container {
             display: flex;
             flex-direction: column;
-            max-width: 1600px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
-            min-height: 100vh;
+            padding: 0;
+            min-height: auto;
             position: relative;
         }
 
@@ -1608,33 +2086,23 @@
 
         /* Responsive Design */
         @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
+            /* Narrower sidebar on medium screens */
             .sidebar {
-                order: 2;
+                width: 240px;
             }
 
-            /* Panels take more space on medium screens */
-            .panel-left, .panel-right {
-                width: 300px;
+            .main-area {
+                margin-left: 240px;
             }
 
-            body.panel-right-open .container {
-                margin-right: 300px;
+            /* Right panel narrower */
+            .right-panel {
+                width: 320px;
+                right: -320px;
             }
 
-            body.panel-left-open .container {
-                margin-left: 300px;
-            }
-
-            body.panel-right-open .toggle-buttons {
-                right: 300px;
-            }
-
-            body.panel-left-open .toggle-buttons-left {
-                left: 300px;
+            .right-panel-toggle.active {
+                right: 320px;
             }
         }
 
@@ -1648,9 +2116,35 @@
             .work-area-content.split-pane .work-area-right {
                 flex: 1 1 100%;
             }
+
+            /* Dashboard cards stack */
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Quick actions wrap */
+            .quick-actions {
+                flex-wrap: wrap;
+            }
         }
 
         @media (max-width: 768px) {
+            /* Sidebar becomes hidden overlay */
+            .sidebar {
+                left: -280px;
+                width: 280px;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .main-area {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
             .phase-buttons {
                 flex-direction: column;
             }
@@ -1663,52 +2157,35 @@
                 grid-template-columns: 1fr;
             }
 
-            /* Panels become full-width bottom sheets on mobile */
-            .panel-left, .panel-right {
+            /* Right panel becomes full-width bottom sheet */
+            .right-panel {
                 width: 100%;
                 height: 70vh;
                 top: auto;
                 bottom: -70vh;
-                left: 0;
                 right: 0;
+                left: 0;
                 transition: bottom 0.3s ease;
                 border-radius: 16px 16px 0 0;
             }
 
-            .panel-left.open, .panel-right.open {
+            .right-panel.open {
                 bottom: 0;
-                left: 0;
-                right: 0;
             }
 
-            /* Don't shift container on mobile, panels overlay */
-            body.panel-right-open .container,
-            body.panel-left-open .container,
-            body.panel-right-open.panel-left-open .container {
-                margin-left: 50px;
-                margin-right: 50px;
+            .right-panel-toggle {
+                bottom: 0;
+                top: auto;
+                right: 50%;
+                transform: translateX(50%);
+                writing-mode: horizontal-tb;
+                border-radius: 8px 8px 0 0;
+                padding: 0.5rem 1rem;
             }
 
-            /* Toggle buttons stay in place */
-            body.panel-right-open .toggle-buttons {
-                right: 0;
-            }
-
-            body.panel-left-open .toggle-buttons-left {
-                left: 0;
-            }
-
-            /* Main content margins */
-            .main-content {
-                margin-left: 45px;
-                margin-right: 45px;
-            }
-
-            /* Toggle buttons smaller on mobile */
-            .toggle-btn, .toggle-btn-left {
-                width: 35px;
-                font-size: 0.65rem;
-                padding: 0.5rem 0.3rem;
+            .right-panel-toggle.active {
+                right: 50%;
+                bottom: 70vh;
             }
 
             /* Modal adjustments */
@@ -1725,6 +2202,11 @@
             .action-buttons .btn {
                 flex: 1 1 auto;
             }
+
+            /* Hide old toggle buttons */
+            .toggle-buttons, .toggle-buttons-left {
+                display: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1736,62 +2218,278 @@
                 font-size: 0.75rem;
             }
 
-            .main-content {
-                margin-left: 40px;
-                margin-right: 40px;
-            }
-
-            .toggle-btn, .toggle-btn-left {
-                width: 32px;
-                font-size: 0.6rem;
+            .quick-action-btn {
+                flex: 1 1 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Mental Models Decision Navigator</h1>
-            <p>A systematic approach to better decisions through structured thinking</p>
-        </div>
-
-        <!-- Left Toggle Button (Notepad) -->
-        <div class="toggle-buttons-left">
-            <button class="toggle-btn-left" id="notepadToggle">Notepad</button>
-        </div>
-
-        <!-- Right Toggle Button (Decision Log) -->
-        <div class="toggle-buttons">
-            <button class="toggle-btn" id="logToggle">Decision Log</button>
-        </div>
-
-        <!-- Left Panel - Notepad -->
-        <div class="panel-left" id="panelLeft">
-            <div class="panel-header panel-header-left">
-                <h3>Notepad</h3>
-                <button class="panel-close" id="panelLeftClose">&times;</button>
+    <div class="app-layout">
+        <!-- Persistent Left Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-greeting" id="sidebarGreeting">Welcome!</div>
+                <div class="sidebar-subgreeting">How can I help you decide?</div>
             </div>
-            <div class="panel-content">
-                <div class="notepad">
-                    <div class="notepad-area empty" id="notepadArea" contenteditable="true">
-                        Drag log entries here to compile your thinking...
+
+            <nav class="sidebar-nav">
+                <!-- Quick Access Section -->
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">Quick Access</div>
+                    <div class="sidebar-item" id="navHome">
+                        <div class="sidebar-item-icon">🏠</div>
+                        <div class="sidebar-item-content">
+                            <div class="sidebar-item-label">Home</div>
+                        </div>
                     </div>
-                    <div class="notepad-actions">
-                        <button id="clearNotepad">Clear</button>
-                        <button id="copyNotepad">Copy</button>
+                    <div class="sidebar-item" id="navNotepad">
+                        <div class="sidebar-item-icon">📝</div>
+                        <div class="sidebar-item-content">
+                            <div class="sidebar-item-label">Notepad</div>
+                            <div class="sidebar-item-sublabel">Compile your thinking</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-item" id="navLog">
+                        <div class="sidebar-item-icon">📋</div>
+                        <div class="sidebar-item-content">
+                            <div class="sidebar-item-label">Decision Log</div>
+                            <div class="sidebar-item-sublabel" id="logCount">0 entries</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision Phases Section -->
+                <div class="sidebar-section" id="phasesSection">
+                    <div class="sidebar-section-title">Decision Phases</div>
+
+                    <div class="phase-sidebar-item" data-phase="diagnostic">
+                        <div class="phase-icon diagnostic">1</div>
+                        <div class="phase-sidebar-content">
+                            <div class="phase-sidebar-label">
+                                Diagnose
+                                <span class="status-badge not-started" id="statusDiagnostic">Not Started</span>
+                            </div>
+                            <div class="phase-progress-bar">
+                                <div class="phase-progress-fill diagnostic" id="progressDiagnostic" style="width: 0%"></div>
+                            </div>
+                            <div class="phase-progress-text" id="progressTextDiagnostic">0/6 models</div>
+                        </div>
+                    </div>
+
+                    <div class="phase-sidebar-item" data-phase="evaluative">
+                        <div class="phase-icon evaluative">2</div>
+                        <div class="phase-sidebar-content">
+                            <div class="phase-sidebar-label">
+                                Evaluate
+                                <span class="status-badge not-started" id="statusEvaluative">Not Started</span>
+                            </div>
+                            <div class="phase-progress-bar">
+                                <div class="phase-progress-fill evaluative" id="progressEvaluative" style="width: 0%"></div>
+                            </div>
+                            <div class="phase-progress-text" id="progressTextEvaluative">0/7 models</div>
+                        </div>
+                    </div>
+
+                    <div class="phase-sidebar-item" data-phase="protective">
+                        <div class="phase-icon protective">3</div>
+                        <div class="phase-sidebar-content">
+                            <div class="phase-sidebar-label">
+                                Protect
+                                <span class="status-badge not-started" id="statusProtective">Not Started</span>
+                            </div>
+                            <div class="phase-progress-bar">
+                                <div class="phase-progress-fill protective" id="progressProtective" style="width: 0%"></div>
+                            </div>
+                            <div class="phase-progress-text" id="progressTextProtective">0/7 models</div>
+                        </div>
+                    </div>
+
+                    <div class="phase-sidebar-item" data-phase="generative">
+                        <div class="phase-icon generative">4</div>
+                        <div class="phase-sidebar-content">
+                            <div class="phase-sidebar-label">
+                                Generate
+                                <span class="status-badge not-started" id="statusGenerative">Not Started</span>
+                            </div>
+                            <div class="phase-progress-bar">
+                                <div class="phase-progress-fill generative" id="progressGenerative" style="width: 0%"></div>
+                            </div>
+                            <div class="phase-progress-text" id="progressTextGenerative">0/7 models</div>
+                        </div>
+                    </div>
+
+                    <div class="phase-sidebar-item" data-phase="implementation">
+                        <div class="phase-icon implementation">5</div>
+                        <div class="phase-sidebar-content">
+                            <div class="phase-sidebar-label">
+                                Implement
+                                <span class="status-badge not-started" id="statusImplementation">Not Started</span>
+                            </div>
+                            <div class="phase-progress-bar">
+                                <div class="phase-progress-fill implementation" id="progressImplementation" style="width: 0%"></div>
+                            </div>
+                            <div class="phase-progress-text" id="progressTextImplementation">0/7 models</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="sidebar-footer-btn" id="startOverSidebar">
+                    🔄 Start New Decision
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-area">
+            <!-- Quick Actions Bar -->
+            <div class="quick-actions" id="quickActions">
+                <button class="quick-action-btn primary" id="quickSuggest">
+                    💡 Suggest a Model
+                </button>
+                <button class="quick-action-btn" id="quickProgress">
+                    📊 View Progress
+                </button>
+                <button class="quick-action-btn" id="quickExport">
+                    📤 Export Session
+                </button>
+            </div>
+
+            <!-- Dashboard Overview (shown on home) -->
+            <div class="dashboard-grid" id="dashboardGrid">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">📋 Your Problem</div>
+                        <span class="dashboard-card-action" id="editProblem">Edit</span>
+                    </div>
+                    <div id="dashboardProblem" style="font-size: 0.85rem; color: var(--charcoal); opacity: 0.8;">
+                        No problem defined yet. Start by describing your decision or problem.
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">📈 Progress Overview</div>
+                    </div>
+                    <div class="progress-overview" id="progressOverview">
+                        <!-- Progress rows will be populated by JS -->
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Right Panel - Decision Log -->
-        <div class="panel-right" id="panelRight">
+            <div class="container">
+                <!-- Problem Reference Banner - shows after problem is described -->
+                <div class="problem-reference" id="problemReference">
+                    <div class="problem-reference-header">Your Decision / Problem</div>
+                    <div class="problem-reference-text" id="problemReferenceText"></div>
+                </div>
+
+                <!-- Problem Type Selector - shows after problem description, before models -->
+                <div class="problem-type-selector" id="problemTypeSelector">
+                    <h3>What type of problem is this?</h3>
+                    <p>Selecting a problem type will show you the most relevant mental models for your situation.</p>
+                    <div class="problem-types-grid" id="problemTypesGrid">
+                        <!-- Problem types will be populated by JavaScript -->
+                    </div>
+                    <button class="continue-btn" id="continueBtn">Continue with Selected Type</button>
+                </div>
+
+                <!-- Work Area - appears first, at top -->
+                <div class="work-area">
+                    <h3>Your Response</h3>
+                    <div class="work-area-content" id="workAreaContent">
+                        <div class="work-area-left">
+                            <div class="selected-model-display empty" id="selectedModelDisplay">
+                                Select a mental model to begin...
+                            </div>
+                        </div>
+                        <div class="work-area-right">
+                            <div class="response-section">
+                                <textarea id="responseInput" placeholder="Apply this mental model to your situation..."></textarea>
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary" id="saveBtn">Add to Log</button>
+                                    <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision Summary Section -->
+                <div class="decision-summary" id="decisionSummary">
+                    <h3>Decision Summary</h3>
+                    <p class="decision-summary-intro">
+                        You've applied multiple mental models to your problem. Now synthesize your insights into a clear decision or action plan.
+                    </p>
+                    <textarea id="summaryInput" placeholder="Based on my analysis, my decision is...
+
+Key insights:
+1.
+2.
+3.
+
+Next steps:
+- "></textarea>
+                    <div class="decision-summary-actions">
+                        <button class="btn btn-summary" id="saveSummaryBtn">Save Summary to Log</button>
+                        <button class="btn btn-secondary" id="exportSessionBtn">Export Full Session</button>
+                    </div>
+                </div>
+
+                <!-- Phase Navigation - hidden initially -->
+                <div class="phase-navigation">
+                    <h2>Decision-Making Sequence</h2>
+                    <div class="phase-buttons">
+                        <button class="phase-btn diagnostic active" data-phase="diagnostic">
+                            1. Diagnose
+                        </button>
+                        <button class="phase-btn evaluative" data-phase="evaluative">
+                            2. Evaluate
+                        </button>
+                        <button class="phase-btn protective" data-phase="protective">
+                            3. Protect
+                        </button>
+                        <button class="phase-btn generative" data-phase="generative">
+                            4. Generate
+                        </button>
+                        <button class="phase-btn implementation" data-phase="implementation">
+                            5. Implement
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Models Section - hidden initially -->
+                <div class="models-section">
+                    <div class="phase-description diagnostic" id="phaseDescription">
+                        <h3>Diagnostic Models</h3>
+                        <p><strong>Purpose:</strong> Understand what's actually happening before making decisions</p>
+                        <p class="core-question">What's the true nature of this situation?</p>
+                    </div>
+                    <div class="models-grid" id="modelsGrid">
+                        <!-- Models will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Panel Toggle -->
+        <button class="right-panel-toggle" id="rightPanelToggle">📋 Log & Notes</button>
+
+        <!-- Right Panel - Combined Log and Notepad -->
+        <div class="right-panel" id="rightPanel">
             <div class="panel-header panel-header-right">
-                <h3>Decision Log</h3>
-                <button class="panel-close" id="panelRightClose">&times;</button>
+                <div class="panel-tabs">
+                    <button class="panel-tab active" id="tabLog">Decision Log</button>
+                    <button class="panel-tab" id="tabNotepad">Notepad</button>
+                </div>
+                <button class="panel-close" id="rightPanelClose">&times;</button>
             </div>
             <div class="panel-content">
-                <div class="decision-log">
+                <!-- Decision Log Section -->
+                <div class="panel-section active" id="logSection">
                     <div class="log-header">
                         <span class="log-header-title">Entries</span>
                         <div class="log-sort-toggle">
@@ -1801,7 +2499,20 @@
                         </div>
                     </div>
                     <div class="log-entries" id="logEntries">
-                        <div class="empty-state">No entries yet. Start by selecting a mental model and responding.</div>
+                        <div class="empty-state">No entries yet. Start by describing your problem.</div>
+                    </div>
+                </div>
+
+                <!-- Notepad Section -->
+                <div class="panel-section" id="notepadSection">
+                    <div class="notepad">
+                        <div class="notepad-area empty" id="notepadArea" contenteditable="true">
+                            Drag log entries here to compile your thinking...
+                        </div>
+                        <div class="notepad-actions">
+                            <button id="clearNotepad">Clear</button>
+                            <button id="copyNotepad">Copy</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1815,101 +2526,6 @@
                 <div class="modal-buttons">
                     <button class="modal-btn modal-btn-cancel" id="modalCancel">Cancel</button>
                     <button class="modal-btn modal-btn-confirm" id="modalConfirm">Yes, Start Over</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <!-- Problem Reference Banner - shows after problem is described -->
-            <div class="problem-reference" id="problemReference">
-                <div class="problem-reference-header">Your Decision / Problem</div>
-                <div class="problem-reference-text" id="problemReferenceText"></div>
-            </div>
-
-            <!-- Problem Type Selector - shows after problem description, before models -->
-            <div class="problem-type-selector" id="problemTypeSelector">
-                <h3>What type of problem is this?</h3>
-                <p>Selecting a problem type will show you the most relevant mental models for your situation.</p>
-                <div class="problem-types-grid" id="problemTypesGrid">
-                    <!-- Problem types will be populated by JavaScript -->
-                </div>
-                <button class="continue-btn" id="continueBtn">Continue with Selected Type</button>
-            </div>
-
-            <!-- Work Area - appears first, at top -->
-            <div class="work-area">
-                <h3>Your Response</h3>
-                <div class="work-area-content" id="workAreaContent">
-                    <div class="work-area-left">
-                        <div class="selected-model-display empty" id="selectedModelDisplay">
-                            Select a mental model to begin...
-                        </div>
-                    </div>
-                    <div class="work-area-right">
-                        <div class="response-section">
-                            <textarea id="responseInput" placeholder="Apply this mental model to your situation..."></textarea>
-                            <div class="action-buttons">
-                                <button class="btn btn-primary" id="saveBtn">Add to Log</button>
-                                <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
-                                <button class="btn btn-warning" id="startOverBtn">Start Over</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Decision Summary Section -->
-            <div class="decision-summary" id="decisionSummary">
-                <h3>Decision Summary</h3>
-                <p class="decision-summary-intro">
-                    You've applied multiple mental models to your problem. Now synthesize your insights into a clear decision or action plan.
-                </p>
-                <textarea id="summaryInput" placeholder="Based on my analysis, my decision is...
-
-Key insights:
-1.
-2.
-3.
-
-Next steps:
-- "></textarea>
-                <div class="decision-summary-actions">
-                    <button class="btn btn-summary" id="saveSummaryBtn">Save Summary to Log</button>
-                    <button class="btn btn-secondary" id="exportSessionBtn">Export Full Session</button>
-                </div>
-            </div>
-
-            <!-- Phase Navigation - hidden initially -->
-            <div class="phase-navigation">
-                <h2>Decision-Making Sequence</h2>
-                <div class="phase-buttons">
-                    <button class="phase-btn diagnostic active" data-phase="diagnostic">
-                        1. Diagnose
-                    </button>
-                    <button class="phase-btn evaluative" data-phase="evaluative">
-                        2. Evaluate
-                    </button>
-                    <button class="phase-btn protective" data-phase="protective">
-                        3. Protect
-                    </button>
-                    <button class="phase-btn generative" data-phase="generative">
-                        4. Generate
-                    </button>
-                    <button class="phase-btn implementation" data-phase="implementation">
-                        5. Implement
-                    </button>
-                </div>
-            </div>
-
-            <!-- Models Section - hidden initially -->
-            <div class="models-section">
-                <div class="phase-description diagnostic" id="phaseDescription">
-                    <h3>Diagnostic Models</h3>
-                    <p><strong>Purpose:</strong> Understand what's actually happening before making decisions</p>
-                    <p class="core-question">What's the true nature of this situation?</p>
-                </div>
-                <div class="models-grid" id="modelsGrid">
-                    <!-- Models will be populated by JavaScript -->
                 </div>
             </div>
         </div>
@@ -2674,13 +3290,13 @@ Next steps:
         const clearNotepadBtn = document.getElementById('clearNotepad');
         const copyNotepadBtn = document.getElementById('copyNotepad');
         
-        // Panel elements
-        const panelLeft = document.getElementById('panelLeft');
-        const panelRight = document.getElementById('panelRight');
-        const logToggle = document.getElementById('logToggle');
-        const notepadToggle = document.getElementById('notepadToggle');
-        const panelLeftClose = document.getElementById('panelLeftClose');
-        const panelRightClose = document.getElementById('panelRightClose');
+        // Legacy panel elements (keeping for backward compatibility)
+        const panelLeft = null; // Removed in new layout
+        const panelRight = null; // Replaced by rightPanel
+        const logToggle = null; // Removed in new layout
+        const notepadToggle = null; // Removed in new layout
+        const panelLeftClose = null; // Removed in new layout
+        const panelRightClose = null; // Replaced by rightPanelClose
 
         // New UI elements
         const workAreaContent = document.getElementById('workAreaContent');
@@ -2696,6 +3312,36 @@ Next steps:
 
         // State
         let logSortOrder = 'newest'; // 'newest' or 'oldest'
+
+        // Sidebar elements
+        const sidebar = document.getElementById('sidebar');
+        const sidebarGreeting = document.getElementById('sidebarGreeting');
+        const phaseSidebarItems = document.querySelectorAll('.phase-sidebar-item');
+        const navHome = document.getElementById('navHome');
+        const navNotepad = document.getElementById('navNotepad');
+        const navLog = document.getElementById('navLog');
+        const logCountLabel = document.getElementById('logCount');
+        const startOverSidebar = document.getElementById('startOverSidebar');
+
+        // Right panel elements
+        const rightPanel = document.getElementById('rightPanel');
+        const rightPanelToggle = document.getElementById('rightPanelToggle');
+        const rightPanelClose = document.getElementById('rightPanelClose');
+        const tabLog = document.getElementById('tabLog');
+        const tabNotepad = document.getElementById('tabNotepad');
+        const logSection = document.getElementById('logSection');
+        const notepadSection = document.getElementById('notepadSection');
+
+        // Dashboard elements
+        const dashboardGrid = document.getElementById('dashboardGrid');
+        const dashboardProblem = document.getElementById('dashboardProblem');
+        const editProblem = document.getElementById('editProblem');
+        const progressOverview = document.getElementById('progressOverview');
+
+        // Quick action buttons
+        const quickSuggest = document.getElementById('quickSuggest');
+        const quickProgress = document.getElementById('quickProgress');
+        const quickExport = document.getElementById('quickExport');
 
         // Render Problem Type Selector
         function renderProblemTypeSelector() {
@@ -2745,7 +3391,13 @@ Next steps:
             renderPhaseContent();
             setupEventListeners();
             setupDrawers();
+            setupSidebar();
+            setupRightPanel();
+            setupQuickActions();
+            setupDashboard();
             loadFromLocalStorage();
+            updateProgressTracking();
+            updateWelcomeGreeting();
         }
 
         // Show Initial Prompt
@@ -2762,33 +3414,325 @@ Next steps:
 
         // Setup Panel Controls
         function setupDrawers() {
-            logToggle.addEventListener('click', toggleRightPanel);
-            notepadToggle.addEventListener('click', toggleLeftPanel);
-            panelRightClose.addEventListener('click', closeRightPanel);
-            panelLeftClose.addEventListener('click', closeLeftPanel);
-
             // Sort button listeners
-            sortNewestBtn.addEventListener('click', () => {
-                logSortOrder = 'newest';
-                sortNewestBtn.classList.add('active');
-                sortOldestBtn.classList.remove('active');
-                renderLogEntries();
-            });
+            if (sortNewestBtn) {
+                sortNewestBtn.addEventListener('click', () => {
+                    logSortOrder = 'newest';
+                    sortNewestBtn.classList.add('active');
+                    sortOldestBtn.classList.remove('active');
+                    renderLogEntries();
+                });
+            }
 
-            sortOldestBtn.addEventListener('click', () => {
-                logSortOrder = 'oldest';
-                sortOldestBtn.classList.add('active');
-                sortNewestBtn.classList.remove('active');
-                renderLogEntries();
-            });
+            if (sortOldestBtn) {
+                sortOldestBtn.addEventListener('click', () => {
+                    logSortOrder = 'oldest';
+                    sortOldestBtn.classList.add('active');
+                    sortNewestBtn.classList.remove('active');
+                    renderLogEntries();
+                });
+            }
 
             // Modal listeners
-            modalCancel.addEventListener('click', closeConfirmModal);
-            modalConfirm.addEventListener('click', confirmStartOver);
+            if (modalCancel) modalCancel.addEventListener('click', closeConfirmModal);
+            if (modalConfirm) modalConfirm.addEventListener('click', confirmStartOver);
 
             // Decision summary listeners
-            saveSummaryBtn.addEventListener('click', saveSummaryToLog);
-            exportSessionBtn.addEventListener('click', downloadSession);
+            if (saveSummaryBtn) saveSummaryBtn.addEventListener('click', saveSummaryToLog);
+            if (exportSessionBtn) exportSessionBtn.addEventListener('click', downloadSession);
+        }
+
+        // Setup Sidebar Navigation
+        function setupSidebar() {
+            // Phase sidebar items - click to navigate to phase
+            phaseSidebarItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const phase = item.dataset.phase;
+                    if (phase) {
+                        currentPhase = phase;
+                        updatePhaseButtons();
+                        renderPhaseContent();
+                        clearSelection();
+                        updateSidebarActivePhase();
+
+                        // Show models section if problem is described
+                        if (problemDescribed) {
+                            modelsSection.classList.add('revealed');
+                            phaseNavigation.classList.add('revealed');
+                        }
+                    }
+                });
+            });
+
+            // Quick access navigation
+            if (navHome) {
+                navHome.addEventListener('click', () => {
+                    // Scroll to top / show dashboard
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    updateSidebarQuickAccess('home');
+                });
+            }
+
+            if (navNotepad) {
+                navNotepad.addEventListener('click', () => {
+                    openRightPanelTab('notepad');
+                    updateSidebarQuickAccess('notepad');
+                });
+            }
+
+            if (navLog) {
+                navLog.addEventListener('click', () => {
+                    openRightPanelTab('log');
+                    updateSidebarQuickAccess('log');
+                });
+            }
+
+            // Start Over button in sidebar
+            if (startOverSidebar) {
+                startOverSidebar.addEventListener('click', startOver);
+            }
+        }
+
+        // Update sidebar active phase highlight
+        function updateSidebarActivePhase() {
+            phaseSidebarItems.forEach(item => {
+                item.classList.toggle('active', item.dataset.phase === currentPhase);
+            });
+        }
+
+        // Update sidebar quick access highlight
+        function updateSidebarQuickAccess(active) {
+            if (navHome) navHome.classList.toggle('active', active === 'home');
+            if (navNotepad) navNotepad.classList.toggle('active', active === 'notepad');
+            if (navLog) navLog.classList.toggle('active', active === 'log');
+        }
+
+        // Setup Right Panel with Tabs
+        function setupRightPanel() {
+            // Toggle button
+            if (rightPanelToggle) {
+                rightPanelToggle.addEventListener('click', () => {
+                    rightPanel.classList.toggle('open');
+                    rightPanelToggle.classList.toggle('active');
+                });
+            }
+
+            // Close button
+            if (rightPanelClose) {
+                rightPanelClose.addEventListener('click', () => {
+                    rightPanel.classList.remove('open');
+                    rightPanelToggle.classList.remove('active');
+                });
+            }
+
+            // Tab switching
+            if (tabLog) {
+                tabLog.addEventListener('click', () => switchPanelTab('log'));
+            }
+            if (tabNotepad) {
+                tabNotepad.addEventListener('click', () => switchPanelTab('notepad'));
+            }
+        }
+
+        // Switch between Log and Notepad tabs
+        function switchPanelTab(tab) {
+            if (tab === 'log') {
+                tabLog.classList.add('active');
+                tabNotepad.classList.remove('active');
+                logSection.classList.add('active');
+                notepadSection.classList.remove('active');
+            } else {
+                tabNotepad.classList.add('active');
+                tabLog.classList.remove('active');
+                notepadSection.classList.add('active');
+                logSection.classList.remove('active');
+            }
+        }
+
+        // Open right panel with specific tab
+        function openRightPanelTab(tab) {
+            rightPanel.classList.add('open');
+            rightPanelToggle.classList.add('active');
+            switchPanelTab(tab);
+        }
+
+        // Setup Quick Action Buttons
+        function setupQuickActions() {
+            if (quickSuggest) {
+                quickSuggest.addEventListener('click', () => {
+                    // Suggest a model based on current state
+                    if (!problemDescribed) {
+                        alert('Please describe your problem first before getting model suggestions.');
+                        return;
+                    }
+                    // Scroll to models section
+                    if (modelsSection) {
+                        modelsSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+
+            if (quickProgress) {
+                quickProgress.addEventListener('click', () => {
+                    // Show progress overview
+                    if (dashboardGrid) {
+                        dashboardGrid.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+
+            if (quickExport) {
+                quickExport.addEventListener('click', downloadSession);
+            }
+        }
+
+        // Setup Dashboard
+        function setupDashboard() {
+            if (editProblem) {
+                editProblem.addEventListener('click', () => {
+                    // Focus on the response input for editing
+                    if (responseInput) {
+                        responseInput.focus();
+                        responseInput.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+
+            // Initial dashboard render
+            updateDashboard();
+        }
+
+        // Update Dashboard
+        function updateDashboard() {
+            // Update problem display
+            if (dashboardProblem) {
+                const initialEntry = logEntries.find(e => e.phase === 'initial');
+                if (initialEntry) {
+                    const truncated = initialEntry.response.length > 150
+                        ? initialEntry.response.substring(0, 150) + '...'
+                        : initialEntry.response;
+                    dashboardProblem.textContent = truncated;
+                } else {
+                    dashboardProblem.textContent = 'No problem defined yet. Start by describing your decision or problem.';
+                }
+            }
+
+            // Update progress overview
+            if (progressOverview) {
+                renderProgressOverview();
+            }
+        }
+
+        // Render Progress Overview in Dashboard
+        function renderProgressOverview() {
+            const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
+            const phaseNames = {
+                diagnostic: 'Diagnose',
+                evaluative: 'Evaluate',
+                protective: 'Protect',
+                generative: 'Generate',
+                implementation: 'Implement'
+            };
+            const phaseColors = {
+                diagnostic: 'var(--diagnostic-color)',
+                evaluative: 'var(--evaluative-color)',
+                protective: 'var(--protective-color)',
+                generative: 'var(--generative-color)',
+                implementation: 'var(--implementation-color)'
+            };
+
+            let html = '';
+            phases.forEach((phase, index) => {
+                const phaseData = mentalModelsData[phase];
+                const totalModels = phaseData.models.length;
+                const usedModels = logEntries.filter(e => e.phase === phase).length;
+                const percentage = Math.round((usedModels / totalModels) * 100);
+
+                html += `
+                    <div class="progress-phase-row">
+                        <div class="progress-phase-icon" style="background: ${phaseColors[phase]}">${index + 1}</div>
+                        <div class="progress-phase-info">
+                            <div class="progress-phase-name">${phaseNames[phase]}</div>
+                            <div class="progress-phase-bar">
+                                <div class="progress-phase-fill" style="width: ${percentage}%; background: ${phaseColors[phase]}"></div>
+                            </div>
+                        </div>
+                        <div class="progress-phase-percent">${percentage}%</div>
+                    </div>
+                `;
+            });
+
+            progressOverview.innerHTML = html;
+        }
+
+        // Update Progress Tracking (sidebar and dashboard)
+        function updateProgressTracking() {
+            const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
+
+            phases.forEach(phase => {
+                const phaseData = mentalModelsData[phase];
+                const totalModels = phaseData.models.length;
+                const usedModels = logEntries.filter(e => e.phase === phase).length;
+                const percentage = Math.round((usedModels / totalModels) * 100);
+
+                // Update sidebar progress bar
+                const progressBar = document.getElementById(`progress${phase.charAt(0).toUpperCase() + phase.slice(1)}`);
+                if (progressBar) {
+                    progressBar.style.width = `${percentage}%`;
+                }
+
+                // Update sidebar progress text
+                const progressText = document.getElementById(`progressText${phase.charAt(0).toUpperCase() + phase.slice(1)}`);
+                if (progressText) {
+                    progressText.textContent = `${usedModels}/${totalModels} models`;
+                }
+
+                // Update status badge
+                const statusBadge = document.getElementById(`status${phase.charAt(0).toUpperCase() + phase.slice(1)}`);
+                if (statusBadge) {
+                    if (usedModels === 0) {
+                        statusBadge.textContent = 'Not Started';
+                        statusBadge.className = 'status-badge not-started';
+                    } else if (usedModels >= totalModels) {
+                        statusBadge.textContent = 'Completed';
+                        statusBadge.className = 'status-badge completed';
+                    } else {
+                        statusBadge.textContent = 'In Progress';
+                        statusBadge.className = 'status-badge in-progress';
+                    }
+                }
+            });
+
+            // Update log count in sidebar
+            if (logCountLabel) {
+                const entryCount = logEntries.filter(e => e.phase !== 'initial' && e.phase !== 'summary').length;
+                logCountLabel.textContent = `${entryCount} ${entryCount === 1 ? 'entry' : 'entries'}`;
+            }
+
+            // Update dashboard
+            updateDashboard();
+        }
+
+        // Update Welcome Greeting
+        function updateWelcomeGreeting() {
+            if (!sidebarGreeting) return;
+
+            const hour = new Date().getHours();
+            let greeting;
+            if (hour < 12) {
+                greeting = 'Good morning!';
+            } else if (hour < 17) {
+                greeting = 'Good afternoon!';
+            } else {
+                greeting = 'Good evening!';
+            }
+
+            // Check if returning user
+            if (logEntries.length > 0) {
+                greeting = 'Welcome back!';
+            }
+
+            sidebarGreeting.textContent = greeting;
         }
 
         // Modal functions
@@ -2850,39 +3794,43 @@ Next steps:
         }
 
         function toggleRightPanel() {
-            panelRight.classList.toggle('open');
-            logToggle.classList.toggle('active');
-            document.body.classList.toggle('panel-right-open');
+            if (rightPanel) {
+                rightPanel.classList.toggle('open');
+                rightPanelToggle.classList.toggle('active');
+            }
         }
 
         function toggleLeftPanel() {
-            panelLeft.classList.toggle('open');
-            notepadToggle.classList.toggle('active');
-            document.body.classList.toggle('panel-left-open');
+            // Left panel removed in new layout - open sidebar instead on mobile
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
         }
 
         function closeRightPanel() {
-            panelRight.classList.remove('open');
-            logToggle.classList.remove('active');
-            document.body.classList.remove('panel-right-open');
+            if (rightPanel) {
+                rightPanel.classList.remove('open');
+                rightPanelToggle.classList.remove('active');
+            }
         }
 
         function closeLeftPanel() {
-            panelLeft.classList.remove('open');
-            notepadToggle.classList.remove('active');
-            document.body.classList.remove('panel-left-open');
+            if (sidebar) {
+                sidebar.classList.remove('open');
+            }
         }
 
         function openRightPanel() {
-            panelRight.classList.add('open');
-            logToggle.classList.add('active');
-            document.body.classList.add('panel-right-open');
+            if (rightPanel) {
+                rightPanel.classList.add('open');
+                rightPanelToggle.classList.add('active');
+            }
         }
 
         function openLeftPanel() {
-            panelLeft.classList.add('open');
-            notepadToggle.classList.add('active');
-            document.body.classList.add('panel-left-open');
+            if (sidebar) {
+                sidebar.classList.add('open');
+            }
         }
 
         // Setup Event Listeners
@@ -3249,9 +4197,10 @@ Next steps:
             setTimeout(() => {
                 renderLogEntries();
                 saveToLocalStorage();
+                updateDashboard();
 
                 // Open decision log panel
-                openRightPanel();
+                openRightPanelTab('log');
             }, 400);
             
             // Add problem description to notepad automatically
@@ -3316,8 +4265,11 @@ Next steps:
             clearCurrentResponse();
             saveToLocalStorage();
 
+            // Update progress tracking
+            updateProgressTracking();
+
             // Open decision log panel
-            openRightPanel();
+            openRightPanelTab('log');
 
             // Check if we should show decision summary
             checkShowDecisionSummary();
