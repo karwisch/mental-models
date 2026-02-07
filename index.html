@@ -2007,6 +2007,90 @@
             transform: translateY(-2px);
         }
 
+        /* Summary Generator */
+        .summary-generator {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 1rem;
+        }
+
+        .summary-intro {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .summary-intro p {
+            color: var(--charcoal);
+            opacity: 0.7;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .summary-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 0.75rem;
+        }
+
+        .summary-text {
+            flex: 1;
+            padding: 1rem;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-y: auto;
+            min-height: 300px;
+            white-space: pre-wrap;
+        }
+
+        .summary-text:focus {
+            outline: none;
+            border-color: var(--teal);
+            background: white;
+        }
+
+        .summary-text h4 {
+            color: var(--charcoal);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            margin: 1rem 0 0.5rem 0;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-text h4:first-child {
+            margin-top: 0;
+        }
+
+        .summary-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .summary-actions button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .summary-actions button:hover {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
+        }
+
         /* Empty States */
         .empty-state {
             text-align: center;
@@ -2255,11 +2339,11 @@
                             <div class="sidebar-item-label">Home</div>
                         </div>
                     </div>
-                    <div class="sidebar-item" id="navNotepad">
+                    <div class="sidebar-item" id="navSummary">
                         <div class="sidebar-item-icon">📝</div>
                         <div class="sidebar-item-content">
-                            <div class="sidebar-item-label">Notepad</div>
-                            <div class="sidebar-item-sublabel">Compile your thinking</div>
+                            <div class="sidebar-item-label">Summary</div>
+                            <div class="sidebar-item-sublabel">Generate decision summary</div>
                         </div>
                     </div>
                     <div class="sidebar-item" id="navLog">
@@ -2465,7 +2549,7 @@ Next steps:
             <div class="panel-header panel-header-right">
                 <div class="panel-tabs">
                     <button class="panel-tab active" id="tabLog">Decision Log</button>
-                    <button class="panel-tab" id="tabNotepad">Notepad</button>
+                    <button class="panel-tab" id="tabSummary">Summary</button>
                 </div>
                 <button class="panel-close" id="rightPanelClose">&times;</button>
             </div>
@@ -2485,15 +2569,20 @@ Next steps:
                     </div>
                 </div>
 
-                <!-- Notepad Section -->
-                <div class="panel-section" id="notepadSection">
-                    <div class="notepad">
-                        <div class="notepad-area empty" id="notepadArea" contenteditable="true">
-                            Drag log entries here to compile your thinking...
+                <!-- Summary Section -->
+                <div class="panel-section" id="summarySection">
+                    <div class="summary-generator">
+                        <div class="summary-intro" id="summaryIntro">
+                            <p>Generate an auto-compiled summary of your decision-making process based on your log entries.</p>
+                            <button class="btn btn-primary" id="generateSummaryBtn">Generate Summary</button>
                         </div>
-                        <div class="notepad-actions">
-                            <button id="clearNotepad">Clear</button>
-                            <button id="copyNotepad">Copy</button>
+                        <div class="summary-content" id="summaryContent" style="display: none;">
+                            <div class="summary-text" id="summaryText" contenteditable="true"></div>
+                            <div class="summary-actions">
+                                <button id="regenerateSummary">Regenerate</button>
+                                <button id="copySummary">Copy</button>
+                                <button id="exportSummary">Export</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3268,9 +3357,10 @@ Next steps:
         const clearBtn = document.getElementById('clearBtn');
         const startOverBtn = document.getElementById('startOverBtn');
         const logEntriesContainer = document.getElementById('logEntries');
-        const notepadArea = document.getElementById('notepadArea');
-        const clearNotepadBtn = document.getElementById('clearNotepad');
-        const copyNotepadBtn = document.getElementById('copyNotepad');
+        // Legacy notepad elements (removed - replaced by Summary)
+        const notepadArea = null;
+        const clearNotepadBtn = null;
+        const copyNotepadBtn = null;
         
         // Legacy panel elements (keeping for backward compatibility)
         const panelLeft = null; // Removed in new layout
@@ -3300,7 +3390,7 @@ Next steps:
         const sidebarGreeting = document.getElementById('sidebarGreeting');
         const phaseSidebarItems = document.querySelectorAll('.phase-sidebar-item');
         const navHome = document.getElementById('navHome');
-        const navNotepad = document.getElementById('navNotepad');
+        const navSummary = document.getElementById('navSummary');
         const navLog = document.getElementById('navLog');
         const logCountLabel = document.getElementById('logCount');
         const startOverSidebar = document.getElementById('startOverSidebar');
@@ -3310,9 +3400,18 @@ Next steps:
         const rightPanelToggle = document.getElementById('rightPanelToggle');
         const rightPanelClose = document.getElementById('rightPanelClose');
         const tabLog = document.getElementById('tabLog');
-        const tabNotepad = document.getElementById('tabNotepad');
+        const tabSummary = document.getElementById('tabSummary');
         const logSection = document.getElementById('logSection');
-        const notepadSection = document.getElementById('notepadSection');
+        const summarySection = document.getElementById('summarySection');
+
+        // Summary elements
+        const summaryIntro = document.getElementById('summaryIntro');
+        const summaryContent = document.getElementById('summaryContent');
+        const summaryText = document.getElementById('summaryText');
+        const generateSummaryBtn = document.getElementById('generateSummaryBtn');
+        const regenerateSummary = document.getElementById('regenerateSummary');
+        const copySummary = document.getElementById('copySummary');
+        const exportSummary = document.getElementById('exportSummary');
 
         // Dashboard elements
         const dashboardGrid = document.getElementById('dashboardGrid');
@@ -3375,6 +3474,7 @@ Next steps:
             setupDrawers();
             setupSidebar();
             setupRightPanel();
+            setupSummary();
             setupQuickActions();
             setupDashboard();
             loadFromLocalStorage();
@@ -3455,10 +3555,10 @@ Next steps:
                 });
             }
 
-            if (navNotepad) {
-                navNotepad.addEventListener('click', () => {
-                    openRightPanelTab('notepad');
-                    updateSidebarQuickAccess('notepad');
+            if (navSummary) {
+                navSummary.addEventListener('click', () => {
+                    openRightPanelTab('summary');
+                    updateSidebarQuickAccess('summary');
                 });
             }
 
@@ -3485,7 +3585,7 @@ Next steps:
         // Update sidebar quick access highlight
         function updateSidebarQuickAccess(active) {
             if (navHome) navHome.classList.toggle('active', active === 'home');
-            if (navNotepad) navNotepad.classList.toggle('active', active === 'notepad');
+            if (navSummary) navSummary.classList.toggle('active', active === 'summary');
             if (navLog) navLog.classList.toggle('active', active === 'log');
         }
 
@@ -3513,8 +3613,8 @@ Next steps:
             if (tabLog) {
                 tabLog.addEventListener('click', () => switchPanelTab('log'));
             }
-            if (tabNotepad) {
-                tabNotepad.addEventListener('click', () => switchPanelTab('notepad'));
+            if (tabSummary) {
+                tabSummary.addEventListener('click', () => switchPanelTab('summary'));
             }
 
             // On large screens, open panel by default
@@ -3526,15 +3626,15 @@ Next steps:
         // Switch between Log and Notepad tabs
         function switchPanelTab(tab) {
             if (tab === 'log') {
-                tabLog.classList.add('active');
-                tabNotepad.classList.remove('active');
-                logSection.classList.add('active');
-                notepadSection.classList.remove('active');
+                if (tabLog) tabLog.classList.add('active');
+                if (tabSummary) tabSummary.classList.remove('active');
+                if (logSection) logSection.classList.add('active');
+                if (summarySection) summarySection.classList.remove('active');
             } else {
-                tabNotepad.classList.add('active');
-                tabLog.classList.remove('active');
-                notepadSection.classList.add('active');
-                logSection.classList.remove('active');
+                if (tabSummary) tabSummary.classList.add('active');
+                if (tabLog) tabLog.classList.remove('active');
+                if (summarySection) summarySection.classList.add('active');
+                if (logSection) logSection.classList.remove('active');
             }
         }
 
@@ -3559,6 +3659,119 @@ Next steps:
             if (rightPanelToggle) {
                 rightPanelToggle.classList.remove('active');
             }
+        }
+
+        // Setup Summary Section
+        function setupSummary() {
+            if (generateSummaryBtn) {
+                generateSummaryBtn.addEventListener('click', generateSummary);
+            }
+            if (regenerateSummary) {
+                regenerateSummary.addEventListener('click', generateSummary);
+            }
+            if (copySummary) {
+                copySummary.addEventListener('click', copySummaryText);
+            }
+            if (exportSummary) {
+                exportSummary.addEventListener('click', exportSummaryDocument);
+            }
+        }
+
+        // Generate Summary from log entries
+        function generateSummary() {
+            if (logEntries.length === 0) {
+                alert('No entries in your decision log yet. Add some entries first.');
+                return;
+            }
+
+            const phaseNames = {
+                initial: 'Problem Statement',
+                diagnostic: 'Diagnosis',
+                evaluative: 'Evaluation',
+                protective: 'Risk Assessment',
+                generative: 'Solution Generation',
+                implementation: 'Implementation Planning',
+                summary: 'Final Decision'
+            };
+
+            let summary = '';
+
+            // Problem Statement
+            const problemEntry = logEntries.find(e => e.phase === 'initial');
+            if (problemEntry) {
+                summary += `PROBLEM/DECISION\n${'─'.repeat(40)}\n${problemEntry.response}\n\n`;
+            }
+
+            // Group entries by phase (excluding initial and summary)
+            const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
+
+            phases.forEach(phase => {
+                const phaseEntries = logEntries.filter(e => e.phase === phase);
+                if (phaseEntries.length > 0) {
+                    summary += `${phaseNames[phase].toUpperCase()}\n${'─'.repeat(40)}\n`;
+                    phaseEntries.forEach(entry => {
+                        summary += `\n${entry.modelName}\n`;
+                        summary += `Q: ${entry.modelPrompt}\n`;
+                        summary += `A: ${entry.response}\n`;
+                    });
+                    summary += '\n';
+                }
+            });
+
+            // Key Insights Section
+            summary += `KEY INSIGHTS\n${'─'.repeat(40)}\n`;
+            summary += `• \n• \n• \n\n`;
+
+            // Decision Section
+            summary += `MY DECISION\n${'─'.repeat(40)}\n`;
+            summary += `Based on this analysis, I will...\n\n`;
+
+            // Next Steps Section
+            summary += `NEXT STEPS\n${'─'.repeat(40)}\n`;
+            summary += `1. \n2. \n3. \n`;
+
+            // Show the summary
+            if (summaryText) {
+                summaryText.innerText = summary;
+            }
+            if (summaryIntro) {
+                summaryIntro.style.display = 'none';
+            }
+            if (summaryContent) {
+                summaryContent.style.display = 'flex';
+            }
+        }
+
+        // Copy summary text
+        function copySummaryText() {
+            if (!summaryText) return;
+            const text = summaryText.innerText || summaryText.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalBg = copySummary.style.background;
+                copySummary.style.background = '#4CAF50';
+                copySummary.style.color = 'white';
+                copySummary.textContent = 'Copied!';
+                setTimeout(() => {
+                    copySummary.style.background = originalBg;
+                    copySummary.style.color = '';
+                    copySummary.textContent = 'Copy';
+                }, 1500);
+            });
+        }
+
+        // Export summary as text file
+        function exportSummaryDocument() {
+            if (!summaryText) return;
+            const text = summaryText.innerText || summaryText.textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `decision-summary-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         // Setup Quick Action Buttons
@@ -4375,12 +4588,12 @@ Next steps:
                 }
             });
             
-            // Add notepad content if not empty
-            if (!notepadArea.classList.contains('empty')) {
+            // Add summary content if available
+            if (summaryText && summaryContent && summaryContent.style.display !== 'none') {
                 content += '=' .repeat(60) + '\n';
-                content += 'COMPILED NOTES:\n';
+                content += 'DECISION SUMMARY:\n';
                 content += '=' .repeat(60) + '\n\n';
-                content += (notepadArea.innerText || notepadArea.textContent) + '\n';
+                content += (summaryText.innerText || summaryText.textContent) + '\n';
             }
             
             // Create and download file
@@ -4410,8 +4623,12 @@ Next steps:
 
             // Reset UI
             responseInput.value = '';
-            notepadArea.innerText = 'Drag log entries here to compile your thinking...';
-            notepadArea.classList.add('empty');
+
+            // Reset summary section
+            if (summaryIntro) summaryIntro.style.display = 'block';
+            if (summaryContent) summaryContent.style.display = 'none';
+            if (summaryText) summaryText.innerText = '';
+
             renderLogEntries();
 
             // Hide problem reference and type selector
@@ -4474,7 +4691,7 @@ Next steps:
             }
         };
 
-        // Drag and Drop Handlers
+        // Legacy drag and drop handlers (kept for backward compatibility, now no-ops)
         function handleDragStart(e) {
             e.dataTransfer.effectAllowed = 'copy';
             e.dataTransfer.setData('text/plain', e.target.dataset.entryId);
@@ -4482,88 +4699,23 @@ Next steps:
 
         function handleDragOver(e) {
             e.preventDefault();
-            e.dataTransfer.dropEffect = 'copy';
-            notepadArea.classList.add('drag-over');
         }
 
         function handleDragLeave(e) {
-            if (e.target === notepadArea) {
-                notepadArea.classList.remove('drag-over');
-            }
+            // No-op - notepad removed
         }
 
         function handleDrop(e) {
             e.preventDefault();
-            notepadArea.classList.remove('drag-over');
-
-            const entryId = parseInt(e.dataTransfer.getData('text/plain'));
-            const entry = logEntries.find(e => e.id === entryId);
-            
-            if (entry) {
-                const currentContent = notepadArea.classList.contains('empty') ? '' : (notepadArea.innerText || notepadArea.textContent);
-                
-                // Format the new entry
-                const newEntryText = `${entry.modelName}:\n${entry.response}\n${'-'.repeat(60)}\n\n`;
-                
-                // If notepad is empty, just add the entry
-                if (notepadArea.classList.contains('empty')) {
-                    notepadArea.innerText = newEntryText.trim();
-                } else {
-                    // If there's a problem description section, append after the divider
-                    if (currentContent.includes('MENTAL MODEL RESPONSES:')) {
-                        notepadArea.innerText = currentContent + newEntryText;
-                    } else {
-                        // Otherwise just append
-                        notepadArea.innerText = `${currentContent}\n\n${newEntryText}`;
-                    }
-                }
-                
-                notepadArea.classList.remove('empty');
-            }
         }
 
-        // Clear Notepad
+        // Legacy notepad functions (no-ops - replaced by Summary)
         function clearNotepad() {
-            if (notepadArea.classList.contains('empty')) {
-                return;
-            }
-            
-            if (confirm('Clear notepad? This will remove all compiled responses but keep your problem description in the log.')) {
-                // If there's a problem description saved, keep it
-                if (problemDescribed) {
-                    const problemEntry = logEntries.find(e => e.phase === 'initial');
-                    if (problemEntry) {
-                        notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
-                        notepadArea.classList.remove('empty');
-                    } else {
-                        notepadArea.innerText = 'Drag log entries here to compile your thinking...';
-                        notepadArea.classList.add('empty');
-                    }
-                } else {
-                    notepadArea.innerText = 'Drag log entries here to compile your thinking...';
-                    notepadArea.classList.add('empty');
-                }
-            }
+            // No-op - notepad removed
         }
 
-        // Copy Notepad
         function copyNotepad() {
-            if (notepadArea.classList.contains('empty')) {
-                alert('Notepad is empty.');
-                return;
-            }
-
-            const text = notepadArea.textContent || notepadArea.innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                // Visual feedback
-                const originalBorder = notepadArea.style.borderColor;
-                notepadArea.style.borderColor = '#4CAF50';
-                setTimeout(() => {
-                    notepadArea.style.borderColor = originalBorder;
-                }, 500);
-            }).catch(() => {
-                alert('Failed to copy. Please select and copy manually.');
-            });
+            // No-op - notepad removed
         }
 
         // Local Storage
