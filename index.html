@@ -282,8 +282,15 @@
         .main-area {
             flex: 1;
             margin-left: 280px;
+            margin-right: 0;
             padding: 1.5rem;
             min-height: 100vh;
+            transition: margin-right 0.3s ease;
+        }
+
+        /* When right panel is open, push main content */
+        body.right-panel-open .main-area {
+            margin-right: 380px;
         }
 
         /* Quick Actions Bar */
@@ -2095,6 +2102,10 @@
                 margin-left: 240px;
             }
 
+            body.right-panel-open .main-area {
+                margin-right: 320px;
+            }
+
             /* Right panel narrower */
             .right-panel {
                 width: 320px;
@@ -2143,6 +2154,11 @@
             .main-area {
                 margin-left: 0;
                 padding: 1rem;
+            }
+
+            /* On mobile, right panel is bottom sheet - don't shift content */
+            body.right-panel-open .main-area {
+                margin-right: 0;
             }
 
             .phase-buttons {
@@ -3513,8 +3529,9 @@ Next steps:
             // Toggle button
             if (rightPanelToggle) {
                 rightPanelToggle.addEventListener('click', () => {
-                    rightPanel.classList.toggle('open');
+                    const isOpen = rightPanel.classList.toggle('open');
                     rightPanelToggle.classList.toggle('active');
+                    document.body.classList.toggle('right-panel-open', isOpen);
                 });
             }
 
@@ -3523,6 +3540,7 @@ Next steps:
                 rightPanelClose.addEventListener('click', () => {
                     rightPanel.classList.remove('open');
                     rightPanelToggle.classList.remove('active');
+                    document.body.classList.remove('right-panel-open');
                 });
             }
 
@@ -3532,6 +3550,11 @@ Next steps:
             }
             if (tabNotepad) {
                 tabNotepad.addEventListener('click', () => switchPanelTab('notepad'));
+            }
+
+            // On large screens, open panel by default
+            if (window.innerWidth > 1200) {
+                openRightPanelTab('log');
             }
         }
 
@@ -3552,9 +3575,25 @@ Next steps:
 
         // Open right panel with specific tab
         function openRightPanelTab(tab) {
-            rightPanel.classList.add('open');
-            rightPanelToggle.classList.add('active');
+            if (rightPanel) {
+                rightPanel.classList.add('open');
+                document.body.classList.add('right-panel-open');
+            }
+            if (rightPanelToggle) {
+                rightPanelToggle.classList.add('active');
+            }
             switchPanelTab(tab);
+        }
+
+        // Close right panel
+        function closeRightPanelFn() {
+            if (rightPanel) {
+                rightPanel.classList.remove('open');
+                document.body.classList.remove('right-panel-open');
+            }
+            if (rightPanelToggle) {
+                rightPanelToggle.classList.remove('active');
+            }
         }
 
         // Setup Quick Action Buttons
@@ -3796,8 +3835,9 @@ Next steps:
 
         function toggleRightPanel() {
             if (rightPanel) {
-                rightPanel.classList.toggle('open');
+                const isOpen = rightPanel.classList.toggle('open');
                 rightPanelToggle.classList.toggle('active');
+                document.body.classList.toggle('right-panel-open', isOpen);
             }
         }
 
@@ -3812,6 +3852,7 @@ Next steps:
             if (rightPanel) {
                 rightPanel.classList.remove('open');
                 rightPanelToggle.classList.remove('active');
+                document.body.classList.remove('right-panel-open');
             }
         }
 
@@ -3825,6 +3866,7 @@ Next steps:
             if (rightPanel) {
                 rightPanel.classList.add('open');
                 rightPanelToggle.classList.add('active');
+                document.body.classList.add('right-panel-open');
             }
         }
 
