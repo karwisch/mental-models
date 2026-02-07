@@ -282,15 +282,8 @@
         .main-area {
             flex: 1;
             margin-left: 280px;
-            margin-right: 0;
             padding: 1.5rem;
             min-height: 100vh;
-            transition: margin-right 0.3s ease;
-        }
-
-        /* When right panel is open, push main content */
-        body.right-panel-open .main-area {
-            margin-right: 380px;
         }
 
         /* Quick Actions Bar */
@@ -480,46 +473,6 @@
 
         .right-panel-toggle.active {
             right: 380px;
-        }
-
-        /* Panel Tabs */
-        .panel-tabs {
-            display: flex;
-            gap: 0;
-        }
-
-        .panel-tab {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: var(--charcoal);
-            opacity: 0.5;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-bottom: 2px solid transparent;
-        }
-
-        .panel-tab:hover {
-            opacity: 0.8;
-        }
-
-        .panel-tab.active {
-            opacity: 1;
-            color: var(--teal);
-            border-bottom-color: var(--teal);
-        }
-
-        .panel-section {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .panel-section.active {
-            display: flex;
         }
 
         .container {
@@ -1821,6 +1774,11 @@
             box-shadow: 0 1px 4px rgba(255, 152, 0, 0.3);
         }
 
+        /* Sidebar - Now in Drawer */
+        .sidebar {
+            display: none; /* Hidden - content moved to drawers */
+        }
+
         .decision-log {
             display: flex;
             flex-direction: column;
@@ -2007,90 +1965,6 @@
             transform: translateY(-2px);
         }
 
-        /* Summary Generator */
-        .summary-generator {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            padding: 1rem;
-        }
-
-        .summary-intro {
-            text-align: center;
-            padding: 2rem 1rem;
-        }
-
-        .summary-intro p {
-            color: var(--charcoal);
-            opacity: 0.7;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
-        }
-
-        .summary-content {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            gap: 0.75rem;
-        }
-
-        .summary-text {
-            flex: 1;
-            padding: 1rem;
-            background: #fafafa;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            overflow-y: auto;
-            min-height: 300px;
-            white-space: pre-wrap;
-        }
-
-        .summary-text:focus {
-            outline: none;
-            border-color: var(--teal);
-            background: white;
-        }
-
-        .summary-text h4 {
-            color: var(--charcoal);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            margin: 1rem 0 0.5rem 0;
-            padding-bottom: 0.25rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .summary-text h4:first-child {
-            margin-top: 0;
-        }
-
-        .summary-actions {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: flex-end;
-        }
-
-        .summary-actions button {
-            padding: 0.5rem 1rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            background: white;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--charcoal);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .summary-actions button:hover {
-            background: var(--teal);
-            color: white;
-            border-color: var(--teal);
-        }
-
         /* Empty States */
         .empty-state {
             text-align: center;
@@ -2172,27 +2046,33 @@
 
         /* Responsive Design */
         @media (max-width: 1200px) {
-            /* Narrower sidebar on medium screens */
+            .container {
+                grid-template-columns: 1fr;
+            }
+
             .sidebar {
-                width: 240px;
+                order: 2;
             }
 
-            .main-area {
-                margin-left: 240px;
+            /* Panels take more space on medium screens */
+            .panel-left, .panel-right {
+                width: 300px;
             }
 
-            body.right-panel-open .main-area {
-                margin-right: 320px;
+            body.panel-right-open .container {
+                margin-right: 300px;
             }
 
-            /* Right panel narrower */
-            .right-panel {
-                width: 320px;
-                right: -320px;
+            body.panel-left-open .container {
+                margin-left: 300px;
             }
 
-            .right-panel-toggle.active {
-                right: 320px;
+            body.panel-right-open .toggle-buttons {
+                right: 300px;
+            }
+
+            body.panel-left-open .toggle-buttons-left {
+                left: 300px;
             }
         }
 
@@ -2206,40 +2086,9 @@
             .work-area-content.split-pane .work-area-right {
                 flex: 1 1 100%;
             }
-
-            /* Dashboard cards stack */
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            /* Quick actions wrap */
-            .quick-actions {
-                flex-wrap: wrap;
-            }
         }
 
         @media (max-width: 768px) {
-            /* Sidebar becomes hidden overlay */
-            .sidebar {
-                left: -280px;
-                width: 280px;
-                transition: left 0.3s ease;
-            }
-
-            .sidebar.open {
-                left: 0;
-            }
-
-            .main-area {
-                margin-left: 0;
-                padding: 1rem;
-            }
-
-            /* On mobile, right panel is bottom sheet - don't shift content */
-            body.right-panel-open .main-area {
-                margin-right: 0;
-            }
-
             .phase-buttons {
                 flex-direction: column;
             }
@@ -2252,35 +2101,52 @@
                 grid-template-columns: 1fr;
             }
 
-            /* Right panel becomes full-width bottom sheet */
-            .right-panel {
+            /* Panels become full-width bottom sheets on mobile */
+            .panel-left, .panel-right {
                 width: 100%;
                 height: 70vh;
                 top: auto;
                 bottom: -70vh;
-                right: 0;
                 left: 0;
+                right: 0;
                 transition: bottom 0.3s ease;
                 border-radius: 16px 16px 0 0;
             }
 
-            .right-panel.open {
+            .panel-left.open, .panel-right.open {
                 bottom: 0;
+                left: 0;
+                right: 0;
             }
 
-            .right-panel-toggle {
-                bottom: 0;
-                top: auto;
-                right: 50%;
-                transform: translateX(50%);
-                writing-mode: horizontal-tb;
-                border-radius: 8px 8px 0 0;
-                padding: 0.5rem 1rem;
+            /* Don't shift container on mobile, panels overlay */
+            body.panel-right-open .container,
+            body.panel-left-open .container,
+            body.panel-right-open.panel-left-open .container {
+                margin-left: 50px;
+                margin-right: 50px;
             }
 
-            .right-panel-toggle.active {
-                right: 50%;
-                bottom: 70vh;
+            /* Toggle buttons stay in place */
+            body.panel-right-open .toggle-buttons {
+                right: 0;
+            }
+
+            body.panel-left-open .toggle-buttons-left {
+                left: 0;
+            }
+
+            /* Main content margins */
+            .main-content {
+                margin-left: 45px;
+                margin-right: 45px;
+            }
+
+            /* Toggle buttons smaller on mobile */
+            .toggle-btn, .toggle-btn-left {
+                width: 35px;
+                font-size: 0.65rem;
+                padding: 0.5rem 0.3rem;
             }
 
             /* Modal adjustments */
@@ -2297,11 +2163,6 @@
             .action-buttons .btn {
                 flex: 1 1 auto;
             }
-
-            /* Hide old toggle buttons */
-            .toggle-buttons, .toggle-buttons-left {
-                display: none;
-            }
         }
 
         @media (max-width: 480px) {
@@ -2313,9 +2174,14 @@
                 font-size: 0.75rem;
             }
 
-            .quick-action-btn {
-                flex: 1 1 100%;
-                justify-content: center;
+            .main-content {
+                margin-left: 40px;
+                margin-right: 40px;
+            }
+
+            .toggle-btn, .toggle-btn-left {
+                width: 32px;
+                font-size: 0.6rem;
             }
         }
     </style>
@@ -2339,11 +2205,11 @@
                             <div class="sidebar-item-label">Home</div>
                         </div>
                     </div>
-                    <div class="sidebar-item" id="navSummary">
+                    <div class="sidebar-item" id="navNotepad">
                         <div class="sidebar-item-icon">📝</div>
                         <div class="sidebar-item-content">
-                            <div class="sidebar-item-label">Summary</div>
-                            <div class="sidebar-item-sublabel">Generate decision summary</div>
+                            <div class="sidebar-item-label">Notepad</div>
+                            <div class="sidebar-item-sublabel">Compile your thinking</div>
                         </div>
                     </div>
                     <div class="sidebar-item" id="navLog">
@@ -2465,6 +2331,14 @@
                     </div>
                 </div>
 
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">📈 Progress Overview</div>
+                    </div>
+                    <div class="progress-overview" id="progressOverview">
+                        <!-- Progress rows will be populated by JS -->
+                    </div>
+                </div>
             </div>
 
             <div class="container">
@@ -2499,7 +2373,6 @@
                                 <div class="action-buttons">
                                     <button class="btn btn-primary" id="saveBtn">Add to Log</button>
                                     <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
-                                    <button class="btn btn-warning" id="startOverBtn">Start Over</button>
                                 </div>
                             </div>
                         </div>
@@ -2527,6 +2400,28 @@ Next steps:
                     </div>
                 </div>
 
+                <!-- Phase Navigation - hidden initially -->
+                <div class="phase-navigation">
+                    <h2>Decision-Making Sequence</h2>
+                    <div class="phase-buttons">
+                        <button class="phase-btn diagnostic active" data-phase="diagnostic">
+                            1. Diagnose
+                        </button>
+                        <button class="phase-btn evaluative" data-phase="evaluative">
+                            2. Evaluate
+                        </button>
+                        <button class="phase-btn protective" data-phase="protective">
+                            3. Protect
+                        </button>
+                        <button class="phase-btn generative" data-phase="generative">
+                            4. Generate
+                        </button>
+                        <button class="phase-btn implementation" data-phase="implementation">
+                            5. Implement
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Models Section - hidden initially -->
                 <div class="models-section">
                     <div class="phase-description diagnostic" id="phaseDescription">
@@ -2549,7 +2444,7 @@ Next steps:
             <div class="panel-header panel-header-right">
                 <div class="panel-tabs">
                     <button class="panel-tab active" id="tabLog">Decision Log</button>
-                    <button class="panel-tab" id="tabSummary">Summary</button>
+                    <button class="panel-tab" id="tabNotepad">Notepad</button>
                 </div>
                 <button class="panel-close" id="rightPanelClose">&times;</button>
             </div>
@@ -2569,20 +2464,15 @@ Next steps:
                     </div>
                 </div>
 
-                <!-- Summary Section -->
-                <div class="panel-section" id="summarySection">
-                    <div class="summary-generator">
-                        <div class="summary-intro" id="summaryIntro">
-                            <p>Generate an auto-compiled summary of your decision-making process based on your log entries.</p>
-                            <button class="btn btn-primary" id="generateSummaryBtn">Generate Summary</button>
+                <!-- Notepad Section -->
+                <div class="panel-section" id="notepadSection">
+                    <div class="notepad">
+                        <div class="notepad-area empty" id="notepadArea" contenteditable="true">
+                            Drag log entries here to compile your thinking...
                         </div>
-                        <div class="summary-content" id="summaryContent" style="display: none;">
-                            <div class="summary-text" id="summaryText" contenteditable="true"></div>
-                            <div class="summary-actions">
-                                <button id="regenerateSummary">Regenerate</button>
-                                <button id="copySummary">Copy</button>
-                                <button id="exportSummary">Export</button>
-                            </div>
+                        <div class="notepad-actions">
+                            <button id="clearNotepad">Clear</button>
+                            <button id="copyNotepad">Copy</button>
                         </div>
                     </div>
                 </div>
@@ -2597,6 +2487,100 @@ Next steps:
                 <div class="modal-buttons">
                     <button class="modal-btn modal-btn-cancel" id="modalCancel">Cancel</button>
                     <button class="modal-btn modal-btn-confirm" id="modalConfirm">Yes, Start Over</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            <!-- Problem Reference Banner - shows after problem is described -->
+            <div class="problem-reference" id="problemReference">
+                <div class="problem-reference-header">Your Decision / Problem</div>
+                <div class="problem-reference-text" id="problemReferenceText"></div>
+            </div>
+
+            <!-- Problem Type Selector - shows after problem description, before models -->
+            <div class="problem-type-selector" id="problemTypeSelector">
+                <h3>What type of problem is this?</h3>
+                <p>Selecting a problem type will show you the most relevant mental models for your situation.</p>
+                <div class="problem-types-grid" id="problemTypesGrid">
+                    <!-- Problem types will be populated by JavaScript -->
+                </div>
+                <button class="continue-btn" id="continueBtn">Continue with Selected Type</button>
+            </div>
+
+            <!-- Work Area - appears first, at top -->
+            <div class="work-area">
+                <h3>Your Response</h3>
+                <div class="work-area-content" id="workAreaContent">
+                    <div class="work-area-left">
+                        <div class="selected-model-display empty" id="selectedModelDisplay">
+                            Select a mental model to begin...
+                        </div>
+                    </div>
+                    <div class="work-area-right">
+                        <div class="response-section">
+                            <textarea id="responseInput" placeholder="Apply this mental model to your situation..."></textarea>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" id="saveBtn">Add to Log</button>
+                                <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
+                                <button class="btn btn-warning" id="startOverBtn">Start Over</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Summary Section -->
+            <div class="decision-summary" id="decisionSummary">
+                <h3>Decision Summary</h3>
+                <p class="decision-summary-intro">
+                    You've applied multiple mental models to your problem. Now synthesize your insights into a clear decision or action plan.
+                </p>
+                <textarea id="summaryInput" placeholder="Based on my analysis, my decision is...
+
+Key insights:
+1.
+2.
+3.
+
+Next steps:
+- "></textarea>
+                <div class="decision-summary-actions">
+                    <button class="btn btn-summary" id="saveSummaryBtn">Save Summary to Log</button>
+                    <button class="btn btn-secondary" id="exportSessionBtn">Export Full Session</button>
+                </div>
+            </div>
+
+            <!-- Phase Navigation - hidden initially -->
+            <div class="phase-navigation">
+                <h2>Decision-Making Sequence</h2>
+                <div class="phase-buttons">
+                    <button class="phase-btn diagnostic active" data-phase="diagnostic">
+                        1. Diagnose
+                    </button>
+                    <button class="phase-btn evaluative" data-phase="evaluative">
+                        2. Evaluate
+                    </button>
+                    <button class="phase-btn protective" data-phase="protective">
+                        3. Protect
+                    </button>
+                    <button class="phase-btn generative" data-phase="generative">
+                        4. Generate
+                    </button>
+                    <button class="phase-btn implementation" data-phase="implementation">
+                        5. Implement
+                    </button>
+                </div>
+            </div>
+
+            <!-- Models Section - hidden initially -->
+            <div class="models-section">
+                <div class="phase-description diagnostic" id="phaseDescription">
+                    <h3>Diagnostic Models</h3>
+                    <p><strong>Purpose:</strong> Understand what's actually happening before making decisions</p>
+                    <p class="core-question">What's the true nature of this situation?</p>
+                </div>
+                <div class="models-grid" id="modelsGrid">
+                    <!-- Models will be populated by JavaScript -->
                 </div>
             </div>
         </div>
@@ -3348,7 +3332,7 @@ Next steps:
         const phaseNavigation = document.querySelector('.phase-navigation');
         const modelsSection = document.querySelector('.models-section');
         const workArea = document.querySelector('.work-area');
-        const mainContent = document.querySelector('.container');
+        const mainContent = document.querySelector('.main-content');
         const modelsGrid = document.getElementById('modelsGrid');
         const phaseDescription = document.getElementById('phaseDescription');
         const selectedModelDisplay = document.getElementById('selectedModelDisplay');
@@ -3357,18 +3341,17 @@ Next steps:
         const clearBtn = document.getElementById('clearBtn');
         const startOverBtn = document.getElementById('startOverBtn');
         const logEntriesContainer = document.getElementById('logEntries');
-        // Legacy notepad elements (removed - replaced by Summary)
-        const notepadArea = null;
-        const clearNotepadBtn = null;
-        const copyNotepadBtn = null;
+        const notepadArea = document.getElementById('notepadArea');
+        const clearNotepadBtn = document.getElementById('clearNotepad');
+        const copyNotepadBtn = document.getElementById('copyNotepad');
         
-        // Legacy panel elements (keeping for backward compatibility)
-        const panelLeft = null; // Removed in new layout
-        const panelRight = null; // Replaced by rightPanel
-        const logToggle = null; // Removed in new layout
-        const notepadToggle = null; // Removed in new layout
-        const panelLeftClose = null; // Removed in new layout
-        const panelRightClose = null; // Replaced by rightPanelClose
+        // Panel elements
+        const panelLeft = document.getElementById('panelLeft');
+        const panelRight = document.getElementById('panelRight');
+        const logToggle = document.getElementById('logToggle');
+        const notepadToggle = document.getElementById('notepadToggle');
+        const panelLeftClose = document.getElementById('panelLeftClose');
+        const panelRightClose = document.getElementById('panelRightClose');
 
         // New UI elements
         const workAreaContent = document.getElementById('workAreaContent');
@@ -3384,45 +3367,6 @@ Next steps:
 
         // State
         let logSortOrder = 'newest'; // 'newest' or 'oldest'
-
-        // Sidebar elements
-        const sidebar = document.getElementById('sidebar');
-        const sidebarGreeting = document.getElementById('sidebarGreeting');
-        const phaseSidebarItems = document.querySelectorAll('.phase-sidebar-item');
-        const navHome = document.getElementById('navHome');
-        const navSummary = document.getElementById('navSummary');
-        const navLog = document.getElementById('navLog');
-        const logCountLabel = document.getElementById('logCount');
-        const startOverSidebar = document.getElementById('startOverSidebar');
-
-        // Right panel elements
-        const rightPanel = document.getElementById('rightPanel');
-        const rightPanelToggle = document.getElementById('rightPanelToggle');
-        const rightPanelClose = document.getElementById('rightPanelClose');
-        const tabLog = document.getElementById('tabLog');
-        const tabSummary = document.getElementById('tabSummary');
-        const logSection = document.getElementById('logSection');
-        const summarySection = document.getElementById('summarySection');
-
-        // Summary elements
-        const summaryIntro = document.getElementById('summaryIntro');
-        const summaryContent = document.getElementById('summaryContent');
-        const summaryText = document.getElementById('summaryText');
-        const generateSummaryBtn = document.getElementById('generateSummaryBtn');
-        const regenerateSummary = document.getElementById('regenerateSummary');
-        const copySummary = document.getElementById('copySummary');
-        const exportSummary = document.getElementById('exportSummary');
-
-        // Dashboard elements
-        const dashboardGrid = document.getElementById('dashboardGrid');
-        const dashboardProblem = document.getElementById('dashboardProblem');
-        const editProblem = document.getElementById('editProblem');
-        const progressOverview = document.getElementById('progressOverview');
-
-        // Quick action buttons
-        const quickSuggest = document.getElementById('quickSuggest');
-        const quickProgress = document.getElementById('quickProgress');
-        const quickExport = document.getElementById('quickExport');
 
         // Render Problem Type Selector
         function renderProblemTypeSelector() {
@@ -3472,14 +3416,7 @@ Next steps:
             renderPhaseContent();
             setupEventListeners();
             setupDrawers();
-            setupSidebar();
-            setupRightPanel();
-            setupSummary();
-            setupQuickActions();
-            setupDashboard();
             loadFromLocalStorage();
-            updateProgressTracking();
-            updateWelcomeGreeting();
         }
 
         // Show Initial Prompt
@@ -3496,461 +3433,33 @@ Next steps:
 
         // Setup Panel Controls
         function setupDrawers() {
-            // Sort button listeners
-            if (sortNewestBtn) {
-                sortNewestBtn.addEventListener('click', () => {
-                    logSortOrder = 'newest';
-                    sortNewestBtn.classList.add('active');
-                    sortOldestBtn.classList.remove('active');
-                    renderLogEntries();
-                });
-            }
+            logToggle.addEventListener('click', toggleRightPanel);
+            notepadToggle.addEventListener('click', toggleLeftPanel);
+            panelRightClose.addEventListener('click', closeRightPanel);
+            panelLeftClose.addEventListener('click', closeLeftPanel);
 
-            if (sortOldestBtn) {
-                sortOldestBtn.addEventListener('click', () => {
-                    logSortOrder = 'oldest';
-                    sortOldestBtn.classList.add('active');
-                    sortNewestBtn.classList.remove('active');
-                    renderLogEntries();
-                });
-            }
+            // Sort button listeners
+            sortNewestBtn.addEventListener('click', () => {
+                logSortOrder = 'newest';
+                sortNewestBtn.classList.add('active');
+                sortOldestBtn.classList.remove('active');
+                renderLogEntries();
+            });
+
+            sortOldestBtn.addEventListener('click', () => {
+                logSortOrder = 'oldest';
+                sortOldestBtn.classList.add('active');
+                sortNewestBtn.classList.remove('active');
+                renderLogEntries();
+            });
 
             // Modal listeners
-            if (modalCancel) modalCancel.addEventListener('click', closeConfirmModal);
-            if (modalConfirm) modalConfirm.addEventListener('click', confirmStartOver);
+            modalCancel.addEventListener('click', closeConfirmModal);
+            modalConfirm.addEventListener('click', confirmStartOver);
 
             // Decision summary listeners
-            if (saveSummaryBtn) saveSummaryBtn.addEventListener('click', saveSummaryToLog);
-            if (exportSessionBtn) exportSessionBtn.addEventListener('click', downloadSession);
-        }
-
-        // Setup Sidebar Navigation
-        function setupSidebar() {
-            // Phase sidebar items - click to navigate to phase
-            phaseSidebarItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const phase = item.dataset.phase;
-                    if (phase) {
-                        currentPhase = phase;
-                        updatePhaseButtons();
-                        renderPhaseContent();
-                        clearSelection();
-                        updateSidebarActivePhase();
-
-                        // Show models section if problem is described
-                        if (problemDescribed) {
-                            modelsSection.classList.add('revealed');
-                            if (phaseNavigation) phaseNavigation.classList.add('revealed');
-                        }
-                    }
-                });
-            });
-
-            // Quick access navigation
-            if (navHome) {
-                navHome.addEventListener('click', () => {
-                    // Scroll to top / show dashboard
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    updateSidebarQuickAccess('home');
-                });
-            }
-
-            if (navSummary) {
-                navSummary.addEventListener('click', () => {
-                    openRightPanelTab('summary');
-                    updateSidebarQuickAccess('summary');
-                });
-            }
-
-            if (navLog) {
-                navLog.addEventListener('click', () => {
-                    openRightPanelTab('log');
-                    updateSidebarQuickAccess('log');
-                });
-            }
-
-            // Start Over button in sidebar
-            if (startOverSidebar) {
-                startOverSidebar.addEventListener('click', startOver);
-            }
-        }
-
-        // Update sidebar active phase highlight
-        function updateSidebarActivePhase() {
-            phaseSidebarItems.forEach(item => {
-                item.classList.toggle('active', item.dataset.phase === currentPhase);
-            });
-        }
-
-        // Update sidebar quick access highlight
-        function updateSidebarQuickAccess(active) {
-            if (navHome) navHome.classList.toggle('active', active === 'home');
-            if (navSummary) navSummary.classList.toggle('active', active === 'summary');
-            if (navLog) navLog.classList.toggle('active', active === 'log');
-        }
-
-        // Setup Right Panel with Tabs
-        function setupRightPanel() {
-            // Toggle button
-            if (rightPanelToggle) {
-                rightPanelToggle.addEventListener('click', () => {
-                    const isOpen = rightPanel.classList.toggle('open');
-                    rightPanelToggle.classList.toggle('active');
-                    document.body.classList.toggle('right-panel-open', isOpen);
-                });
-            }
-
-            // Close button
-            if (rightPanelClose) {
-                rightPanelClose.addEventListener('click', () => {
-                    rightPanel.classList.remove('open');
-                    rightPanelToggle.classList.remove('active');
-                    document.body.classList.remove('right-panel-open');
-                });
-            }
-
-            // Tab switching
-            if (tabLog) {
-                tabLog.addEventListener('click', () => switchPanelTab('log'));
-            }
-            if (tabSummary) {
-                tabSummary.addEventListener('click', () => switchPanelTab('summary'));
-            }
-
-            // On large screens, open panel by default
-            if (window.innerWidth > 1200) {
-                openRightPanelTab('log');
-            }
-        }
-
-        // Switch between Log and Notepad tabs
-        function switchPanelTab(tab) {
-            if (tab === 'log') {
-                if (tabLog) tabLog.classList.add('active');
-                if (tabSummary) tabSummary.classList.remove('active');
-                if (logSection) logSection.classList.add('active');
-                if (summarySection) summarySection.classList.remove('active');
-            } else {
-                if (tabSummary) tabSummary.classList.add('active');
-                if (tabLog) tabLog.classList.remove('active');
-                if (summarySection) summarySection.classList.add('active');
-                if (logSection) logSection.classList.remove('active');
-            }
-        }
-
-        // Open right panel with specific tab
-        function openRightPanelTab(tab) {
-            if (rightPanel) {
-                rightPanel.classList.add('open');
-                document.body.classList.add('right-panel-open');
-            }
-            if (rightPanelToggle) {
-                rightPanelToggle.classList.add('active');
-            }
-            switchPanelTab(tab);
-        }
-
-        // Close right panel
-        function closeRightPanelFn() {
-            if (rightPanel) {
-                rightPanel.classList.remove('open');
-                document.body.classList.remove('right-panel-open');
-            }
-            if (rightPanelToggle) {
-                rightPanelToggle.classList.remove('active');
-            }
-        }
-
-        // Setup Summary Section
-        function setupSummary() {
-            if (generateSummaryBtn) {
-                generateSummaryBtn.addEventListener('click', generateSummary);
-            }
-            if (regenerateSummary) {
-                regenerateSummary.addEventListener('click', generateSummary);
-            }
-            if (copySummary) {
-                copySummary.addEventListener('click', copySummaryText);
-            }
-            if (exportSummary) {
-                exportSummary.addEventListener('click', exportSummaryDocument);
-            }
-        }
-
-        // Generate Summary from log entries
-        function generateSummary() {
-            if (logEntries.length === 0) {
-                alert('No entries in your decision log yet. Add some entries first.');
-                return;
-            }
-
-            const phaseNames = {
-                initial: 'Problem Statement',
-                diagnostic: 'Diagnosis',
-                evaluative: 'Evaluation',
-                protective: 'Risk Assessment',
-                generative: 'Solution Generation',
-                implementation: 'Implementation Planning',
-                summary: 'Final Decision'
-            };
-
-            let summary = '';
-
-            // Problem Statement
-            const problemEntry = logEntries.find(e => e.phase === 'initial');
-            if (problemEntry) {
-                summary += `PROBLEM/DECISION\n${'─'.repeat(40)}\n${problemEntry.response}\n\n`;
-            }
-
-            // Group entries by phase (excluding initial and summary)
-            const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
-
-            phases.forEach(phase => {
-                const phaseEntries = logEntries.filter(e => e.phase === phase);
-                if (phaseEntries.length > 0) {
-                    summary += `${phaseNames[phase].toUpperCase()}\n${'─'.repeat(40)}\n`;
-                    phaseEntries.forEach(entry => {
-                        summary += `\n${entry.modelName}\n`;
-                        summary += `Q: ${entry.modelPrompt}\n`;
-                        summary += `A: ${entry.response}\n`;
-                    });
-                    summary += '\n';
-                }
-            });
-
-            // Key Insights Section
-            summary += `KEY INSIGHTS\n${'─'.repeat(40)}\n`;
-            summary += `• \n• \n• \n\n`;
-
-            // Decision Section
-            summary += `MY DECISION\n${'─'.repeat(40)}\n`;
-            summary += `Based on this analysis, I will...\n\n`;
-
-            // Next Steps Section
-            summary += `NEXT STEPS\n${'─'.repeat(40)}\n`;
-            summary += `1. \n2. \n3. \n`;
-
-            // Show the summary
-            if (summaryText) {
-                summaryText.innerText = summary;
-            }
-            if (summaryIntro) {
-                summaryIntro.style.display = 'none';
-            }
-            if (summaryContent) {
-                summaryContent.style.display = 'flex';
-            }
-        }
-
-        // Copy summary text
-        function copySummaryText() {
-            if (!summaryText) return;
-            const text = summaryText.innerText || summaryText.textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                const originalBg = copySummary.style.background;
-                copySummary.style.background = '#4CAF50';
-                copySummary.style.color = 'white';
-                copySummary.textContent = 'Copied!';
-                setTimeout(() => {
-                    copySummary.style.background = originalBg;
-                    copySummary.style.color = '';
-                    copySummary.textContent = 'Copy';
-                }, 1500);
-            });
-        }
-
-        // Export summary as text file
-        function exportSummaryDocument() {
-            if (!summaryText) return;
-            const text = summaryText.innerText || summaryText.textContent;
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `decision-summary-${new Date().toISOString().split('T')[0]}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        // Setup Quick Action Buttons
-        function setupQuickActions() {
-            if (quickSuggest) {
-                quickSuggest.addEventListener('click', () => {
-                    // Suggest a model based on current state
-                    if (!problemDescribed) {
-                        alert('Please describe your problem first before getting model suggestions.');
-                        return;
-                    }
-                    // Scroll to models section
-                    if (modelsSection) {
-                        modelsSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            }
-
-            if (quickProgress) {
-                quickProgress.addEventListener('click', () => {
-                    // Show progress overview
-                    if (dashboardGrid) {
-                        dashboardGrid.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            }
-
-            if (quickExport) {
-                quickExport.addEventListener('click', downloadSession);
-            }
-        }
-
-        // Setup Dashboard
-        function setupDashboard() {
-            if (editProblem) {
-                editProblem.addEventListener('click', () => {
-                    // Focus on the response input for editing
-                    if (responseInput) {
-                        responseInput.focus();
-                        responseInput.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            }
-
-            // Initial dashboard render
-            updateDashboard();
-        }
-
-        // Update Dashboard
-        function updateDashboard() {
-            // Update problem display
-            if (dashboardProblem) {
-                const initialEntry = logEntries.find(e => e.phase === 'initial');
-                if (initialEntry) {
-                    const truncated = initialEntry.response.length > 150
-                        ? initialEntry.response.substring(0, 150) + '...'
-                        : initialEntry.response;
-                    dashboardProblem.textContent = truncated;
-                } else {
-                    dashboardProblem.textContent = 'No problem defined yet. Start by describing your decision or problem.';
-                }
-            }
-
-            // Update progress overview
-            if (progressOverview) {
-                renderProgressOverview();
-            }
-        }
-
-        // Render Progress Overview in Dashboard
-        function renderProgressOverview() {
-            const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
-            const phaseNames = {
-                diagnostic: 'Diagnose',
-                evaluative: 'Evaluate',
-                protective: 'Protect',
-                generative: 'Generate',
-                implementation: 'Implement'
-            };
-            const phaseColors = {
-                diagnostic: 'var(--diagnostic-color)',
-                evaluative: 'var(--evaluative-color)',
-                protective: 'var(--protective-color)',
-                generative: 'var(--generative-color)',
-                implementation: 'var(--implementation-color)'
-            };
-
-            let html = '';
-            phases.forEach((phase, index) => {
-                const phaseData = mentalModelsData[phase];
-                const totalModels = phaseData.models.length;
-                const usedModels = logEntries.filter(e => e.phase === phase).length;
-                const percentage = Math.round((usedModels / totalModels) * 100);
-
-                html += `
-                    <div class="progress-phase-row">
-                        <div class="progress-phase-icon" style="background: ${phaseColors[phase]}">${index + 1}</div>
-                        <div class="progress-phase-info">
-                            <div class="progress-phase-name">${phaseNames[phase]}</div>
-                            <div class="progress-phase-bar">
-                                <div class="progress-phase-fill" style="width: ${percentage}%; background: ${phaseColors[phase]}"></div>
-                            </div>
-                        </div>
-                        <div class="progress-phase-percent">${percentage}%</div>
-                    </div>
-                `;
-            });
-
-            progressOverview.innerHTML = html;
-        }
-
-        // Update Progress Tracking (sidebar and dashboard)
-        function updateProgressTracking() {
-            const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
-
-            phases.forEach(phase => {
-                const phaseData = mentalModelsData[phase];
-                const totalModels = phaseData.models.length;
-                const usedModels = logEntries.filter(e => e.phase === phase).length;
-                const percentage = Math.round((usedModels / totalModels) * 100);
-
-                // Update sidebar progress bar
-                const progressBar = document.getElementById(`progress${phase.charAt(0).toUpperCase() + phase.slice(1)}`);
-                if (progressBar) {
-                    progressBar.style.width = `${percentage}%`;
-                }
-
-                // Update sidebar progress text
-                const progressText = document.getElementById(`progressText${phase.charAt(0).toUpperCase() + phase.slice(1)}`);
-                if (progressText) {
-                    progressText.textContent = `${usedModels}/${totalModels} models`;
-                }
-
-                // Update status badge
-                const statusBadge = document.getElementById(`status${phase.charAt(0).toUpperCase() + phase.slice(1)}`);
-                if (statusBadge) {
-                    if (usedModels === 0) {
-                        statusBadge.textContent = 'Not Started';
-                        statusBadge.className = 'status-badge not-started';
-                    } else if (usedModels >= totalModels) {
-                        statusBadge.textContent = 'Completed';
-                        statusBadge.className = 'status-badge completed';
-                    } else {
-                        statusBadge.textContent = 'In Progress';
-                        statusBadge.className = 'status-badge in-progress';
-                    }
-                }
-            });
-
-            // Update log count in sidebar
-            if (logCountLabel) {
-                const entryCount = logEntries.filter(e => e.phase !== 'initial' && e.phase !== 'summary').length;
-                logCountLabel.textContent = `${entryCount} ${entryCount === 1 ? 'entry' : 'entries'}`;
-            }
-
-            // Update dashboard
-            updateDashboard();
-        }
-
-        // Update Welcome Greeting
-        function updateWelcomeGreeting() {
-            if (!sidebarGreeting) return;
-
-            const hour = new Date().getHours();
-            let greeting;
-            if (hour < 12) {
-                greeting = 'Good morning!';
-            } else if (hour < 17) {
-                greeting = 'Good afternoon!';
-            } else {
-                greeting = 'Good evening!';
-            }
-
-            // Check if returning user
-            if (logEntries.length > 0) {
-                greeting = 'Welcome back!';
-            }
-
-            sidebarGreeting.textContent = greeting;
+            saveSummaryBtn.addEventListener('click', saveSummaryToLog);
+            exportSessionBtn.addEventListener('click', downloadSession);
         }
 
         // Modal functions
@@ -4012,46 +3521,39 @@ Next steps:
         }
 
         function toggleRightPanel() {
-            if (rightPanel) {
-                const isOpen = rightPanel.classList.toggle('open');
-                rightPanelToggle.classList.toggle('active');
-                document.body.classList.toggle('right-panel-open', isOpen);
-            }
+            panelRight.classList.toggle('open');
+            logToggle.classList.toggle('active');
+            document.body.classList.toggle('panel-right-open');
         }
 
         function toggleLeftPanel() {
-            // Left panel removed in new layout - open sidebar instead on mobile
-            if (sidebar) {
-                sidebar.classList.toggle('open');
-            }
+            panelLeft.classList.toggle('open');
+            notepadToggle.classList.toggle('active');
+            document.body.classList.toggle('panel-left-open');
         }
 
         function closeRightPanel() {
-            if (rightPanel) {
-                rightPanel.classList.remove('open');
-                rightPanelToggle.classList.remove('active');
-                document.body.classList.remove('right-panel-open');
-            }
+            panelRight.classList.remove('open');
+            logToggle.classList.remove('active');
+            document.body.classList.remove('panel-right-open');
         }
 
         function closeLeftPanel() {
-            if (sidebar) {
-                sidebar.classList.remove('open');
-            }
+            panelLeft.classList.remove('open');
+            notepadToggle.classList.remove('active');
+            document.body.classList.remove('panel-left-open');
         }
 
         function openRightPanel() {
-            if (rightPanel) {
-                rightPanel.classList.add('open');
-                rightPanelToggle.classList.add('active');
-                document.body.classList.add('right-panel-open');
-            }
+            panelRight.classList.add('open');
+            logToggle.classList.add('active');
+            document.body.classList.add('panel-right-open');
         }
 
         function openLeftPanel() {
-            if (sidebar) {
-                sidebar.classList.add('open');
-            }
+            panelLeft.classList.add('open');
+            notepadToggle.classList.add('active');
+            document.body.classList.add('panel-left-open');
         }
 
         // Setup Event Listeners
@@ -4065,19 +3567,17 @@ Next steps:
                 });
             });
 
-            if (saveBtn) saveBtn.addEventListener('click', saveToLog);
-            if (clearBtn) clearBtn.addEventListener('click', clearCurrentResponse);
-            if (startOverBtn) startOverBtn.addEventListener('click', startOver);
-            if (continueBtn) continueBtn.addEventListener('click', continueToProblemSolving);
-            if (clearNotepadBtn) clearNotepadBtn.addEventListener('click', clearNotepad);
-            if (copyNotepadBtn) copyNotepadBtn.addEventListener('click', copyNotepad);
+            saveBtn.addEventListener('click', saveToLog);
+            clearBtn.addEventListener('click', clearCurrentResponse);
+            startOverBtn.addEventListener('click', startOver);
+            continueBtn.addEventListener('click', continueToProblemSolving);
+            clearNotepadBtn.addEventListener('click', clearNotepad);
+            copyNotepadBtn.addEventListener('click', copyNotepad);
 
             // Drag and drop for notepad
-            if (notepadArea) {
-                notepadArea.addEventListener('dragover', handleDragOver);
-                notepadArea.addEventListener('drop', handleDrop);
-                notepadArea.addEventListener('dragleave', handleDragLeave);
-            }
+            notepadArea.addEventListener('dragover', handleDragOver);
+            notepadArea.addEventListener('drop', handleDrop);
+            notepadArea.addEventListener('dragleave', handleDragLeave);
         }
 
         // Update Phase Buttons
@@ -4372,19 +3872,21 @@ Next steps:
 
         // Reveal Sections
         function revealSections() {
-            // Move models section before work area
-            if (mainContent && modelsSection && workArea) {
-                mainContent.insertBefore(modelsSection, workArea);
-            }
-
-            // Reveal models section
+            // Move phase navigation and models section before work area
+            mainContent.insertBefore(phaseNavigation, workArea);
+            mainContent.insertBefore(modelsSection, workArea);
+            
+            // Reveal phase navigation first
+            phaseNavigation.classList.add('revealed');
+            
+            // Then reveal models section with a slight delay
             setTimeout(() => {
-                if (modelsSection) modelsSection.classList.add('revealed');
+                modelsSection.classList.add('revealed');
             }, 100);
-
+            
             // Slide work area down
             setTimeout(() => {
-                if (workArea) workArea.classList.add('slide-down');
+                workArea.classList.add('slide-down');
             }, 200);
         }
 
@@ -4418,17 +3920,14 @@ Next steps:
             setTimeout(() => {
                 renderLogEntries();
                 saveToLocalStorage();
-                updateDashboard();
 
                 // Open decision log panel
-                openRightPanelTab('log');
+                openRightPanel();
             }, 400);
             
             // Add problem description to notepad automatically
-            if (notepadArea) {
-                notepadArea.innerText = `PROBLEM/DECISION:\n${description}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
-                notepadArea.classList.remove('empty');
-            }
+            notepadArea.innerText = `PROBLEM/DECISION:\n${description}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
+            notepadArea.classList.remove('empty');
             
             // Show problem type selector after brief delay
             setTimeout(() => {
@@ -4488,11 +3987,8 @@ Next steps:
             clearCurrentResponse();
             saveToLocalStorage();
 
-            // Update progress tracking
-            updateProgressTracking();
-
             // Open decision log panel
-            openRightPanelTab('log');
+            openRightPanel();
 
             // Check if we should show decision summary
             checkShowDecisionSummary();
@@ -4588,12 +4084,12 @@ Next steps:
                 }
             });
             
-            // Add summary content if available
-            if (summaryText && summaryContent && summaryContent.style.display !== 'none') {
+            // Add notepad content if not empty
+            if (!notepadArea.classList.contains('empty')) {
                 content += '=' .repeat(60) + '\n';
-                content += 'DECISION SUMMARY:\n';
+                content += 'COMPILED NOTES:\n';
                 content += '=' .repeat(60) + '\n\n';
-                content += (summaryText.innerText || summaryText.textContent) + '\n';
+                content += (notepadArea.innerText || notepadArea.textContent) + '\n';
             }
             
             // Create and download file
@@ -4623,12 +4119,8 @@ Next steps:
 
             // Reset UI
             responseInput.value = '';
-
-            // Reset summary section
-            if (summaryIntro) summaryIntro.style.display = 'block';
-            if (summaryContent) summaryContent.style.display = 'none';
-            if (summaryText) summaryText.innerText = '';
-
+            notepadArea.innerText = 'Drag log entries here to compile your thinking...';
+            notepadArea.classList.add('empty');
             renderLogEntries();
 
             // Hide problem reference and type selector
@@ -4645,9 +4137,9 @@ Next steps:
             workAreaContent.classList.remove('split-pane');
 
             // Hide sections again
-            if (phaseNavigation) phaseNavigation.classList.remove('revealed');
-            if (modelsSection) modelsSection.classList.remove('revealed');
-            if (workArea) workArea.classList.remove('slide-down');
+            phaseNavigation.classList.remove('revealed');
+            modelsSection.classList.remove('revealed');
+            workArea.classList.remove('slide-down');
 
             // Close panels
             closeRightPanel();
@@ -4691,7 +4183,7 @@ Next steps:
             }
         };
 
-        // Legacy drag and drop handlers (kept for backward compatibility, now no-ops)
+        // Drag and Drop Handlers
         function handleDragStart(e) {
             e.dataTransfer.effectAllowed = 'copy';
             e.dataTransfer.setData('text/plain', e.target.dataset.entryId);
@@ -4699,23 +4191,88 @@ Next steps:
 
         function handleDragOver(e) {
             e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+            notepadArea.classList.add('drag-over');
         }
 
         function handleDragLeave(e) {
-            // No-op - notepad removed
+            if (e.target === notepadArea) {
+                notepadArea.classList.remove('drag-over');
+            }
         }
 
         function handleDrop(e) {
             e.preventDefault();
+            notepadArea.classList.remove('drag-over');
+
+            const entryId = parseInt(e.dataTransfer.getData('text/plain'));
+            const entry = logEntries.find(e => e.id === entryId);
+            
+            if (entry) {
+                const currentContent = notepadArea.classList.contains('empty') ? '' : (notepadArea.innerText || notepadArea.textContent);
+                
+                // Format the new entry
+                const newEntryText = `${entry.modelName}:\n${entry.response}\n${'-'.repeat(60)}\n\n`;
+                
+                // If notepad is empty, just add the entry
+                if (notepadArea.classList.contains('empty')) {
+                    notepadArea.innerText = newEntryText.trim();
+                } else {
+                    // If there's a problem description section, append after the divider
+                    if (currentContent.includes('MENTAL MODEL RESPONSES:')) {
+                        notepadArea.innerText = currentContent + newEntryText;
+                    } else {
+                        // Otherwise just append
+                        notepadArea.innerText = `${currentContent}\n\n${newEntryText}`;
+                    }
+                }
+                
+                notepadArea.classList.remove('empty');
+            }
         }
 
-        // Legacy notepad functions (no-ops - replaced by Summary)
+        // Clear Notepad
         function clearNotepad() {
-            // No-op - notepad removed
+            if (notepadArea.classList.contains('empty')) {
+                return;
+            }
+            
+            if (confirm('Clear notepad? This will remove all compiled responses but keep your problem description in the log.')) {
+                // If there's a problem description saved, keep it
+                if (problemDescribed) {
+                    const problemEntry = logEntries.find(e => e.phase === 'initial');
+                    if (problemEntry) {
+                        notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
+                        notepadArea.classList.remove('empty');
+                    } else {
+                        notepadArea.innerText = 'Drag log entries here to compile your thinking...';
+                        notepadArea.classList.add('empty');
+                    }
+                } else {
+                    notepadArea.innerText = 'Drag log entries here to compile your thinking...';
+                    notepadArea.classList.add('empty');
+                }
+            }
         }
 
+        // Copy Notepad
         function copyNotepad() {
-            // No-op - notepad removed
+            if (notepadArea.classList.contains('empty')) {
+                alert('Notepad is empty.');
+                return;
+            }
+
+            const text = notepadArea.textContent || notepadArea.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const originalBorder = notepadArea.style.borderColor;
+                notepadArea.style.borderColor = '#4CAF50';
+                setTimeout(() => {
+                    notepadArea.style.borderColor = originalBorder;
+                }, 500);
+            }).catch(() => {
+                alert('Failed to copy. Please select and copy manually.');
+            });
         }
 
         // Local Storage
@@ -4746,18 +4303,9 @@ Next steps:
                         problemReferenceText.textContent = problemEntry.response;
                         problemReference.classList.add('visible');
 
-                        if (notepadArea) {
-                            notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
-                            notepadArea.classList.remove('empty');
-                        }
+                        notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
+                        notepadArea.classList.remove('empty');
                     }
-
-                    // Update display to show "select a model" instead of initial prompt
-                    selectedModelDisplay.className = 'selected-model-display empty';
-                    selectedModelDisplay.innerHTML = 'Select a mental model to continue your analysis...';
-                    responseInput.placeholder = "Apply this mental model to your situation...";
-                    responseInput.classList.remove('initial-entry');
-                    saveBtn.textContent = 'Add to Log';
                 }
 
                 renderLogEntries();
