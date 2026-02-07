@@ -2381,14 +2381,6 @@
                     </div>
                 </div>
 
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <div class="dashboard-card-title">📈 Progress Overview</div>
-                    </div>
-                    <div class="progress-overview" id="progressOverview">
-                        <!-- Progress rows will be populated by JS -->
-                    </div>
-                </div>
             </div>
 
             <div class="container">
@@ -2448,28 +2440,6 @@ Next steps:
                     <div class="decision-summary-actions">
                         <button class="btn btn-summary" id="saveSummaryBtn">Save Summary to Log</button>
                         <button class="btn btn-secondary" id="exportSessionBtn">Export Full Session</button>
-                    </div>
-                </div>
-
-                <!-- Phase Navigation - hidden initially -->
-                <div class="phase-navigation">
-                    <h2>Decision-Making Sequence</h2>
-                    <div class="phase-buttons">
-                        <button class="phase-btn diagnostic active" data-phase="diagnostic">
-                            1. Diagnose
-                        </button>
-                        <button class="phase-btn evaluative" data-phase="evaluative">
-                            2. Evaluate
-                        </button>
-                        <button class="phase-btn protective" data-phase="protective">
-                            3. Protect
-                        </button>
-                        <button class="phase-btn generative" data-phase="generative">
-                            4. Generate
-                        </button>
-                        <button class="phase-btn implementation" data-phase="implementation">
-                            5. Implement
-                        </button>
                     </div>
                 </div>
 
@@ -3470,7 +3440,7 @@ Next steps:
                         // Show models section if problem is described
                         if (problemDescribed) {
                             modelsSection.classList.add('revealed');
-                            phaseNavigation.classList.add('revealed');
+                            if (phaseNavigation) phaseNavigation.classList.add('revealed');
                         }
                     }
                 });
@@ -4189,21 +4159,19 @@ Next steps:
 
         // Reveal Sections
         function revealSections() {
-            // Move phase navigation and models section before work area
-            mainContent.insertBefore(phaseNavigation, workArea);
-            mainContent.insertBefore(modelsSection, workArea);
-            
-            // Reveal phase navigation first
-            phaseNavigation.classList.add('revealed');
-            
-            // Then reveal models section with a slight delay
+            // Move models section before work area
+            if (mainContent && modelsSection && workArea) {
+                mainContent.insertBefore(modelsSection, workArea);
+            }
+
+            // Reveal models section
             setTimeout(() => {
-                modelsSection.classList.add('revealed');
+                if (modelsSection) modelsSection.classList.add('revealed');
             }, 100);
-            
+
             // Slide work area down
             setTimeout(() => {
-                workArea.classList.add('slide-down');
+                if (workArea) workArea.classList.add('slide-down');
             }, 200);
         }
 
@@ -4460,9 +4428,9 @@ Next steps:
             workAreaContent.classList.remove('split-pane');
 
             // Hide sections again
-            phaseNavigation.classList.remove('revealed');
-            modelsSection.classList.remove('revealed');
-            workArea.classList.remove('slide-down');
+            if (phaseNavigation) phaseNavigation.classList.remove('revealed');
+            if (modelsSection) modelsSection.classList.remove('revealed');
+            if (workArea) workArea.classList.remove('slide-down');
 
             // Close panels
             closeRightPanel();
