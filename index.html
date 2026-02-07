@@ -857,6 +857,45 @@
             opacity: 1;
         }
 
+        .panel-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-tab {
+            background: none;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            opacity: 0.5;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .panel-tab:hover {
+            opacity: 0.8;
+        }
+
+        .panel-tab.active {
+            opacity: 1;
+            color: var(--teal);
+            border-bottom-color: var(--teal);
+        }
+
+        .panel-section {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .panel-section.active {
+            display: flex;
+        }
+
         .panel-content {
             flex: 1;
             display: flex;
@@ -865,38 +904,7 @@
             padding: 1rem;
         }
 
-        /* Responsive main content */
-        .container {
-            display: flex;
-            flex-direction: column;
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 1rem;
-            min-height: 100vh;
-            position: relative;
-            transition: margin 0.3s ease, max-width 0.3s ease;
-        }
-
-        body.panel-right-open .container {
-            margin-right: 350px;
-        }
-
-        body.panel-left-open .container {
-            margin-left: 350px;
-        }
-
-        body.panel-right-open.panel-left-open .container {
-            margin-left: 350px;
-            margin-right: 350px;
-        }
-
-        body.panel-right-open .toggle-buttons {
-            right: 350px;
-        }
-
-        body.panel-left-open .toggle-buttons-left {
-            left: 350px;
-        }
+        /* Container adjustments for sidebar layout */
 
         /* Phase Navigation */
         .phase-navigation {
@@ -1774,10 +1782,7 @@
             box-shadow: 0 1px 4px rgba(255, 152, 0, 0.3);
         }
 
-        /* Sidebar - Now in Drawer */
-        .sidebar {
-            display: none; /* Hidden - content moved to drawers */
-        }
+        /* Sidebar visibility controlled by layout */
 
         .decision-log {
             display: flex;
@@ -2373,6 +2378,7 @@
                                 <div class="action-buttons">
                                     <button class="btn btn-primary" id="saveBtn">Add to Log</button>
                                     <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
+                                    <button class="btn btn-warning" id="startOverBtn">Start Over</button>
                                 </div>
                             </div>
                         </div>
@@ -2487,100 +2493,6 @@ Next steps:
                 <div class="modal-buttons">
                     <button class="modal-btn modal-btn-cancel" id="modalCancel">Cancel</button>
                     <button class="modal-btn modal-btn-confirm" id="modalConfirm">Yes, Start Over</button>
-                </div>
-            </div>
-        </div>
-    </div>
-            <!-- Problem Reference Banner - shows after problem is described -->
-            <div class="problem-reference" id="problemReference">
-                <div class="problem-reference-header">Your Decision / Problem</div>
-                <div class="problem-reference-text" id="problemReferenceText"></div>
-            </div>
-
-            <!-- Problem Type Selector - shows after problem description, before models -->
-            <div class="problem-type-selector" id="problemTypeSelector">
-                <h3>What type of problem is this?</h3>
-                <p>Selecting a problem type will show you the most relevant mental models for your situation.</p>
-                <div class="problem-types-grid" id="problemTypesGrid">
-                    <!-- Problem types will be populated by JavaScript -->
-                </div>
-                <button class="continue-btn" id="continueBtn">Continue with Selected Type</button>
-            </div>
-
-            <!-- Work Area - appears first, at top -->
-            <div class="work-area">
-                <h3>Your Response</h3>
-                <div class="work-area-content" id="workAreaContent">
-                    <div class="work-area-left">
-                        <div class="selected-model-display empty" id="selectedModelDisplay">
-                            Select a mental model to begin...
-                        </div>
-                    </div>
-                    <div class="work-area-right">
-                        <div class="response-section">
-                            <textarea id="responseInput" placeholder="Apply this mental model to your situation..."></textarea>
-                            <div class="action-buttons">
-                                <button class="btn btn-primary" id="saveBtn">Add to Log</button>
-                                <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
-                                <button class="btn btn-warning" id="startOverBtn">Start Over</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Decision Summary Section -->
-            <div class="decision-summary" id="decisionSummary">
-                <h3>Decision Summary</h3>
-                <p class="decision-summary-intro">
-                    You've applied multiple mental models to your problem. Now synthesize your insights into a clear decision or action plan.
-                </p>
-                <textarea id="summaryInput" placeholder="Based on my analysis, my decision is...
-
-Key insights:
-1.
-2.
-3.
-
-Next steps:
-- "></textarea>
-                <div class="decision-summary-actions">
-                    <button class="btn btn-summary" id="saveSummaryBtn">Save Summary to Log</button>
-                    <button class="btn btn-secondary" id="exportSessionBtn">Export Full Session</button>
-                </div>
-            </div>
-
-            <!-- Phase Navigation - hidden initially -->
-            <div class="phase-navigation">
-                <h2>Decision-Making Sequence</h2>
-                <div class="phase-buttons">
-                    <button class="phase-btn diagnostic active" data-phase="diagnostic">
-                        1. Diagnose
-                    </button>
-                    <button class="phase-btn evaluative" data-phase="evaluative">
-                        2. Evaluate
-                    </button>
-                    <button class="phase-btn protective" data-phase="protective">
-                        3. Protect
-                    </button>
-                    <button class="phase-btn generative" data-phase="generative">
-                        4. Generate
-                    </button>
-                    <button class="phase-btn implementation" data-phase="implementation">
-                        5. Implement
-                    </button>
-                </div>
-            </div>
-
-            <!-- Models Section - hidden initially -->
-            <div class="models-section">
-                <div class="phase-description diagnostic" id="phaseDescription">
-                    <h3>Diagnostic Models</h3>
-                    <p><strong>Purpose:</strong> Understand what's actually happening before making decisions</p>
-                    <p class="core-question">What's the true nature of this situation?</p>
-                </div>
-                <div class="models-grid" id="modelsGrid">
-                    <!-- Models will be populated by JavaScript -->
                 </div>
             </div>
         </div>
@@ -3332,7 +3244,7 @@ Next steps:
         const phaseNavigation = document.querySelector('.phase-navigation');
         const modelsSection = document.querySelector('.models-section');
         const workArea = document.querySelector('.work-area');
-        const mainContent = document.querySelector('.main-content');
+        const mainContent = document.querySelector('.container');
         const modelsGrid = document.getElementById('modelsGrid');
         const phaseDescription = document.getElementById('phaseDescription');
         const selectedModelDisplay = document.getElementById('selectedModelDisplay');
@@ -3346,12 +3258,13 @@ Next steps:
         const copyNotepadBtn = document.getElementById('copyNotepad');
         
         // Panel elements
-        const panelLeft = document.getElementById('panelLeft');
-        const panelRight = document.getElementById('panelRight');
-        const logToggle = document.getElementById('logToggle');
-        const notepadToggle = document.getElementById('notepadToggle');
-        const panelLeftClose = document.getElementById('panelLeftClose');
-        const panelRightClose = document.getElementById('panelRightClose');
+        const panelRight = document.getElementById('rightPanel');
+        const logToggle = document.getElementById('rightPanelToggle');
+        const panelRightClose = document.getElementById('rightPanelClose');
+        const tabLog = document.getElementById('tabLog');
+        const tabNotepad = document.getElementById('tabNotepad');
+        const logSection = document.getElementById('logSection');
+        const notepadSection = document.getElementById('notepadSection');
 
         // New UI elements
         const workAreaContent = document.getElementById('workAreaContent');
@@ -3434,9 +3347,22 @@ Next steps:
         // Setup Panel Controls
         function setupDrawers() {
             logToggle.addEventListener('click', toggleRightPanel);
-            notepadToggle.addEventListener('click', toggleLeftPanel);
             panelRightClose.addEventListener('click', closeRightPanel);
-            panelLeftClose.addEventListener('click', closeLeftPanel);
+
+            // Tab switching in right panel
+            tabLog.addEventListener('click', () => {
+                tabLog.classList.add('active');
+                tabNotepad.classList.remove('active');
+                logSection.classList.add('active');
+                notepadSection.classList.remove('active');
+            });
+
+            tabNotepad.addEventListener('click', () => {
+                tabNotepad.classList.add('active');
+                tabLog.classList.remove('active');
+                notepadSection.classList.add('active');
+                logSection.classList.remove('active');
+            });
 
             // Sort button listeners
             sortNewestBtn.addEventListener('click', () => {
@@ -3460,6 +3386,69 @@ Next steps:
             // Decision summary listeners
             saveSummaryBtn.addEventListener('click', saveSummaryToLog);
             exportSessionBtn.addEventListener('click', downloadSession);
+
+            // Sidebar navigation
+            const startOverSidebar = document.getElementById('startOverSidebar');
+            if (startOverSidebar) {
+                startOverSidebar.addEventListener('click', startOver);
+            }
+
+            // Sidebar phase navigation
+            document.querySelectorAll('.phase-sidebar-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const phase = item.dataset.phase;
+                    if (phase && problemDescribed) {
+                        currentPhase = phase;
+                        updatePhaseButtons();
+                        renderPhaseContent();
+                        clearSelection();
+                    }
+                });
+            });
+
+            // Quick action buttons
+            const quickSuggest = document.getElementById('quickSuggest');
+            const quickProgress = document.getElementById('quickProgress');
+            const quickExport = document.getElementById('quickExport');
+            const editProblem = document.getElementById('editProblem');
+
+            if (quickSuggest) quickSuggest.addEventListener('click', () => {
+                if (problemDescribed) {
+                    // Suggest a random model from current phase
+                    const phaseData = mentalModelsData[currentPhase];
+                    const randomModel = phaseData.models[Math.floor(Math.random() * phaseData.models.length)];
+                    const modelCards = document.querySelectorAll('.model-card');
+                    modelCards.forEach(card => {
+                        if (card.querySelector('.model-name').textContent === randomModel.name) {
+                            card.click();
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    });
+                } else {
+                    alert('Please describe your problem first.');
+                }
+            });
+
+            if (quickProgress) quickProgress.addEventListener('click', () => {
+                openRightPanel();
+            });
+
+            if (quickExport) quickExport.addEventListener('click', downloadSession);
+
+            if (editProblem) editProblem.addEventListener('click', () => {
+                const problemEntry = logEntries.find(e => e.phase === 'initial');
+                if (problemEntry) {
+                    const newProblem = prompt('Edit your problem description:', problemEntry.response);
+                    if (newProblem && newProblem.trim()) {
+                        problemEntry.response = newProblem.trim();
+                        problemReferenceText.textContent = newProblem.trim();
+                        const dashboardProblem = document.getElementById('dashboardProblem');
+                        if (dashboardProblem) dashboardProblem.textContent = newProblem.trim();
+                        renderLogEntries();
+                        saveToLocalStorage();
+                    }
+                }
+            });
         }
 
         // Modal functions
@@ -3523,37 +3512,16 @@ Next steps:
         function toggleRightPanel() {
             panelRight.classList.toggle('open');
             logToggle.classList.toggle('active');
-            document.body.classList.toggle('panel-right-open');
-        }
-
-        function toggleLeftPanel() {
-            panelLeft.classList.toggle('open');
-            notepadToggle.classList.toggle('active');
-            document.body.classList.toggle('panel-left-open');
         }
 
         function closeRightPanel() {
             panelRight.classList.remove('open');
             logToggle.classList.remove('active');
-            document.body.classList.remove('panel-right-open');
-        }
-
-        function closeLeftPanel() {
-            panelLeft.classList.remove('open');
-            notepadToggle.classList.remove('active');
-            document.body.classList.remove('panel-left-open');
         }
 
         function openRightPanel() {
             panelRight.classList.add('open');
             logToggle.classList.add('active');
-            document.body.classList.add('panel-right-open');
-        }
-
-        function openLeftPanel() {
-            panelLeft.classList.add('open');
-            notepadToggle.classList.add('active');
-            document.body.classList.add('panel-left-open');
         }
 
         // Setup Event Listeners
@@ -3915,6 +3883,10 @@ Next steps:
             setTimeout(() => {
                 problemReference.classList.add('visible');
             }, 100);
+
+            // Update dashboard problem text
+            const dashboardProblem = document.getElementById('dashboardProblem');
+            if (dashboardProblem) dashboardProblem.textContent = description;
             
             // Delay log rendering and panel opening to sync with animation
             setTimeout(() => {
@@ -4129,6 +4101,10 @@ Next steps:
             problemTypeSelector.classList.remove('visible');
             continueBtn.classList.remove('visible');
 
+            // Reset dashboard
+            const dashboardProblem = document.getElementById('dashboardProblem');
+            if (dashboardProblem) dashboardProblem.textContent = 'No problem defined yet. Start by describing your decision or problem.';
+
             // Hide decision summary
             decisionSummary.classList.remove('visible');
             summaryInput.value = '';
@@ -4143,7 +4119,6 @@ Next steps:
 
             // Close panels
             closeRightPanel();
-            closeLeftPanel();
 
             // Reorder DOM back to initial state (work area first)
             mainContent.insertBefore(workArea, phaseNavigation);
