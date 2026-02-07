@@ -4631,9 +4631,18 @@ Next steps:
                         problemReferenceText.textContent = problemEntry.response;
                         problemReference.classList.add('visible');
 
-                        notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
-                        notepadArea.classList.remove('empty');
+                        if (notepadArea) {
+                            notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
+                            notepadArea.classList.remove('empty');
+                        }
                     }
+
+                    // Update display to show "select a model" instead of initial prompt
+                    selectedModelDisplay.className = 'selected-model-display empty';
+                    selectedModelDisplay.innerHTML = 'Select a mental model to continue your analysis...';
+                    responseInput.placeholder = "Apply this mental model to your situation...";
+                    responseInput.classList.remove('initial-entry');
+                    saveBtn.textContent = 'Add to Log';
                 }
 
                 renderLogEntries();
