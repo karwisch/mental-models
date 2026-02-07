@@ -2412,6 +2412,7 @@
                                 <div class="action-buttons">
                                     <button class="btn btn-primary" id="saveBtn">Add to Log</button>
                                     <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
+                                    <button class="btn btn-warning" id="startOverBtn">Start Over</button>
                                 </div>
                             </div>
                         </div>
@@ -3844,17 +3845,19 @@ Next steps:
                 });
             });
 
-            saveBtn.addEventListener('click', saveToLog);
-            clearBtn.addEventListener('click', clearCurrentResponse);
-            startOverBtn.addEventListener('click', startOver);
-            continueBtn.addEventListener('click', continueToProblemSolving);
-            clearNotepadBtn.addEventListener('click', clearNotepad);
-            copyNotepadBtn.addEventListener('click', copyNotepad);
+            if (saveBtn) saveBtn.addEventListener('click', saveToLog);
+            if (clearBtn) clearBtn.addEventListener('click', clearCurrentResponse);
+            if (startOverBtn) startOverBtn.addEventListener('click', startOver);
+            if (continueBtn) continueBtn.addEventListener('click', continueToProblemSolving);
+            if (clearNotepadBtn) clearNotepadBtn.addEventListener('click', clearNotepad);
+            if (copyNotepadBtn) copyNotepadBtn.addEventListener('click', copyNotepad);
 
             // Drag and drop for notepad
-            notepadArea.addEventListener('dragover', handleDragOver);
-            notepadArea.addEventListener('drop', handleDrop);
-            notepadArea.addEventListener('dragleave', handleDragLeave);
+            if (notepadArea) {
+                notepadArea.addEventListener('dragover', handleDragOver);
+                notepadArea.addEventListener('drop', handleDrop);
+                notepadArea.addEventListener('dragleave', handleDragLeave);
+            }
         }
 
         // Update Phase Buttons
@@ -4204,8 +4207,10 @@ Next steps:
             }, 400);
             
             // Add problem description to notepad automatically
-            notepadArea.innerText = `PROBLEM/DECISION:\n${description}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
-            notepadArea.classList.remove('empty');
+            if (notepadArea) {
+                notepadArea.innerText = `PROBLEM/DECISION:\n${description}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
+                notepadArea.classList.remove('empty');
+            }
             
             // Show problem type selector after brief delay
             setTimeout(() => {
