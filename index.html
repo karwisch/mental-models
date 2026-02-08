@@ -275,20 +275,22 @@
             gap: 0.5rem;
             width: 100%;
             padding: 0.6rem;
-            background: var(--teal);
-            color: white;
-            border: none;
+            background: transparent;
+            color: #c0392b;
+            border: 1.5px solid #e0e0e0;
             border-radius: 8px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .sidebar-footer-btn:hover {
-            background: var(--light-teal);
-            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.3);
+            background: #c0392b;
+            color: white;
+            border-color: #c0392b;
+            box-shadow: 0 2px 8px rgba(192, 57, 43, 0.3);
         }
 
         /* Main Content Area - adjusted for sidebar and journal panel */
@@ -298,46 +300,6 @@
             margin-right: 340px;
             padding: 1.5rem;
             min-height: 100vh;
-        }
-
-        /* Quick Actions Bar */
-        .quick-actions {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .quick-action-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 0.75rem;
-            color: var(--charcoal);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .quick-action-btn:hover {
-            border-color: var(--teal);
-            color: var(--teal);
-            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.15);
-        }
-
-        .quick-action-btn.primary {
-            background: var(--teal);
-            border-color: var(--teal);
-            color: white;
-        }
-
-        .quick-action-btn.primary:hover {
-            background: var(--light-teal);
         }
 
         /* Dashboard Cards */
@@ -1984,20 +1946,19 @@
             </div>
 
             <nav class="sidebar-nav">
-                <!-- Quick Access Section -->
+                <!-- Actions Section -->
                 <div class="sidebar-section">
-                    <div class="sidebar-section-title">Quick Access</div>
-                    <div class="sidebar-item" id="navHome">
-                        <div class="sidebar-item-icon">🏠</div>
+                    <div class="sidebar-section-title">Actions</div>
+                    <div class="sidebar-item" id="quickSuggest">
+                        <div class="sidebar-item-icon">💡</div>
                         <div class="sidebar-item-content">
-                            <div class="sidebar-item-label">Home</div>
+                            <div class="sidebar-item-label">Suggest a Model</div>
                         </div>
                     </div>
-                    <div class="sidebar-item" id="navJournal">
-                        <div class="sidebar-item-icon">📋</div>
+                    <div class="sidebar-item" id="quickExport">
+                        <div class="sidebar-item-icon">📤</div>
                         <div class="sidebar-item-content">
-                            <div class="sidebar-item-label">Decision Journal</div>
-                            <div class="sidebar-item-sublabel" id="logCount">0 entries</div>
+                            <div class="sidebar-item-label">Export Session</div>
                         </div>
                     </div>
                 </div>
@@ -2087,19 +2048,6 @@
 
         <!-- Main Content Area -->
         <main class="main-area">
-            <!-- Quick Actions Bar -->
-            <div class="quick-actions" id="quickActions">
-                <button class="quick-action-btn primary" id="quickSuggest">
-                    💡 Suggest a Model
-                </button>
-                <button class="quick-action-btn" id="quickProgress">
-                    📊 View Progress
-                </button>
-                <button class="quick-action-btn" id="quickExport">
-                    📤 Export Session
-                </button>
-            </div>
-
             <!-- Dashboard Overview (shown on home) -->
             <div class="dashboard-grid" id="dashboardGrid">
                 <div class="dashboard-card">
@@ -3123,7 +3071,6 @@ Next steps:
 
             // Quick action buttons
             const quickSuggest = document.getElementById('quickSuggest');
-            const quickProgress = document.getElementById('quickProgress');
             const quickExport = document.getElementById('quickExport');
             const editProblem = document.getElementById('editProblem');
 
@@ -3141,10 +3088,6 @@ Next steps:
                 } else {
                     alert('Please describe your problem first.');
                 }
-            });
-
-            if (quickProgress) quickProgress.addEventListener('click', () => {
-                openRightPanel();
             });
 
             if (quickExport) quickExport.addEventListener('click', downloadSession);
