@@ -2350,6 +2350,150 @@ Next steps:
                             "You can't understand a system just by understanding its parts—emergence is real"
                         ],
                         relatedModels: ["Second-Order Thinking", "Root Cause Analysis", "First Principles"]
+                    },
+                    {
+                        name: "Problem Definition",
+                        description: "Are you solving the right problem?",
+                        explanation: "Most failed solutions fail not because the solution was wrong, but because the problem was poorly defined. Problem Definition forces you to step back and articulate exactly what you're trying to solve before jumping to solutions. Einstein reportedly said he'd spend 55 minutes defining the problem and 5 minutes solving it. A well-defined problem often contains the seed of its own solution.",
+                        example: "A company's sales are declining. The knee-jerk problem definition is 'we need more leads.' But deeper examination reveals the close rate dropped 40%—they have plenty of leads, they're just not converting. The real problem is sales effectiveness, not lead generation. Solving the wrong problem would have wasted the marketing budget while the real issue persisted.",
+                        prompts: [
+                            "Can you state the problem in one sentence? Now state it differently three more times—what shifts?",
+                            "What would 'solved' look like? Be specific about the end state you want.",
+                            "Whose problem is this, really? Is it your problem to solve?",
+                            "What's the problem behind the problem? What triggered you to notice this issue now?"
+                        ],
+                        warnings: [
+                            "The way you frame the problem constrains the solutions you can see",
+                            "Stakeholders may define the same problem very differently",
+                            "Symptoms and root problems often look alike—don't confuse them"
+                        ],
+                        relatedModels: ["Root Cause Analysis", "Reframing", "First Principles"]
+                    },
+                    {
+                        name: "Base Rate Analysis",
+                        description: "What does the data say before your specifics?",
+                        explanation: "Base Rate Analysis means checking how often something actually happens in general before assuming your situation is special. We tend to focus on the vivid details of our specific case and ignore the broader statistical reality. If 90% of startups fail, your startup needs extraordinary reasons to expect different odds—not just optimism. Base rates are the starting point; your specifics adjust from there, not the other way around.",
+                        example: "You're considering opening a restaurant because you're a great cook and friends love your food. Before planning, check the base rate: roughly 60% of restaurants fail in the first year, 80% within five years. Your cooking skill is real, but it's only one factor. The base rate tells you the default outcome, so you can honestly assess whether your specific advantages are strong enough to beat it.",
+                        prompts: [
+                            "For situations like this, what's the general success/failure rate? What does the data show?",
+                            "What makes you think your specific case will differ from the typical outcome?",
+                            "Are you weighting your personal story more than the statistical reality?",
+                            "What's the reference class? What category of situations does this actually belong to?"
+                        ],
+                        warnings: [
+                            "Base rates feel impersonal—that's exactly why people ignore them",
+                            "Your situation IS unique in some ways, but unique doesn't mean exempt from statistics",
+                            "Good base rate data isn't always available—don't fabricate precision"
+                        ],
+                        relatedModels: ["Confirmation Bias Recognition", "Expected Value", "Occam's Razor"]
+                    },
+                    {
+                        name: "Survivorship Bias Recognition",
+                        description: "You're only seeing the winners",
+                        explanation: "Survivorship Bias occurs when you draw conclusions from visible successes while ignoring the invisible failures. When you study only the companies that survived, the people who succeeded, or the strategies that worked, you get a dangerously distorted picture. The failures—which often used the exact same strategies—are silent and invisible. You need to actively seek out the data on what didn't work.",
+                        example: "Business books study successful CEOs who dropped out of college—Gates, Zuckerberg, Jobs—and conclude that dropping out can lead to success. But for every college dropout billionaire, there are millions of dropouts who struggled financially. The dropouts who failed don't write bestselling memoirs. The visible survivors create an illusion that the strategy itself was sound.",
+                        prompts: [
+                            "Who or what didn't survive this process? What happened to the failures?",
+                            "Are you drawing lessons only from successes? What would the failures teach you?",
+                            "Is the advice you're following based on a complete picture or just the visible winners?",
+                            "If 100 people tried this exact approach, how many would succeed vs. fail?"
+                        ],
+                        warnings: [
+                            "Success stories are louder than failure stories—adjust your information diet accordingly",
+                            "The plural of anecdote is not data, especially when the anecdotes are cherry-picked",
+                            "Even valid lessons from survivors may not be the actual cause of their survival"
+                        ],
+                        relatedModels: ["Base Rate Analysis", "Confirmation Bias Recognition", "Availability Bias Recognition"]
+                    },
+                    {
+                        name: "Availability Bias Recognition",
+                        description: "Recent and vivid isn't the same as common",
+                        explanation: "Availability Bias makes us overweight information that comes to mind easily—recent events, dramatic stories, personal experiences—and underweight information that's harder to recall but more representative. After seeing a plane crash on the news, you feel flying is dangerous, even though the drive to the airport is statistically far riskier. The ease of recall tricks your brain into thinking something is more frequent or important than it actually is.",
+                        example: "After a high-profile data breach makes the news, a company's leadership pushes to spend $2M on cybersecurity—while ignoring the mundane-but-costly employee turnover problem that's been draining $5M annually. The breach is vivid and available; the turnover is chronic and invisible. Availability bias redirects resources toward what feels urgent rather than what's actually most impactful.",
+                        prompts: [
+                            "Is your assessment based on data, or on what comes to mind most easily?",
+                            "What recent, vivid, or emotional events might be skewing your perception?",
+                            "If you hadn't seen/heard about [that specific event], would you still feel the same way?",
+                            "What boring, chronic, undramatic factors might actually be more important here?"
+                        ],
+                        warnings: [
+                            "Your gut feeling about frequency or risk is almost certainly influenced by what's top of mind",
+                            "News media amplifies the dramatic and rare, not the common and important",
+                            "Personal experience, while valid, is a tiny and biased sample"
+                        ],
+                        relatedModels: ["Survivorship Bias Recognition", "Base Rate Analysis", "Confirmation Bias Recognition"]
+                    },
+                    {
+                        name: "Stakeholder Mapping",
+                        description: "Who is affected and who has influence?",
+                        explanation: "Stakeholder Mapping identifies everyone who has a stake in the outcome—those affected by it, those who can influence it, and those with the power to block or enable it. Most decisions fail not on technical merit but on the people dimension: someone with influence was overlooked, someone affected wasn't consulted, or competing interests weren't surfaced. Map the landscape of people before mapping the landscape of options.",
+                        example: "A product team wants to redesign the checkout flow. Obvious stakeholders: customers, designers, engineers. Less obvious: the customer support team (who handles complaints about the current flow), the finance team (who depends on specific data the flow captures), legal (who has compliance requirements), and the sales team (who promised specific features to enterprise clients). Missing any of these means surprises later.",
+                        prompts: [
+                            "Who will be directly affected by this decision or its outcomes?",
+                            "Who has the power to approve, block, or undermine this?",
+                            "Whose perspective haven't you considered yet? Who's not in the room?",
+                            "What does each key stakeholder need, fear, or want from this situation?"
+                        ],
+                        warnings: [
+                            "The most important stakeholder is often the one you forgot to list",
+                            "Influence and authority aren't the same—informal influencers matter enormously",
+                            "Don't just map stakeholders—actually talk to them"
+                        ],
+                        relatedModels: ["Perspective-Taking", "Systems Thinking", "Incentives"]
+                    },
+                    {
+                        name: "SWOT Analysis",
+                        description: "Map strengths, weaknesses, opportunities, and threats",
+                        explanation: "SWOT is a structured framework for assessing a situation across four dimensions: Strengths (internal advantages), Weaknesses (internal disadvantages), Opportunities (external possibilities), and Threats (external risks). Its power is in forcing a balanced assessment—optimists tend to see only strengths and opportunities, while pessimists see only weaknesses and threats. A complete SWOT gives you the full picture.",
+                        example: "A freelance designer considering going full-time at a startup. Strengths: deep design skills, existing portfolio, startup experience. Weaknesses: no management experience, limited financial runway. Opportunities: equity upside, growing market, chance to build a team. Threats: startup may fail, losing freelance client relationships, health insurance gap. Seeing all four quadrants makes the decision more grounded.",
+                        prompts: [
+                            "What are the genuine strengths and advantages you bring to this situation?",
+                            "What are the honest weaknesses, gaps, or vulnerabilities?",
+                            "What external opportunities exist that you could capitalize on?",
+                            "What external threats or risks could undermine you, regardless of how well you execute?"
+                        ],
+                        warnings: [
+                            "Be brutally honest in the Weaknesses and Threats quadrants—this is where self-deception hides",
+                            "Strengths can become weaknesses in a different context (and vice versa)",
+                            "SWOT is a snapshot—revisit it as conditions change"
+                        ],
+                        relatedModels: ["Stakeholder Mapping", "Constraint Identification", "First Principles"]
+                    },
+                    {
+                        name: "Perspective-Taking",
+                        description: "How does this look from the other side?",
+                        explanation: "Perspective-Taking means deliberately stepping out of your own viewpoint and inhabiting someone else's. This isn't just empathy (feeling what others feel)—it's cognitive work: understanding their information, incentives, constraints, fears, and goals. Most conflicts and misunderstandings stem from each party being unable to see the situation through the other's eyes. The most effective leaders, negotiators, and problem-solvers do this habitually.",
+                        example: "An engineering lead is frustrated that the product manager keeps changing requirements. From the PM's perspective: customers are churning, the CEO is demanding pivots, and the PM is caught between conflicting pressures with limited time to communicate context. Understanding this doesn't make the changes less frustrating, but it shifts the conversation from blame to collaborative problem-solving.",
+                        prompts: [
+                            "Pick the person most affected by this. What does this situation look like from their position?",
+                            "What information do they have that you don't? What do you know that they don't?",
+                            "What are they afraid of? What's their best-case outcome?",
+                            "If you were advising them, what would you tell them to do?"
+                        ],
+                        warnings: [
+                            "Don't confuse imagining their perspective with actually asking them—do both",
+                            "You're projecting your own mental model onto them unless you've verified",
+                            "Multiple stakeholders means multiple perspectives—don't flatten them into one"
+                        ],
+                        relatedModels: ["Stakeholder Mapping", "Incentives", "Confirmation Bias Recognition"]
+                    },
+                    {
+                        name: "Constraint Identification",
+                        description: "What are the real limits vs. the assumed ones?",
+                        explanation: "Constraint Identification separates genuine, immovable constraints (laws of physics, legal requirements, hard deadlines) from assumed constraints (habits, conventions, fears, untested beliefs). Most people overestimate how constrained they are. What feels like a wall is often just a fence you haven't tried to look over. Identifying which constraints are real focuses your effort on what can actually change.",
+                        example: "A team says they can't ship a feature in Q1 because 'it requires a database migration that takes 3 months.' Probing deeper: the migration takes 3 months because it's always been done that way. The actual constraint is 2 hours of downtime for the migration itself—the rest is process overhead that could be compressed. The real constraint and the assumed constraint were very different.",
+                        prompts: [
+                            "List every constraint you're operating under. Now mark each as 'hard' (immovable) or 'soft' (assumed/conventional).",
+                            "For each soft constraint: what would happen if you ignored it? What's the actual consequence?",
+                            "Who imposed this constraint? Is it still valid? Has anyone challenged it?",
+                            "What would you do if you had twice the time? Half the time? No budget? Unlimited budget?"
+                        ],
+                        warnings: [
+                            "Some assumed constraints exist for good reasons you haven't discovered yet—investigate before ignoring",
+                            "Real constraints can change over time—revisit them periodically",
+                            "Political and cultural constraints are real even if they're not 'hard' constraints"
+                        ],
+                        relatedModels: ["First Principles", "Constraint Removal", "Reframing"]
                     }
                 ]
             },
@@ -2484,6 +2628,132 @@ Next steps:
                             "The best decision made today often beats a perfect decision made too late"
                         ],
                         relatedModels: ["Opportunity Cost", "Reversible vs. Irreversible Decisions", "Pareto Principle (80/20)"]
+                    },
+                    {
+                        name: "Regret Minimization",
+                        description: "Which choice will you regret least in 10 years?",
+                        explanation: "Regret Minimization, popularized by Jeff Bezos, means projecting yourself to age 80 and asking which choice minimizes your total lifetime regret. This framework cuts through analysis paralysis by shifting from 'what's optimal right now' to 'what can I live with long-term.' It naturally weights bold action over inaction—because we typically regret the things we didn't do more than the things we did.",
+                        example: "Bezos had a well-paying job on Wall Street when he had the idea for Amazon. Analytically, leaving was risky. But he applied regret minimization: 'When I'm 80, will I regret leaving Wall Street? No. Will I regret not trying this internet thing I'm excited about? Yes.' The framework made the decision clear even though the spreadsheet didn't.",
+                        prompts: [
+                            "Project yourself 10 years into the future. Which choice would you regret NOT making?",
+                            "Which option is a risk of commission (doing something) vs. omission (not doing something)? Which type of regret is harder to live with for you?",
+                            "If this fails, will you regret trying? Or will the experience itself have value?",
+                            "Are you avoiding a choice because of fear, or because it's genuinely the wrong move?"
+                        ],
+                        warnings: [
+                            "This framework biases toward action—sometimes inaction really is the right choice",
+                            "Future-you may have different values than present-you—don't assume perfect consistency",
+                            "Regret minimization works best for big, hard-to-reverse life decisions, not routine ones"
+                        ],
+                        relatedModels: ["Reversible vs. Irreversible Decisions", "Values Alignment", "Opportunity Cost"]
+                    },
+                    {
+                        name: "Sunk Cost Awareness",
+                        description: "Past investments shouldn't drive future decisions",
+                        explanation: "The Sunk Cost Fallacy is our tendency to continue investing in something because of what we've already put in, rather than because of what we expect to get out. The money, time, or effort already spent is gone regardless of what you do next. Rational decisions are based only on future costs and benefits. Yet we consistently throw good money after bad, stay in failing relationships, and finish terrible books—all because of what we've already invested.",
+                        example: "A company has spent $3M building a product that market testing shows nobody wants. The CEO argues 'we can't waste the $3M we've already invested.' But that $3M is gone whether they continue or stop. The real question is: 'Is the NEXT $1M better spent finishing this unwanted product or starting something new?' Sunk cost thinking would waste another $1M; forward-looking thinking would redirect it.",
+                        prompts: [
+                            "If you hadn't already invested time/money/effort, would you start this today?",
+                            "Are you continuing because of future potential or because of past investment?",
+                            "What would you advise a friend who described this exact situation to you?",
+                            "What's the opportunity cost of continuing? What else could those future resources do?"
+                        ],
+                        warnings: [
+                            "Sometimes persistence IS the right call—distinguish sunk cost fallacy from genuine long-term investment",
+                            "Reputational costs of quitting are real and forward-looking, not sunk",
+                            "Emotional investment is the hardest sunk cost to recognize"
+                        ],
+                        relatedModels: ["Opportunity Cost", "Zero-Based Thinking", "Regret Minimization"]
+                    },
+                    {
+                        name: "Short-term vs Long-term Tradeoffs",
+                        description: "Is this optimizing for now or for later?",
+                        explanation: "Almost every decision involves tension between short-term and long-term outcomes. Eating the cake is great now, bad later. Exercising is painful now, great later. Organizations face the same tradeoffs: cutting R&D boosts this quarter's profit but erodes future competitiveness. Making this tradeoff explicit—rather than defaulting to whichever timeframe feels most urgent—leads to dramatically better decisions.",
+                        example: "A startup can either (A) take on technical debt to ship fast and win customers now, or (B) build it right, ship slower, but have a maintainable codebase for years. Neither is universally right. The question is: what's the right time horizon? If you need to prove market fit before funding runs out, (A) might be survival. If you've already proven fit, (B) prevents a future rewrite that costs 10x more.",
+                        prompts: [
+                            "What's the short-term benefit of this choice? What's the long-term cost?",
+                            "What's the short-term cost of the alternative? What's the long-term benefit?",
+                            "What's the right time horizon for this decision? 1 month? 1 year? 10 years?",
+                            "Are you defaulting to short-term thinking because of urgency, pressure, or discomfort?"
+                        ],
+                        warnings: [
+                            "Long-term thinking can become an excuse for never shipping or deciding",
+                            "You have to survive the short term to benefit from the long term",
+                            "The 'long term' is not a single point—different long-term horizons can give different answers"
+                        ],
+                        relatedModels: ["Second-Order Thinking", "Compound Interest", "Regret Minimization"]
+                    },
+                    {
+                        name: "Weighted Scoring / Decision Matrix",
+                        description: "Score options against weighted criteria",
+                        explanation: "A Decision Matrix makes evaluation explicit and structured. You list your options as rows, your criteria as columns, weight each criterion by importance, then score each option against each criterion. The math forces you to confront tradeoffs you might otherwise wave away. It doesn't make the decision for you—but it shows you exactly what you're trading off and prevents you from unconsciously overweighting one factor.",
+                        example: "Choosing between three job offers. Criteria (weighted 1-5): compensation (4), growth potential (5), work-life balance (3), team quality (4), mission alignment (3). Score each job 1-10 on each criterion, multiply by weight, sum. Job A might win on compensation but Job B wins overall because it scores highest on the heavily-weighted growth potential. The matrix reveals what your priorities actually produce.",
+                        prompts: [
+                            "What are your 4-6 most important criteria for this decision? Can you rank them by importance?",
+                            "Score each option against each criterion. Where are the surprising gaps?",
+                            "Does the mathematical winner match your gut feeling? If not, what criterion are you underweighting?",
+                            "What would change the result? Which scores are uncertain and worth investigating?"
+                        ],
+                        warnings: [
+                            "Garbage in, garbage out—the matrix is only as good as your criteria and honest scoring",
+                            "If the result feels wrong, that's useful data—explore why rather than dismissing the tool",
+                            "Don't use false precision—a 7.2 vs 7.3 difference is noise, not signal"
+                        ],
+                        relatedModels: ["Cost-Benefit Analysis", "Satisficing vs. Optimizing", "Values Alignment"]
+                    },
+                    {
+                        name: "Sensitivity Analysis",
+                        description: "Which assumptions, if wrong, would change your answer?",
+                        explanation: "Sensitivity Analysis tests how robust your decision is by asking: what if my key assumptions are wrong? You identify the critical assumptions underlying your choice, then vary them—what if costs are 50% higher? What if the timeline doubles? What if demand is half of projections? If your decision still holds under these variations, it's robust. If a small change in one assumption flips the answer, that assumption deserves much more scrutiny.",
+                        example: "A business case for a new product assumes $1M revenue in year one. Sensitivity analysis: what if revenue is only $500K? The project still breaks even in year two—acceptable. What if customer acquisition cost is $200 instead of $100? The project never breaks even. Now you know: revenue estimates can be off and you're fine, but CAC assumptions are the critical variable that needs real validation.",
+                        prompts: [
+                            "What are the 3-4 biggest assumptions your decision rests on?",
+                            "For each assumption: what if it's 50% worse than expected? Does the decision change?",
+                            "Which single assumption, if wrong, would most change the outcome?",
+                            "How confident are you in each key assumption? Where do you have real data vs. guesses?"
+                        ],
+                        warnings: [
+                            "Don't just test small variations—test dramatically different scenarios",
+                            "Correlated risks: sometimes multiple assumptions fail together (economic downturns affect both revenue AND costs)",
+                            "Unknown unknowns—sensitivity analysis only tests the assumptions you've identified"
+                        ],
+                        relatedModels: ["Expected Value", "Margin of Safety", "Pre-mortem"]
+                    },
+                    {
+                        name: "Values Alignment",
+                        description: "Does this align with who you want to be?",
+                        explanation: "Values Alignment asks whether a choice is consistent with your core principles—not just whether it's profitable or efficient, but whether it's the kind of decision the person or organization you want to be would make. This isn't soft or idealistic; values misalignment creates internal friction, erodes trust, and leads to decisions you can't defend when questioned. Sustainable success requires that strategy and values point in the same direction.",
+                        example: "A company can increase margins by 15% by switching to a cheaper supplier with questionable labor practices. The spreadsheet says yes. But the company's stated values include ethical sourcing, and their customers chose them partly for that reason. The margin gain is real but the values misalignment would create employee disillusionment, PR risk, and brand erosion. The 'right' financial decision is the wrong actual decision.",
+                        prompts: [
+                            "What are your 3-5 core values (personal or organizational)? Does this decision align with all of them?",
+                            "If this decision were made public—to your team, your customers, your family—would you be comfortable?",
+                            "Are you compromising a value for a short-term gain? What's the long-term cost of that compromise?",
+                            "Which option would make you most proud when you look back on it?"
+                        ],
+                        warnings: [
+                            "Values without tradeoffs aren't values—they're platitudes. Real values cost you something.",
+                            "Don't confuse stated values with revealed values (what you actually do under pressure)",
+                            "Values can conflict with each other—'loyalty' vs 'honesty,' for example. Be honest about the tension."
+                        ],
+                        relatedModels: ["Regret Minimization", "Incentives", "Second-Order Thinking"]
+                    },
+                    {
+                        name: "Eisenhower Matrix",
+                        description: "Urgent vs. important—are you confusing the two?",
+                        explanation: "The Eisenhower Matrix separates tasks and decisions into four quadrants based on urgency (needs attention now) and importance (matters for long-term goals). Most people spend their time on urgent-but-not-important tasks (emails, interruptions) while neglecting important-but-not-urgent work (planning, relationships, health). The matrix forces you to ask: am I spending my time and attention on what actually matters, or just on what's screaming loudest?",
+                        example: "A manager's week: urgent emails, last-minute meetings, firefighting production issues (urgent), plus a hiring plan, team development conversations, and process improvements (important but not urgent). Without the matrix, the urgent stuff fills every hour. The important work—which determines whether next quarter is better—keeps getting pushed to 'next week.' The matrix makes this pattern visible and fixable.",
+                        prompts: [
+                            "Is this truly urgent, or does it just feel urgent? What happens if you wait a week?",
+                            "Is this truly important, or is it just visible and noisy?",
+                            "What important-but-not-urgent work have you been neglecting? What's the cost of continued neglect?",
+                            "Can the urgent items be delegated, automated, or eliminated so you can focus on what's important?"
+                        ],
+                        warnings: [
+                            "Other people's urgency is not your importance—protect your priorities",
+                            "Truly urgent AND important items do exist—don't over-philosophize during a real crisis",
+                            "The matrix is about allocation of attention and time, not just task sorting"
+                        ],
+                        relatedModels: ["Pareto Principle (80/20)", "Opportunity Cost", "Satisficing vs. Optimizing"]
                     }
                 ]
             },
@@ -2618,6 +2888,114 @@ Next steps:
                             "Use for potentially catastrophic/irreversible outcomes, not routine decisions"
                         ],
                         relatedModels: ["Margin of Safety", "Reversible vs. Irreversible Decisions", "Expected Value"]
+                    },
+                    {
+                        name: "Devil's Advocate",
+                        description: "Deliberately argue against the leading option",
+                        explanation: "The Devil's Advocate technique assigns someone (or yourself) the role of forcefully arguing against the preferred option. Unlike Pre-mortem (imagining failure), this actively attacks the reasoning, evidence, and assumptions supporting the leading choice RIGHT NOW. It originated in the Catholic Church's canonization process, where an advocatus diaboli would argue against sainthood to ensure only the most deserving were canonized. The discomfort it creates is exactly the point.",
+                        example: "A board is leaning toward acquiring a competitor. Everyone is excited about the synergies. A designated devil's advocate argues: 'The synergies are theoretical—integrations this size fail 60% of the time. Their best engineers will leave within 18 months. Their tech stack is incompatible with ours. We'd be paying 12x revenue for a company whose growth is already slowing.' Whether or not this changes the decision, it surfaces risks that enthusiasm was hiding.",
+                        prompts: [
+                            "Argue against your preferred option as forcefully as you can. What's the strongest case against it?",
+                            "What evidence would someone who disagrees with you point to?",
+                            "What are you dismissing or downplaying because it's inconvenient to your preferred conclusion?",
+                            "If a smart, skeptical friend heard your plan, what would they challenge first?"
+                        ],
+                        warnings: [
+                            "Don't dismiss the devil's advocate arguments just because they're uncomfortable",
+                            "The goal is to strengthen your thinking, not to create paralysis",
+                            "A weak devil's advocate (who argues poorly on purpose) is worse than none—take the role seriously"
+                        ],
+                        relatedModels: ["Steelmanning", "Confirmation Bias Recognition", "Pre-mortem"]
+                    },
+                    {
+                        name: "Steelmanning",
+                        description: "Build the strongest version of the opposing view",
+                        explanation: "Steelmanning is the opposite of strawmanning. Instead of weakening an opposing argument to make it easier to dismiss, you strengthen it—constructing the most compelling possible version. If you can argue the opposing side better than its own advocates, and your position STILL holds, you can be genuinely confident. If you can't steelman the opposition, you probably don't understand it well enough to reject it.",
+                        example: "You want to adopt a microservices architecture, and a colleague advocates staying monolithic. Instead of dismissing their view ('they're just afraid of change'), steelman it: 'A monolith reduces operational complexity, eliminates network latency between services, simplifies debugging, avoids data consistency challenges, and at our current scale, the deployment benefits of microservices don't yet outweigh the coordination costs.' Now you're engaging with the REAL argument, not a caricature.",
+                        prompts: [
+                            "What's the strongest possible case for the option you're leaning AGAINST?",
+                            "Can you argue the opposing side well enough to convince a neutral observer?",
+                            "What legitimate concerns or evidence does the other side have that you're underweighting?",
+                            "If the opposing view is right, what would that imply? What would you see in the world?"
+                        ],
+                        warnings: [
+                            "If your steelman feels weak, you probably don't understand the opposition well enough—keep going",
+                            "Steelmanning requires intellectual honesty—it's tempting to secretly weaken the argument",
+                            "This is about understanding, not agreeing—you may still reject the opposing view after steelmanning it"
+                        ],
+                        relatedModels: ["Devil's Advocate", "Perspective-Taking", "Confirmation Bias Recognition"]
+                    },
+                    {
+                        name: "Anchoring Bias Check",
+                        description: "Is an arbitrary reference point pulling your judgment?",
+                        explanation: "Anchoring Bias occurs when an initial piece of information (the 'anchor') disproportionately influences subsequent judgments. The first number you hear in a negotiation, the original price on a sale tag, the initial estimate in a project—all become reference points that pull your thinking toward them, even when they're arbitrary or irrelevant. Being aware of anchors doesn't fully eliminate their effect, but it helps you deliberately re-anchor on more relevant data.",
+                        example: "A house is listed at $500K. You negotiate down to $420K and feel great—you 'saved' $80K. But comparable homes sold for $380K-$400K. The listing price was an arbitrary anchor that made $420K feel like a deal when it was actually above market. If you'd started your analysis from comparable sales instead of the listing price, your negotiation target would have been very different.",
+                        prompts: [
+                            "What was the first number, estimate, or reference point you encountered in this situation?",
+                            "Is your current thinking being pulled toward that initial anchor? Would you think differently if the anchor had been different?",
+                            "What would your assessment be if you started from scratch with no prior reference point?",
+                            "Can you find independent data points that aren't influenced by the original anchor?"
+                        ],
+                        warnings: [
+                            "Knowing about anchoring doesn't make you immune—you need active countermeasures",
+                            "Anchors work even when they're obviously random (studies show this repeatedly)",
+                            "Your own initial estimate can anchor you too—be willing to revise dramatically"
+                        ],
+                        relatedModels: ["Availability Bias Recognition", "Base Rate Analysis", "Sensitivity Analysis"]
+                    },
+                    {
+                        name: "Status Quo Bias Check",
+                        description: "Are you favoring this just because it's the current state?",
+                        explanation: "Status Quo Bias is our strong preference for the current state of affairs. We feel losses from change more than equivalent gains (loss aversion), and the current state feels safer simply because it's familiar. This means we systematically under-change—staying in jobs, relationships, strategies, and systems longer than we should. The question isn't 'is there a good reason to change?' but 'if I weren't already doing this, would I choose to start?'",
+                        example: "A company has used the same CRM for 8 years. Everyone agrees it's inadequate, but switching feels enormous—data migration, retraining, disruption. They keep renewing. The status quo bias question: 'If we had no CRM today and were choosing for the first time, would we pick this one?' Obviously not. The switching costs are real but finite; the ongoing cost of an inadequate tool compounds forever.",
+                        prompts: [
+                            "If you were starting fresh today with no history, would you choose the current path?",
+                            "What are you keeping simply because changing feels harder than staying?",
+                            "What's the ongoing cost of the status quo that you've stopped noticing because it's familiar?",
+                            "Separate the genuine switching costs (real) from the comfort of familiarity (bias). Are the costs really that high?"
+                        ],
+                        warnings: [
+                            "Sometimes the status quo really is the best option—bias check doesn't mean 'always change'",
+                            "Switching costs are real even when status quo bias is also real—account for both",
+                            "Change for the sake of change is its own bias (novelty bias)"
+                        ],
+                        relatedModels: ["Sunk Cost Awareness", "Zero-Based Thinking", "Inversion"]
+                    },
+                    {
+                        name: "Black Swan Awareness",
+                        description: "What extreme, unlikely events could change everything?",
+                        explanation: "Black Swan Awareness, from Nassim Taleb's work, means accounting for events that are extremely unlikely, have massive impact, and are only 'predictable' in hindsight. Standard risk analysis focuses on the probable—Black Swan thinking focuses on the possible. You can't predict specific Black Swans, but you can ask: how exposed am I to extreme events, and can I position myself to survive (or benefit from) them?",
+                        example: "A supply chain optimized for efficiency has a single supplier for a critical component. Probability of that supplier failing: very low. Impact: catastrophic. COVID-19 was a Black Swan that exposed exactly this fragility across global supply chains. Companies that had maintained 'inefficient' backup suppliers—a hedge against unlikely events—survived while hyper-optimized competitors collapsed.",
+                        prompts: [
+                            "What extremely unlikely but high-impact events could blow up this plan?",
+                            "How fragile is your plan to unexpected shocks? Where are the single points of failure?",
+                            "What would you do if the worst-case scenario happened tomorrow? Do you have a response ready?",
+                            "Can you structure this so you benefit from positive surprises while limiting exposure to negative ones?"
+                        ],
+                        warnings: [
+                            "You can't predict specific Black Swans—focus on resilience and exposure, not prediction",
+                            "Don't become paralyzed by unlikely scenarios—the goal is awareness and positioning, not fear",
+                            "The biggest risk is often the one nobody in the room is talking about"
+                        ],
+                        relatedModels: ["Antifragility", "Redundancy", "Margin of Safety"]
+                    },
+                    {
+                        name: "Tripwire / Kill Criteria",
+                        description: "Define in advance when to stop or pivot",
+                        explanation: "Tripwire planning means setting specific, measurable conditions IN ADVANCE that trigger a decision to stop, pivot, or escalate. Without tripwires, gradual deterioration goes unnoticed—the frog in slowly boiling water. When you define 'if X happens, we do Y' while you're thinking clearly, you protect your future self from denial, sunk cost fallacy, and the slow drift of standards. Tripwires turn vague unease into clear action.",
+                        example: "A startup commits to a new product direction with these tripwires: 'If we don't have 100 paying users by month 6, we pivot. If burn rate exceeds $80K/month for two consecutive months, we cut scope. If either founder wants out, we have a serious conversation within one week.' Six months later, they have 40 users. Without the tripwire, they'd rationalize. With it, the decision to pivot was already made—they just had to execute.",
+                        prompts: [
+                            "What specific, measurable signals would tell you this isn't working?",
+                            "At what point should you stop investing and cut losses? Define the number or date now.",
+                            "What conditions would trigger a pivot vs. a full stop vs. doubling down?",
+                            "Are you willing to commit NOW to honoring these tripwires, even if it's uncomfortable later?"
+                        ],
+                        warnings: [
+                            "Tripwires only work if you actually honor them—pre-commit publicly if possible",
+                            "Set them while you're thinking clearly, not when you're already invested and emotional",
+                            "Too-sensitive tripwires cause premature quitting; too-insensitive ones are useless—calibrate carefully"
+                        ],
+                        relatedModels: ["Pre-mortem", "Sunk Cost Awareness", "Reversible vs. Irreversible Decisions"]
                     }
                 ]
             },
@@ -2752,6 +3130,132 @@ Next steps:
                             "Customers may not know they want something that doesn't exist yet"
                         ],
                         relatedModels: ["First Principles (Generative)", "Reframing", "Combinatorial Thinking"]
+                    },
+                    {
+                        name: "Working Backwards",
+                        description: "Start from the ideal outcome and reverse-engineer",
+                        explanation: "Working Backwards means starting with a vivid picture of the desired end state and then reasoning backward step by step: what's the last thing that needs to happen before that? And before that? And before that? This is the opposite of forward planning (where you start from today and project forward). Working backwards often reveals paths, requirements, and intermediate steps that forward thinking misses because it gets trapped by current constraints.",
+                        example: "Amazon famously writes the press release first—before building anything. For a new product, they start with the customer experience they want (the end state), write the announcement as if it already exists, then work backward to figure out what needs to be built. This ensures the end product actually delivers value rather than being a collection of features that seemed logical during development.",
+                        prompts: [
+                            "Describe the ideal end state in vivid detail. What does success look like when it's done?",
+                            "What's the very last step before that end state is achieved?",
+                            "Keep going backward: what comes before that? And before that? Map the chain.",
+                            "At what point does the backward chain connect to where you are now? What's the first step?"
+                        ],
+                        warnings: [
+                            "The ideal end state needs to be realistic enough to reverse-engineer from",
+                            "Don't skip steps in the backward chain—gaps hide the hardest problems",
+                            "Working backwards reveals the path, but you still walk it forwards—sequence matters"
+                        ],
+                        relatedModels: ["Critical Path", "Reframing", "First Principles (Generative)"]
+                    },
+                    {
+                        name: "Scenario Planning",
+                        description: "Map multiple plausible futures",
+                        explanation: "Scenario Planning creates 3-4 distinct, plausible future states and asks: what would we do in each? Unlike prediction (picking the most likely future), scenario planning acknowledges uncertainty and prepares for multiple possibilities. The goal isn't to guess right, but to have thought through your response to various futures so you're never completely blindsided. The best strategies are robust across multiple scenarios, not optimized for just one.",
+                        example: "A retailer planning their 2-year strategy creates four scenarios: (1) economy booms, consumers spend freely; (2) recession, consumers cut back; (3) competitor launches disruptive online platform; (4) supply chain disruption continues. For each, they map their response. They discover that investing in their own online platform is a strong move in scenarios 1, 3, AND 4—making it robust. A new physical store only wins in scenario 1—making it fragile.",
+                        prompts: [
+                            "What are 3-4 genuinely different but plausible futures for this situation?",
+                            "For each scenario: what would you do? What would your response be?",
+                            "Which actions or preparations are robust across multiple scenarios?",
+                            "Which scenario are you unconsciously assuming is most likely? What if you're wrong?"
+                        ],
+                        warnings: [
+                            "Scenarios should be genuinely different, not minor variations of the same future",
+                            "Include at least one scenario that makes you uncomfortable—that's usually the most valuable",
+                            "Don't use scenario planning to justify a decision you've already made by cherry-picking the right scenario"
+                        ],
+                        relatedModels: ["Black Swan Awareness", "Sensitivity Analysis", "Working Backwards"]
+                    },
+                    {
+                        name: "Zero-Based Thinking",
+                        description: "If you weren't already here, would you start?",
+                        explanation: "Zero-Based Thinking asks: knowing what I now know, if I were not already in this situation, would I get into it? If the answer is no, your next question is: how do I get out, and how fast? This ruthlessly separates past decisions (which can't be changed) from present reality (which can). It's the antidote to sunk cost fallacy, status quo bias, and the gradual drift that keeps people in suboptimal situations long past their expiration date.",
+                        example: "A manager has an underperforming employee they hired two years ago. They've invested heavily in coaching and support. Zero-based question: 'If this person applied for the job today, knowing what I know about their performance, would I hire them?' If the honest answer is no, then the question shifts from 'how do I salvage this?' to 'what's my transition plan?' The past investment is irrelevant to the current decision.",
+                        prompts: [
+                            "Knowing what you now know, would you make the same choice again today?",
+                            "If the answer is no—what's your exit plan? What's keeping you in this situation?",
+                            "What would a fresh start look like if you could design it from scratch?",
+                            "What's the cost of staying in this situation for another year vs. the cost of changing now?"
+                        ],
+                        warnings: [
+                            "Sometimes you WOULD start again—zero-based thinking isn't always about leaving",
+                            "Exit costs are real and should be factored in, but don't confuse them with sunk costs",
+                            "Applies to jobs, relationships, projects, strategies, subscriptions—anything with ongoing commitment"
+                        ],
+                        relatedModels: ["Sunk Cost Awareness", "Status Quo Bias Check", "Constraint Removal"]
+                    },
+                    {
+                        name: "SCAMPER",
+                        description: "Systematically modify what exists",
+                        explanation: "SCAMPER is a structured creativity technique that generates alternatives by systematically applying seven transformations to what already exists: Substitute (replace a component), Combine (merge with something else), Adapt (borrow from another context), Modify (change size/shape/attributes), Put to other use (repurpose), Eliminate (remove components), Reverse (flip the order or roles). It's particularly powerful when 'brainstorming' feels too vague or when you're stuck iterating on the same ideas.",
+                        example: "A struggling coffee shop applies SCAMPER. Substitute: replace tables with standing desks (attracts remote workers). Combine: add a bookshop section. Adapt: copy the 'speakeasy' model with a hidden entrance. Modify: make it tiny (6 seats, hyper-premium). Put to other use: rent the space as event venue after hours. Eliminate: remove the menu—one perfect coffee, no choices. Reverse: customers set prices. Each generates a genuinely different concept.",
+                        prompts: [
+                            "SUBSTITUTE: What component could you replace with something different?",
+                            "COMBINE: What could you merge this with to create something new?",
+                            "ADAPT / MODIFY: What could you borrow from another domain, or change in scale/form?",
+                            "ELIMINATE / REVERSE: What could you remove entirely, or what order/role could you flip?"
+                        ],
+                        warnings: [
+                            "Not every SCAMPER output will be good—the point is volume and variety, then filtering",
+                            "Works best on concrete things (products, processes, services) rather than abstract problems",
+                            "Combine SCAMPER with evaluation—creativity without judgment leads nowhere"
+                        ],
+                        relatedModels: ["Combinatorial Thinking", "Constraint Removal", "Lateral Thinking"]
+                    },
+                    {
+                        name: "Worst Possible Idea",
+                        description: "Brainstorm terrible ideas, then invert them",
+                        explanation: "The Worst Possible Idea technique flips brainstorming on its head: instead of trying to generate good ideas (which creates pressure and self-censorship), you deliberately generate the worst, most ridiculous ideas you can think of. This is psychologically freeing—there's no judgment, and terrible ideas flow easily. Then you examine each bad idea: why is it bad? What would the opposite look like? Often, inverting a terrible idea produces a surprisingly creative good one.",
+                        example: "Designing a better hospital waiting room. Worst ideas: make it dark and scary, play annoying music, have no chairs, show patients' wait times counting UP. Inverting: the 'counting up' idea inverts to a real-time display showing estimated wait and queue position—which actually addresses patients' top complaint (uncertainty). The terrible idea contained the seed of a genuinely innovative solution.",
+                        prompts: [
+                            "What are the absolute worst approaches to this situation? Be creative—go absurd.",
+                            "For each bad idea: WHY specifically is it bad? What makes it terrible?",
+                            "Now invert each bad idea. What's the opposite? Does any inversion spark something interesting?",
+                            "What assumptions did your worst ideas violate? Should those assumptions actually be violated?"
+                        ],
+                        warnings: [
+                            "The inversion step is critical—don't stop at just generating bad ideas",
+                            "Some 'worst' ideas are only bad in conventional thinking and might actually be innovative",
+                            "This works best in groups where people feed off each other's absurdity"
+                        ],
+                        relatedModels: ["Inversion", "Lateral Thinking", "Reframing"]
+                    },
+                    {
+                        name: "Reverse Engineering",
+                        description: "Find what works and figure out how they did it",
+                        explanation: "Reverse Engineering means finding an existing success—a product, a solution, a company, a person who solved a similar problem—and working backward to understand HOW they achieved it. Instead of inventing from scratch, you learn from what already works. This isn't copying; it's understanding the principles and mechanisms behind success, which you can then adapt to your own context. It's how most innovation actually happens.",
+                        example: "A SaaS startup struggling with churn studies Slack's onboarding. They don't copy the UI—they reverse-engineer the principles: immediate value delivery (first message sent in under 2 minutes), progressive disclosure (features revealed as needed), social proof (showing team activity), and low commitment (free tier with generous limits). They apply these same principles to their own very different product, and churn drops 30%.",
+                        prompts: [
+                            "Who has already solved a problem similar to yours? What did they do?",
+                            "Don't just look at WHAT they did—WHY did it work? What are the underlying principles?",
+                            "What aspects of their solution could be adapted to your specific context?",
+                            "What advantages or constraints do you have that they didn't? How does that change the approach?"
+                        ],
+                        warnings: [
+                            "Context matters enormously—what worked for them may not work for you in different conditions",
+                            "Don't confuse correlation with causation: they might have succeeded despite their strategy, not because of it",
+                            "Reverse engineering the visible parts misses the invisible advantages (network effects, timing, luck)"
+                        ],
+                        relatedModels: ["Analogical Thinking", "First Principles (Generative)", "Working Backwards"]
+                    },
+                    {
+                        name: "Second-Order Opportunities",
+                        description: "What new possibilities does this open up?",
+                        explanation: "Second-Order Opportunities looks beyond the immediate outcome of a decision to ask: what new possibilities does this create? Every action changes the landscape—opening doors that didn't exist before. Most people evaluate a decision only on its direct merits, but the indirect opportunities it creates (or forecloses) can be far more valuable. The best strategic decisions are ones where even the 'side effects' are valuable.",
+                        example: "A developer decides to open-source a tool they built internally. First-order outcome: they get some community contributions. Second-order opportunities: they become known as an expert in this space, receive speaking invitations, attract hiring interest from top companies, and potential customers discover their consulting services through the project. The decision to open-source was good on its own merits, but the second-order opportunities dwarfed the first-order benefit.",
+                        prompts: [
+                            "If you take this path, what new options, connections, or capabilities does it open up?",
+                            "What doors does this close? Are the doors it opens more valuable than the ones it closes?",
+                            "What could you do AFTER this that you couldn't do before? What's the next move it enables?",
+                            "Which option creates the most future optionality, regardless of the immediate outcome?"
+                        ],
+                        warnings: [
+                            "Don't justify a bad first-order decision with hypothetical second-order benefits",
+                            "Second-order opportunities are uncertain—don't overvalue them relative to concrete first-order outcomes",
+                            "The best second-order opportunities often aren't predictable—position for luck rather than planning for it"
+                        ],
+                        relatedModels: ["Second-Order Thinking", "Scenario Planning", "Blue Ocean Strategy"]
                     }
                 ]
             },
@@ -2886,6 +3390,114 @@ Next steps:
                             "If the stack breaks, rebuild from the most reliable anchor habit"
                         ],
                         relatedModels: ["Compound Interest", "Feedback Loops", "Minimum Viable Product (MVP)"]
+                    },
+                    {
+                        name: "Pilot Testing",
+                        description: "Run a small-scale trial before full commitment",
+                        explanation: "Pilot Testing means running a small, bounded experiment before committing to a full-scale implementation. Unlike MVP (which is about product), pilot testing applies to any decision—new processes, policies, hires, strategies, lifestyle changes. The key is designing the pilot to actually test your critical assumptions: defining what success looks like, how long to run it, and what you'll measure. A pilot turns a leap of faith into a calculated experiment.",
+                        example: "A company wants to switch to a 4-day work week. Instead of company-wide change, they pilot it with two teams for 3 months. Success criteria: productivity doesn't drop >5%, employee satisfaction increases, no client complaints. After the pilot, one team thrived (creative work benefited from focus days) and one struggled (client-facing work needed 5-day availability). The pilot revealed nuance that an all-or-nothing rollout would have missed.",
+                        prompts: [
+                            "Can you test this at a smaller scale first? What would a pilot look like?",
+                            "What specifically would the pilot need to demonstrate for you to proceed with full commitment?",
+                            "How long does the pilot need to run to give you meaningful data?",
+                            "What's the smallest, cheapest version of this you could test to learn the most?"
+                        ],
+                        warnings: [
+                            "Pilots need to be representative—a test in ideal conditions doesn't prove it works in real conditions",
+                            "Define success criteria BEFORE the pilot, not after (to avoid moving the goalposts)",
+                            "Some things fundamentally can't be piloted at small scale—network effects, for example"
+                        ],
+                        relatedModels: ["Minimum Viable Product (MVP)", "Feedback Loops", "Tripwire / Kill Criteria"]
+                    },
+                    {
+                        name: "If-Then Planning",
+                        description: "Pre-commit to specific triggers and actions",
+                        explanation: "If-Then Planning (also called Implementation Intentions) means pre-deciding: 'When situation X occurs, I will do Y.' Research shows this simple technique dramatically increases follow-through because it removes in-the-moment decision-making. Instead of relying on willpower or remembering to act, you create an automatic link between a trigger and a response. It works for individual habits, team processes, and organizational responses.",
+                        example: "Instead of 'I'll exercise more,' an If-Then plan: 'When I finish my morning coffee, I put on running shoes and go for a 20-minute run.' Instead of a vague escalation policy, a team defines: 'If a customer issue is unresolved after 4 hours, it automatically escalates to the team lead.' The specificity of the trigger-action pair eliminates ambiguity and the option to defer.",
+                        prompts: [
+                            "What are the key moments where action is needed? Define the specific triggers.",
+                            "For each trigger, what's the specific action? Write it as 'When [trigger], I will [action].'",
+                            "What obstacles or temptations might arise? Create If-Then plans for those too.",
+                            "How will you make the trigger obvious and the action easy?"
+                        ],
+                        warnings: [
+                            "If-Then plans work best for clearly defined situations—not for ambiguous, complex responses",
+                            "Too many If-Then rules become a rigid system—keep them for the critical few behaviors",
+                            "The action needs to be specific and concrete, not vague ('I will think about it' doesn't work)"
+                        ],
+                        relatedModels: ["Habit Stacking", "Tripwire / Kill Criteria", "Feedback Loops"]
+                    },
+                    {
+                        name: "Staged Rollout",
+                        description: "Implement in phases with go/no-go gates",
+                        explanation: "Staged Rollout breaks implementation into distinct phases, each with defined deliverables and a decision point: continue, adjust, or stop. This is different from a plan with milestones—the key difference is the explicit go/no-go gate between stages. Each gate requires honest assessment against criteria defined at the start. Staged rollouts limit exposure, allow course correction, and prevent the common failure mode of 'we've come this far, we can't stop now.'",
+                        example: "Rolling out a new performance review system. Stage 1: Design and pilot with one team (4 weeks). Gate: team feedback is positive, managers report it takes <30 mins per review. Stage 2: Expand to one department (8 weeks). Gate: participation >90%, no increase in HR complaints. Stage 3: Company-wide. Each gate is a genuine decision point—the rollout can be paused, modified, or reversed at any stage.",
+                        prompts: [
+                            "What are the natural stages of this implementation? What's the logical sequence?",
+                            "What criteria must be met at each stage before proceeding to the next?",
+                            "Who decides go/no-go at each gate? What data do they need?",
+                            "What's your rollback plan if a stage fails? Can you reverse each stage independently?"
+                        ],
+                        warnings: [
+                            "Go/no-go gates only work if someone has the authority and willingness to say 'no-go'",
+                            "Staged rollouts take longer than all-at-once—ensure the timeline works for your constraints",
+                            "Each stage should be genuinely independent enough to assess on its own merits"
+                        ],
+                        relatedModels: ["Pilot Testing", "Tripwire / Kill Criteria", "Critical Path"]
+                    },
+                    {
+                        name: "Timeboxing / Parkinson's Law",
+                        description: "Set tight, deliberate deadlines",
+                        explanation: "Parkinson's Law states that work expands to fill the time available for its completion. Give yourself a week, and it takes a week. Give yourself a day, and—surprisingly often—it takes a day. Timeboxing harnesses this by setting deliberately tight time boundaries. This forces prioritization, prevents perfectionism, and creates urgency that sharpens focus. The constraint of limited time is often more productive than the luxury of ample time.",
+                        example: "A team is given 2 weeks to research a market opportunity. After 2 weeks, they ask for 2 more 'to be thorough.' Parkinson's Law in action—the research expanded to fill the time. Alternative: timebox to 3 days. They focus on the 4-5 most critical questions, get 80% of the insight in 20% of the time, and make a faster decision. The 'missing' 20% of insight almost never changes the conclusion.",
+                        prompts: [
+                            "How long do you think this should take? Now cut that in half—what would you drop?",
+                            "What's the minimum time needed to get to a 'good enough' result?",
+                            "Are you spending time on perfection when 'done' would be more valuable?",
+                            "What specific deliverable will you have at the end of your timebox?"
+                        ],
+                        warnings: [
+                            "Timeboxing isn't about rushing—it's about focusing. Quality matters within the timebox.",
+                            "Some things genuinely can't be compressed (curing concrete, building relationships, healing)",
+                            "Chronic under-estimation is a separate problem—be honest about actual effort required"
+                        ],
+                        relatedModels: ["Pareto Principle (80/20)", "80/20 Action", "Satisficing vs. Optimizing"]
+                    },
+                    {
+                        name: "After-Action Review",
+                        description: "Structured learning from what just happened",
+                        explanation: "An After-Action Review (AAR) asks four questions immediately after an action or decision plays out: What did we expect to happen? What actually happened? Why was there a difference? What will we do differently next time? Developed by the US Army, AARs are the most effective organizational learning tool known. They work because they're structured, blameless, and focused on the gap between expectation and reality—which is where all learning lives.",
+                        example: "A product launch hit 60% of its sales target. AAR: Expected 10K units in month one. Actually sold 6K. Why the gap? Marketing reached the right audience (email open rates were high) but the landing page had a 2% conversion rate vs. the 5% benchmark—indicating a messaging problem, not a reach problem. Next time: A/B test landing pages before launch and set conversion rate tripwires.",
+                        prompts: [
+                            "What did you expect to happen? Be specific about your predictions.",
+                            "What actually happened? Stick to facts and observations, not interpretations.",
+                            "Why was there a gap between expectation and reality? What caused the difference?",
+                            "What will you do differently next time? Be specific about the change."
+                        ],
+                        warnings: [
+                            "AARs must be blameless to be honest—focus on systems and processes, not individuals",
+                            "Do the AAR quickly, while memory is fresh—waiting reduces accuracy and honesty",
+                            "The 'what will we do differently' must be specific and actionable, not vague 'try harder'"
+                        ],
+                        relatedModels: ["Feedback Loops", "Pilot Testing", "Root Cause Analysis"]
+                    },
+                    {
+                        name: "Communication Planning",
+                        description: "Who needs to know what, when, and how?",
+                        explanation: "Communication Planning addresses the most common failure mode in implementation: not the plan itself, but how it's communicated. Who needs to know? What do they need to know? When do they need to know it? What's the right channel? What questions will they have? Most failed implementations were technically sound but poorly communicated—creating confusion, resistance, and misalignment. The implementation plan and the communication plan are equally important.",
+                        example: "A company restructures two teams. The plan is solid, but communication is an afterthought: affected employees hear rumors before the official announcement, managers aren't briefed on how to answer questions, and partner teams learn about it from Slack gossip. Trust erodes. Contrast with planned communication: managers briefed Monday, affected teams told Tuesday in person with Q&A, broader org notified Wednesday via email with FAQ. Same restructuring, completely different experience.",
+                        prompts: [
+                            "Who are the different audiences for this decision? What does each group need to know?",
+                            "What's the right sequence? Who should hear first, and why?",
+                            "What questions will people have? Prepare answers before they ask.",
+                            "What's the right channel for each audience? (Some things require face-to-face, not email.)"
+                        ],
+                        warnings: [
+                            "Under-communication is almost always the failure mode—when in doubt, communicate more",
+                            "People need to hear things multiple times in multiple ways before it lands",
+                            "The absence of communication IS a communication—it says 'you don't matter enough to inform'"
+                        ],
+                        relatedModels: ["Stakeholder Mapping", "Staged Rollout", "Perspective-Taking"]
                     }
                 ]
             }
