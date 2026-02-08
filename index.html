@@ -302,47 +302,224 @@
             min-height: 100vh;
         }
 
-        /* Dashboard Cards */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .dashboard-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e8e8e8;
-        }
-
-        .dashboard-card-header {
+        /* Focus Area - single-purpose center content */
+        .focus-area {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.75rem;
+            justify-content: center;
+            min-height: 60vh;
+            padding: 2rem;
         }
 
-        .dashboard-card-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
+        .focus-area.top-aligned {
+            justify-content: flex-start;
+            min-height: auto;
+        }
+
+        /* Sidebar Problem Display */
+        .sidebar-problem {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .sidebar-problem-label {
+            font-size: 0.65rem;
             font-weight: 600;
-            color: var(--charcoal);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--teal);
+            margin-bottom: 0.25rem;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .dashboard-card-action {
-            font-size: 0.7rem;
+        .sidebar-problem-text {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .sidebar-problem-edit {
+            font-size: 0.65rem;
             color: var(--teal);
             cursor: pointer;
             font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .dashboard-card-action:hover {
+        .sidebar-problem-edit:hover {
+            text-decoration: underline;
+        }
+
+        /* Focus View: Centered content cards */
+        .focus-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .focus-card .focus-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .focus-card .focus-subtitle {
+            font-size: 0.85rem;
+            color: var(--charcoal);
+            opacity: 0.6;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        /* Describe input step */
+        .focus-input-area {
+            width: 100%;
+            text-align: left;
+        }
+
+        .focus-input-area input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .focus-input-area input[type="text"]:focus {
+            border-color: var(--teal);
+        }
+
+        .focus-word-count {
+            font-size: 0.7rem;
+            color: var(--charcoal);
+            opacity: 0.5;
+            margin-top: 0.4rem;
+            text-align: right;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .focus-word-count.over-limit {
+            color: #c0392b;
+            opacity: 1;
+        }
+
+        .focus-submit-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.65rem 2rem;
+            background: var(--teal);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .focus-submit-btn:hover {
+            background: var(--light-teal);
+            box-shadow: 0 2px 8px rgba(27, 127, 146, 0.3);
+        }
+
+        .focus-submit-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Model work view (full-width when working on a model) */
+        .model-work-view {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .model-work-view .model-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .model-work-view .model-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 0.25rem;
+        }
+
+        .model-work-view .model-header p {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+            opacity: 0.6;
+        }
+
+        .model-work-view .response-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            resize: vertical;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .model-work-view .response-section textarea:focus {
+            border-color: var(--teal);
+        }
+
+        .model-work-view .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Browse models view */
+        .browse-models-view {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .browse-models-view h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .browse-models-view .browse-subtitle {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+            opacity: 0.6;
+            margin-bottom: 1rem;
+        }
+
+        .browse-back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: var(--teal);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .browse-back-link:hover {
             text-decoration: underline;
         }
 
@@ -2068,6 +2245,13 @@
                 </div>
             </div>
 
+            <!-- Problem/Decision Description (shown after user describes it) -->
+            <div class="sidebar-problem" id="sidebarProblem" style="display: none;">
+                <div class="sidebar-problem-label" id="sidebarProblemLabel">Your Decision</div>
+                <div class="sidebar-problem-text" id="sidebarProblemText"></div>
+                <span class="sidebar-problem-edit" id="editProblem">Edit</span>
+            </div>
+
             <nav class="sidebar-nav">
                 <!-- Actions Section -->
                 <div class="sidebar-section">
@@ -2076,6 +2260,12 @@
                         <div class="sidebar-item-icon">💡</div>
                         <div class="sidebar-item-content">
                             <div class="sidebar-item-label">Suggest a Model</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-item" id="quickBrowse">
+                        <div class="sidebar-item-icon">📋</div>
+                        <div class="sidebar-item-content">
+                            <div class="sidebar-item-label">Browse All Models</div>
                         </div>
                     </div>
                     <div class="sidebar-item" id="quickExport">
@@ -2171,77 +2361,8 @@
 
         <!-- Main Content Area -->
         <main class="main-area">
-            <!-- Dashboard Overview (shown on home) -->
-            <div class="dashboard-grid" id="dashboardGrid">
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <div class="dashboard-card-title">📋 Your Decision or Problem</div>
-                        <span class="dashboard-card-action" id="editProblem">Edit</span>
-                    </div>
-                    <div id="dashboardProblem" style="font-size: 0.85rem; color: var(--charcoal); opacity: 0.8;">
-                        No decision or problem defined yet.
-                    </div>
-                </div>
-            </div>
-
-            <div class="container">
-                <!-- Work Area - appears first, at top -->
-                <div class="work-area">
-                    <h3>Your Response</h3>
-                    <div class="work-area-content" id="workAreaContent">
-                        <div class="work-area-left">
-                            <div class="selected-model-display empty" id="selectedModelDisplay">
-                                Select a mental model to begin...
-                            </div>
-                        </div>
-                        <div class="work-area-right">
-                            <div class="response-section">
-                                <textarea id="responseInput" placeholder="Apply this mental model to your situation..."></textarea>
-                                <div class="action-buttons">
-                                    <button class="btn btn-primary" id="saveBtn">Add to Log</button>
-                                    <button class="btn btn-secondary" id="clearBtn">Clear Answer</button>
-                                    <button class="btn btn-warning" id="startOverBtn">Start Over</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Decision Summary Section -->
-                <div class="decision-summary" id="decisionSummary">
-                    <h3>Decision Summary</h3>
-                    <p class="decision-summary-intro">
-                        You've applied multiple mental models to your problem. Now synthesize your insights into a clear decision or action plan.
-                    </p>
-                    <textarea id="summaryInput" placeholder="Based on my analysis, my decision is...
-
-Key insights:
-1.
-2.
-3.
-
-Next steps:
-- "></textarea>
-                    <div class="decision-summary-actions">
-                        <button class="btn btn-summary" id="saveSummaryBtn">Save Summary to Log</button>
-                        <button class="btn btn-secondary" id="exportSessionBtn">Export Full Session</button>
-                    </div>
-                </div>
-
-                <!-- Models Section - hidden initially -->
-                <div class="models-section">
-                    <div class="phase-description diagnostic" id="phaseDescription">
-                        <h3>Diagnostic Models</h3>
-                        <p><strong>Purpose:</strong> Understand what's actually happening before making decisions</p>
-                        <p class="core-question">What's the true nature of this situation?</p>
-                    </div>
-                    <div class="tree-walker" id="treeWalker">
-                        <!-- Tree questions populated by JavaScript -->
-                    </div>
-                    <div class="models-grid hidden" id="modelsGrid">
-                        <!-- Models grid (shown via "Show me other options") -->
-                    </div>
-                </div>
+            <div class="focus-area" id="focusArea">
+                <!-- Content swapped dynamically based on current step -->
             </div>
         </main>
 
@@ -3892,19 +4013,7 @@ Next steps:
         let decisionMode = null; // 'decision' or 'problem'
 
         // DOM Elements
-        const container = document.querySelector('.container');
-        const modelsSection = document.querySelector('.models-section');
-        const workArea = document.querySelector('.work-area');
-        const mainContent = document.querySelector('.container');
-        const modelsGrid = document.getElementById('modelsGrid');
-        const treeWalker = document.getElementById('treeWalker');
-        const phaseDescription = document.getElementById('phaseDescription');
-        const selectedModelDisplay = document.getElementById('selectedModelDisplay');
-        const responseInput = document.getElementById('responseInput');
-        const saveBtn = document.getElementById('saveBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const startOverBtn = document.getElementById('startOverBtn');
-        // Journal panel elements
+        const focusArea = document.getElementById('focusArea');
         const panelRight = document.getElementById('rightPanel');
         const logToggle = document.getElementById('rightPanelToggle');
         const panelRightClose = document.getElementById('rightPanelClose');
@@ -3913,50 +4022,129 @@ Next steps:
         const addJournalNoteBtn = document.getElementById('addJournalNote');
         const copyJournalBtn = document.getElementById('copyJournal');
         const exportJournalBtn = document.getElementById('exportJournal');
-
-        // New UI elements
-        const workAreaContent = document.getElementById('workAreaContent');
         const confirmModal = document.getElementById('confirmModal');
         const modalCancel = document.getElementById('modalCancel');
         const modalConfirm = document.getElementById('modalConfirm');
-        const decisionSummary = document.getElementById('decisionSummary');
-        const summaryInput = document.getElementById('summaryInput');
-        const saveSummaryBtn = document.getElementById('saveSummaryBtn');
-        const exportSessionBtn = document.getElementById('exportSessionBtn');
         const sortNewestBtn = document.getElementById('sortNewest');
         const sortOldestBtn = document.getElementById('sortOldest');
+        const sidebarProblem = document.getElementById('sidebarProblem');
+        const sidebarProblemLabel = document.getElementById('sidebarProblemLabel');
+        const sidebarProblemText = document.getElementById('sidebarProblemText');
 
         // State
-        let logSortOrder = 'newest'; // 'newest' or 'oldest'
-
-        // Tree Walker State
-        let treeHistory = []; // tracks answers for display: [{question, answer}]
+        let logSortOrder = 'newest';
+        let treeHistory = [];
         let treeCurrentNode = null;
 
-        // Start the decision tree for the current phase
-        function startTree() {
-            if (!decisionMode) return;
-            const mode = decisionMode; // 'decision' or 'problem'
-            const tree = decisionTrees[mode] && decisionTrees[mode][currentPhase];
-            if (!tree) {
-                // Fallback: show all models
-                showAllModels();
-                return;
+        // ─── FOCUS AREA RENDERING ───────────────────────────────
+        // The center panel shows ONLY the current step. One function per view.
+
+        function renderFocusView() {
+            focusArea.scrollTop = 0;
+            window.scrollTo(0, 0);
+
+            if (!decisionMode) {
+                renderModeSelection();
+            } else if (!problemDescribed) {
+                renderDescribeStep();
+            } else if (selectedModel) {
+                renderModelWorkView();
+            } else {
+                renderTreeView();
             }
-            treeHistory = [];
-            treeCurrentNode = tree;
-            modelsGrid.classList.add('hidden');
-            treeWalker.style.display = 'block';
-            renderTreeNode();
         }
 
-        // Render the current tree node (question or recommendation)
-        function renderTreeNode() {
-            if (!treeCurrentNode) return;
+        // Step 1: Decision vs Problem selection
+        function renderModeSelection() {
+            focusArea.className = 'focus-area';
+            focusArea.innerHTML = `
+                <div class="focus-card">
+                    <div class="focus-title">What are you working through?</div>
+                    <div class="focus-subtitle">Choose your starting point</div>
+                    <div class="mode-selector">
+                        <div class="mode-card" data-mode="decision">
+                            <div class="mode-icon">⚖️</div>
+                            <div class="mode-title">I'm making a decision</div>
+                            <div class="mode-desc">Choosing between options, determining a direction, weighing trade-offs</div>
+                        </div>
+                        <div class="mode-card" data-mode="problem">
+                            <div class="mode-icon">🔍</div>
+                            <div class="mode-title">I'm solving a problem</div>
+                            <div class="mode-desc">Diagnosing an issue, finding a root cause, working toward a solution</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            focusArea.querySelectorAll('.mode-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    decisionMode = card.dataset.mode;
+                    saveToLocalStorage();
+                    renderFocusView();
+                });
+            });
+        }
 
-            // If it's a leaf node (model recommendation)
+        // Step 2: Describe your decision/problem (10 words or less)
+        function renderDescribeStep() {
+            const modeLabel = decisionMode === 'decision' ? 'decision' : 'problem';
+            focusArea.className = 'focus-area';
+            focusArea.innerHTML = `
+                <div class="focus-card">
+                    <div class="focus-title">${decisionMode === 'decision' ? '⚖️' : '🔍'} Describe your ${modeLabel}</div>
+                    <div class="focus-subtitle">Keep it short — 10 words or less</div>
+                    <div class="focus-input-area">
+                        <input type="text" id="describeInput" placeholder="${decisionMode === 'decision' ? 'e.g., Should I change careers or stay?' : 'e.g., Our customer churn rate is increasing'}" maxlength="120" />
+                        <div class="focus-word-count" id="wordCount">0 / 10 words</div>
+                    </div>
+                    <button class="focus-submit-btn" id="describeSubmit" disabled>Continue</button>
+                </div>
+            `;
+            const input = document.getElementById('describeInput');
+            const wordCount = document.getElementById('wordCount');
+            const submitBtn = document.getElementById('describeSubmit');
+
+            input.addEventListener('input', () => {
+                const words = input.value.trim().split(/\s+/).filter(w => w.length > 0);
+                const count = words.length;
+                wordCount.textContent = `${count} / 10 words`;
+                wordCount.className = 'focus-word-count' + (count > 10 ? ' over-limit' : '');
+                submitBtn.disabled = count === 0 || count > 10;
+            });
+
+            submitBtn.addEventListener('click', () => {
+                const description = input.value.trim();
+                if (!description) return;
+                saveProblemDescription(description);
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !submitBtn.disabled) {
+                    submitBtn.click();
+                }
+            });
+
+            input.focus();
+        }
+
+        // Step 3: Tree walker (yes/no questions)
+        function renderTreeView() {
+            focusArea.className = 'focus-area';
+            const phaseData = mentalModelsData[currentPhase];
+            const tree = decisionTrees[decisionMode] && decisionTrees[decisionMode][currentPhase];
+
+            if (!tree) {
+                // No tree for this phase/mode combo — show browse view
+                renderBrowseModels();
+                return;
+            }
+
+            if (!treeCurrentNode) {
+                treeHistory = [];
+                treeCurrentNode = tree;
+            }
+
+            // If leaf node — show recommendation
             if (treeCurrentNode.model) {
-                const phaseData = mentalModelsData[currentPhase];
                 const model = phaseData.models.find(m => m.name === treeCurrentNode.model);
                 const desc = model ? model.description : '';
 
@@ -3969,52 +4157,41 @@ Next steps:
                     historyHTML += '</div>';
                 }
 
-                treeWalker.innerHTML = `
-                    ${historyHTML}
-                    <div class="tree-recommendation">
-                        <div class="rec-label">Recommended Model</div>
-                        <div class="rec-model-name">${treeCurrentNode.model}</div>
-                        <div class="rec-model-desc">${desc}</div>
-                        <div class="rec-actions">
-                            <button class="tree-rec-btn primary" id="treeUseModel">Use This Model</button>
-                            <button class="tree-rec-btn secondary" id="treeShowOthers">Show Me Other Options</button>
+                focusArea.innerHTML = `
+                    <div class="focus-card" style="max-width: 600px;">
+                        <div class="tree-step-label">${phaseData.title}</div>
+                        ${historyHTML}
+                        <div class="tree-recommendation">
+                            <div class="rec-label">Recommended Model</div>
+                            <div class="rec-model-name">${treeCurrentNode.model}</div>
+                            <div class="rec-model-desc">${desc}</div>
+                            <div class="rec-actions">
+                                <button class="tree-rec-btn primary" id="treeUseModel">Use This Model</button>
+                                <button class="tree-rec-btn secondary" id="treeShowOthers">Show Me Other Options</button>
+                            </div>
+                            <span class="tree-restart-link" id="treeRestart">↩ Start Over</span>
                         </div>
-                        <span class="tree-restart-link" id="treeRestart">↩ Start Over</span>
                     </div>
                 `;
 
                 document.getElementById('treeUseModel').addEventListener('click', () => {
-                    const phaseData = mentalModelsData[currentPhase];
-                    const model = phaseData.models.find(m => m.name === treeCurrentNode.model);
                     if (model) {
-                        treeWalker.style.display = 'none';
-                        showAllModels();
-                        // Find and click the model card
-                        setTimeout(() => {
-                            const cards = document.querySelectorAll('.model-card');
-                            cards.forEach(card => {
-                                if (card.querySelector('.model-name').textContent === model.name) {
-                                    card.click();
-                                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                }
-                            });
-                        }, 100);
+                        selectedModel = { ...model, phase: currentPhase };
+                        renderFocusView();
                     }
                 });
-
                 document.getElementById('treeShowOthers').addEventListener('click', () => {
-                    treeWalker.style.display = 'none';
-                    showAllModels();
+                    treeCurrentNode = null;
+                    renderBrowseModels();
                 });
-
                 document.getElementById('treeRestart').addEventListener('click', () => {
-                    startTree();
+                    treeCurrentNode = null;
+                    renderFocusView();
                 });
-
                 return;
             }
 
-            // It's a question node
+            // Question node
             let historyHTML = '';
             if (treeHistory.length > 0) {
                 historyHTML = '<div class="tree-history">';
@@ -4025,453 +4202,44 @@ Next steps:
             }
 
             const stepNum = treeHistory.length + 1;
-            treeWalker.innerHTML = `
-                ${historyHTML}
-                <div class="tree-step-label">Question ${stepNum}</div>
-                <div class="tree-question">${treeCurrentNode.q}</div>
-                <div class="tree-buttons">
-                    <button class="tree-btn yes" id="treeYes">Yes</button>
-                    <button class="tree-btn no" id="treeNo">No</button>
+            focusArea.innerHTML = `
+                <div class="focus-card" style="max-width: 600px;">
+                    <div class="tree-step-label">${phaseData.title} — Question ${stepNum}</div>
+                    ${historyHTML}
+                    <div class="tree-question">${treeCurrentNode.q}</div>
+                    <div class="tree-buttons">
+                        <button class="tree-btn yes" id="treeYes">Yes</button>
+                        <button class="tree-btn no" id="treeNo">No</button>
+                    </div>
+                    ${stepNum > 1 ? '<span class="tree-restart-link" id="treeRestart">↩ Start Over</span>' : ''}
                 </div>
-                <span class="tree-restart-link" id="treeRestart">${stepNum > 1 ? '↩ Start Over' : ''}</span>
             `;
 
             document.getElementById('treeYes').addEventListener('click', () => {
                 treeHistory.push({ question: treeCurrentNode.q, answer: 'Yes' });
                 treeCurrentNode = treeCurrentNode.yes;
-                renderTreeNode();
+                renderFocusView();
             });
-
             document.getElementById('treeNo').addEventListener('click', () => {
                 treeHistory.push({ question: treeCurrentNode.q, answer: 'No' });
                 treeCurrentNode = treeCurrentNode.no;
-                renderTreeNode();
+                renderFocusView();
             });
-
             const restartBtn = document.getElementById('treeRestart');
-            if (restartBtn) {
-                restartBtn.addEventListener('click', () => startTree());
-            }
-        }
-
-        // Show all models in the grid (fallback / "show me other options")
-        function showAllModels() {
-            const phaseData = mentalModelsData[currentPhase];
-            modelsGrid.innerHTML = '';
-            modelsGrid.classList.remove('hidden');
-
-            phaseData.models.forEach((model, index) => {
-                const modelCard = document.createElement('div');
-                modelCard.className = `model-card ${currentPhase}`;
-                modelCard.dataset.modelIndex = index;
-                modelCard.innerHTML = `
-                    <div class="model-name">${model.name}</div>
-                    <div class="model-description">${model.description}</div>
-                `;
-                modelCard.addEventListener('click', () => selectModel(model, modelCard));
-                modelsGrid.appendChild(modelCard);
+            if (restartBtn) restartBtn.addEventListener('click', () => {
+                treeCurrentNode = null;
+                renderFocusView();
             });
         }
 
-        // Continue After Problem Description (skip type selector, go straight to phases)
-        function continueToProblemSolving() {
-            // Reveal the decision-making sections
-            setTimeout(() => {
-                revealSections();
-            }, 300);
-        }
+        // Step 4: Working with a selected model
+        function renderModelWorkView() {
+            focusArea.className = 'focus-area top-aligned';
+            const model = selectedModel;
 
-        // Initialize
-        function init() {
-            showInitialPrompt();
-            renderPhaseContent();
-            setupEventListeners();
-            setupDrawers();
-            loadFromLocalStorage();
-        }
-
-        // Show Initial Prompt
-        function showInitialPrompt() {
-            selectedModelDisplay.className = 'selected-model-display initial';
-            selectedModelDisplay.innerHTML = `
-                <div class="instruction-text">Welcome! What are you working through?</div>
-                <div class="mode-selector">
-                    <div class="mode-card" data-mode="decision">
-                        <div class="mode-icon">⚖️</div>
-                        <div class="mode-title">I'm making a decision</div>
-                        <div class="mode-desc">Choosing between options, determining a direction, weighing trade-offs</div>
-                    </div>
-                    <div class="mode-card" data-mode="problem">
-                        <div class="mode-icon">🔍</div>
-                        <div class="mode-title">I'm solving a problem</div>
-                        <div class="mode-desc">Diagnosing an issue, finding a root cause, working toward a solution</div>
-                    </div>
-                </div>
-            `;
-            responseInput.placeholder = "First, choose whether you're making a decision or solving a problem...";
-            responseInput.disabled = true;
-            saveBtn.disabled = true;
-            responseInput.classList.add('initial-entry');
-            saveBtn.textContent = 'Add to Log';
-
-            // Attach mode card click listeners
-            selectedModelDisplay.querySelectorAll('.mode-card').forEach(card => {
-                card.addEventListener('click', () => selectMode(card.dataset.mode));
-            });
-        }
-
-        // Update labels throughout the UI based on mode
-        function updateModeLabels() {
-            const modeLabel = decisionMode === 'decision' ? 'Decision' : 'Problem';
-            const dashboardTitle = document.querySelector('#dashboardGrid .dashboard-card-title');
-            if (dashboardTitle) dashboardTitle.textContent = `📋 Your ${modeLabel}`;
-        }
-
-        // Select Decision or Problem Mode
-        function selectMode(mode) {
-            decisionMode = mode;
-            const modeLabel = mode === 'decision' ? 'decision' : 'problem';
-
-            // Update the prompt area
-            selectedModelDisplay.className = 'selected-model-display initial';
-            selectedModelDisplay.innerHTML = `
-                <div class="instruction-text">${mode === 'decision' ? '⚖️' : '🔍'} Describe your ${modeLabel}</div>
-                <div class="instruction-subtext">${mode === 'decision'
-                    ? 'What decision are you facing? What options are you considering?'
-                    : 'What problem are you trying to solve? What symptoms are you seeing?'
-                }</div>
-            `;
-            responseInput.placeholder = mode === 'decision'
-                ? "Describe the decision you're facing..."
-                : "Describe the problem you're trying to solve...";
-            responseInput.disabled = false;
-            saveBtn.disabled = false;
-            responseInput.focus();
-        }
-
-        // Setup Panel Controls
-        function setupDrawers() {
-            logToggle.addEventListener('click', toggleRightPanel);
-            panelRightClose.addEventListener('click', closeRightPanel);
-
-            // Sort button listeners
-            sortNewestBtn.addEventListener('click', () => {
-                logSortOrder = 'newest';
-                sortNewestBtn.classList.add('active');
-                sortOldestBtn.classList.remove('active');
-                renderJournal();
-            });
-
-            sortOldestBtn.addEventListener('click', () => {
-                logSortOrder = 'oldest';
-                sortOldestBtn.classList.add('active');
-                sortNewestBtn.classList.remove('active');
-                renderJournal();
-            });
-
-            // Journal note input
-            addJournalNoteBtn.addEventListener('click', addJournalNote);
-            journalNoteInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    addJournalNote();
-                }
-            });
-
-            // Journal actions
-            copyJournalBtn.addEventListener('click', copyJournal);
-            exportJournalBtn.addEventListener('click', downloadSession);
-
-            // Modal listeners
-            modalCancel.addEventListener('click', closeConfirmModal);
-            modalConfirm.addEventListener('click', confirmStartOver);
-
-            // Decision summary listeners
-            saveSummaryBtn.addEventListener('click', saveSummaryToLog);
-            exportSessionBtn.addEventListener('click', downloadSession);
-
-            // Sidebar navigation
-            const startOverSidebar = document.getElementById('startOverSidebar');
-            if (startOverSidebar) {
-                startOverSidebar.addEventListener('click', startOver);
-            }
-
-            // Sidebar phase navigation
-            document.querySelectorAll('.phase-sidebar-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const phase = item.dataset.phase;
-                    if (phase && problemDescribed) {
-                        currentPhase = phase;
-                        updatePhaseButtons();
-                        renderPhaseContent();
-                        clearSelection();
-                    }
-                });
-            });
-
-            // Quick action buttons
-            const quickSuggest = document.getElementById('quickSuggest');
-            const quickExport = document.getElementById('quickExport');
-            const editProblem = document.getElementById('editProblem');
-
-            if (quickSuggest) quickSuggest.addEventListener('click', () => {
-                if (problemDescribed) {
-                    // Hide tree walker and show grid if needed
-                    treeWalker.style.display = 'none';
-                    showAllModels();
-                    const phaseData = mentalModelsData[currentPhase];
-                    const randomModel = phaseData.models[Math.floor(Math.random() * phaseData.models.length)];
-                    setTimeout(() => {
-                        const modelCards = document.querySelectorAll('.model-card');
-                        modelCards.forEach(card => {
-                            if (card.querySelector('.model-name').textContent === randomModel.name) {
-                                card.click();
-                                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }
-                        });
-                    }, 100);
-                } else {
-                    alert('Please describe your decision or problem first.');
-                }
-            });
-
-            if (quickExport) quickExport.addEventListener('click', downloadSession);
-
-            if (editProblem) editProblem.addEventListener('click', () => {
-                const problemEntry = logEntries.find(e => e.phase === 'initial');
-                if (problemEntry) {
-                    const newProblem = prompt('Edit your problem description:', problemEntry.response);
-                    if (newProblem && newProblem.trim()) {
-                        problemEntry.response = newProblem.trim();
-                        const dashboardProblem = document.getElementById('dashboardProblem');
-                        if (dashboardProblem) dashboardProblem.textContent = newProblem.trim();
-                        renderJournal();
-                        saveToLocalStorage();
-                    }
-                }
-            });
-        }
-
-        // Add free-form note to journal
-        function addJournalNote() {
-            const text = journalNoteInput.value.trim();
-            if (!text) return;
-
-            const entry = {
-                id: nextLogId++,
-                phase: 'note',
-                modelName: 'Note',
-                modelPrompt: null,
-                response: text,
-                timestamp: new Date().toLocaleString()
-            };
-
-            logEntries.unshift(entry);
-            renderJournal();
-            saveToLocalStorage();
-            journalNoteInput.value = '';
-        }
-
-        // Copy journal to clipboard
-        function copyJournal() {
-            if (logEntries.length === 0) {
-                alert('Journal is empty.');
-                return;
-            }
-
-            const sorted = [...logEntries].sort((a, b) => a.id - b.id);
-            let text = 'DECISION JOURNAL\n' + '='.repeat(50) + '\n\n';
-            sorted.forEach(entry => {
-                if (entry.phase === 'note') {
-                    text += `[Note] ${entry.response}\n(${entry.timestamp})\n\n`;
-                } else {
-                    text += `[${entry.modelName}]\n`;
-                    if (entry.modelPrompt) text += `Q: ${entry.modelPrompt}\n`;
-                    text += `${entry.response}\n(${entry.timestamp})\n\n`;
-                }
-            });
-
-            navigator.clipboard.writeText(text).then(() => {
-                copyJournalBtn.textContent = 'Copied!';
-                setTimeout(() => { copyJournalBtn.textContent = 'Copy'; }, 1500);
-            }).catch(() => {
-                alert('Failed to copy. Please try again.');
-            });
-        }
-
-        // Modal functions
-        function showConfirmModal() {
-            confirmModal.classList.add('visible');
-        }
-
-        function closeConfirmModal() {
-            confirmModal.classList.remove('visible');
-        }
-
-        function confirmStartOver() {
-            closeConfirmModal();
-            resetApp();
-        }
-
-        // Save summary to log
-        function saveSummaryToLog() {
-            const summaryText = summaryInput.value.trim();
-            if (!summaryText) {
-                alert('Please write your decision summary before saving.');
-                return;
-            }
-
-            const entry = {
-                id: nextLogId++,
-                phase: 'summary',
-                modelName: 'Decision Summary',
-                modelPrompt: 'Final synthesis of mental model analysis',
-                response: summaryText,
-                timestamp: new Date().toLocaleString()
-            };
-
-            logEntries.unshift(entry);
-            renderJournal();
-            saveToLocalStorage();
-            openRightPanel();
-
-            // Clear the summary input
-            summaryInput.value = '';
-
-            alert('Decision summary saved to log!');
-        }
-
-        // Show decision summary after enough meaningful work is done
-        function checkShowDecisionSummary() {
-            // Filter out initial problem description and summary entries
-            const workEntries = logEntries.filter(e => e.phase !== 'initial' && e.phase !== 'summary');
-
-            // Get unique phases from work entries
-            const uniquePhases = new Set(workEntries.map(e => e.phase));
-
-            // Show decision summary when user has applied at least 3 mental models from at least 2 different phases
-            if (uniquePhases.size >= 2 && workEntries.length >= 3) {
-                decisionSummary.classList.add('visible');
-            } else {
-                decisionSummary.classList.remove('visible');
-            }
-        }
-
-        function isDesktop() {
-            return window.innerWidth > 1024;
-        }
-
-        function toggleRightPanel() {
-            if (isDesktop()) return; // Always visible on desktop
-            panelRight.classList.toggle('open');
-            logToggle.classList.toggle('active');
-        }
-
-        function closeRightPanel() {
-            if (isDesktop()) return;
-            panelRight.classList.remove('open');
-            logToggle.classList.remove('active');
-        }
-
-        function openRightPanel() {
-            if (isDesktop()) return;
-            panelRight.classList.add('open');
-            logToggle.classList.add('active');
-        }
-
-        // Setup Event Listeners
-        function setupEventListeners() {
-            saveBtn.addEventListener('click', saveToLog);
-            clearBtn.addEventListener('click', clearCurrentResponse);
-            startOverBtn.addEventListener('click', startOver);
-        }
-
-        // Update Phase Buttons (sidebar items)
-        function updatePhaseButtons() {
-            document.querySelectorAll('.phase-sidebar-item').forEach(item => {
-                item.classList.toggle('active', item.dataset.phase === currentPhase);
-            });
-        }
-
-        // Render Phase Content
-        function renderPhaseContent() {
-            const phaseData = mentalModelsData[currentPhase];
-
-            // Update phase description
-            phaseDescription.className = `phase-description ${currentPhase}`;
-            phaseDescription.innerHTML = `
-                <h3>${phaseData.title}</h3>
-                <p><strong>Purpose:</strong> ${phaseData.purpose}</p>
-                <p class="core-question">${phaseData.coreQuestion}</p>
-            `;
-
-            // Start decision tree for this phase (or show all models if no tree)
-            if (decisionMode && decisionTrees[decisionMode] && decisionTrees[decisionMode][currentPhase]) {
-                startTree();
-            } else {
-                treeWalker.style.display = 'none';
-                showAllModels();
-            }
-        }
-
-        // Select Model
-        function selectModel(model, card) {
-            // If problem hasn't been described yet, save it first
-            if (!problemDescribed && responseInput.value.trim()) {
-                saveProblemDescription();
-                return; // Let the save process complete
-            }
-
-            // Clear previous selection
-            document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
-
-            // Set new selection
-            card.classList.add('selected');
-            selectedModel = { ...model, phase: currentPhase };
-
-            // Check if this model has expanded content
-            if (model.prompts && model.explanation) {
-                // Enable split-pane layout
-                workAreaContent.classList.add('split-pane');
-
-                // Render expanded model display
-                selectedModelDisplay.className = 'selected-model-display expanded';
-                selectedModelDisplay.innerHTML = renderExpandedModel(model);
-
-                // Set up prompt selection handlers
-                setupPromptSelection();
-
-                // Set up collapsible section handlers
-                setupCollapsibleSections();
-
-                // Set up related model click handlers
-                setupRelatedModelLinks();
-            } else {
-                // Remove split-pane for simple models
-                workAreaContent.classList.remove('split-pane');
-
-                // Fallback to simple display for models not yet expanded
-                selectedModelDisplay.className = 'selected-model-display';
-                selectedModelDisplay.innerHTML = `
-                    <div class="model-prompt"><strong>${model.name}</strong></div>
-                    <div>${model.prompt}</div>
-                `;
-            }
-
-            // Reset placeholder and button for model response
-            responseInput.placeholder = "Apply this mental model to your situation...";
-            responseInput.classList.remove('initial-entry');
-            saveBtn.textContent = 'Add to Log';
-
-            // Focus textarea
-            responseInput.focus();
-        }
-
-        // Render expanded model content
-        function renderExpandedModel(model) {
-            const promptsHtml = model.prompts.map((prompt, index) =>
+            const promptsHtml = model.prompts ? model.prompts.map((prompt, index) =>
                 `<li data-prompt="${escapeHtml(prompt)}">${prompt}</li>`
-            ).join('');
+            ).join('') : '';
 
             const warningsHtml = model.warnings ? model.warnings.map(w =>
                 `<li>${w}</li>`
@@ -4481,205 +4249,178 @@ Next steps:
                 `<span class="model-related-tag" data-model="${escapeHtml(r)}">${r}</span>`
             ).join('') : '';
 
-            return `
-                <div class="model-header">
-                    <h3>${model.name}</h3>
-                    <div class="model-tagline">${model.description}</div>
-                </div>
+            focusArea.innerHTML = `
+                <div class="model-work-view">
+                    <span class="browse-back-link" id="backToTree">← Back to ${mentalModelsData[currentPhase].title}</span>
+                    <div class="model-header">
+                        <h2>${model.name}</h2>
+                        <p>${model.description}</p>
+                    </div>
 
-                <div class="model-section collapsible">
-                    <div class="model-section-header" data-section="explanation">
-                        <div class="model-section-title">What It Is</div>
-                        <span class="model-section-toggle">▼</span>
+                    <div class="model-section collapsible">
+                        <div class="model-section-header" data-section="explanation">
+                            <div class="model-section-title">What It Is</div>
+                            <span class="model-section-toggle">▼</span>
+                        </div>
+                        <div class="model-section-body">
+                            <div class="model-explanation">${model.explanation || ''}</div>
+                        </div>
                     </div>
-                    <div class="model-section-body">
-                        <div class="model-explanation">${model.explanation}</div>
-                    </div>
-                </div>
 
-                <div class="model-section collapsible">
-                    <div class="model-section-header" data-section="example">
-                        <div class="model-section-title">Example</div>
-                        <span class="model-section-toggle">▼</span>
+                    <div class="model-section collapsible">
+                        <div class="model-section-header" data-section="example">
+                            <div class="model-section-title">Example</div>
+                            <span class="model-section-toggle">▼</span>
+                        </div>
+                        <div class="model-section-body">
+                            <div class="model-example">${model.example || ''}</div>
+                        </div>
                     </div>
-                    <div class="model-section-body">
-                        <div class="model-example">${model.example}</div>
-                    </div>
-                </div>
 
-                <div class="model-section collapsible">
-                    <div class="model-section-header" data-section="prompts">
-                        <div class="model-section-title">Questions to Ask</div>
-                        <span class="model-section-toggle">▼</span>
+                    ${model.prompts ? `
+                    <div class="model-section collapsible">
+                        <div class="model-section-header" data-section="prompts">
+                            <div class="model-section-title">Questions to Ask</div>
+                            <span class="model-section-toggle">▼</span>
+                        </div>
+                        <div class="model-section-body">
+                            <div class="prompt-instruction">Click a question to use it as your prompt:</div>
+                            <ul class="model-prompts-list">${promptsHtml}</ul>
+                        </div>
                     </div>
-                    <div class="model-section-body">
-                        <div class="prompt-instruction">Click a question to use it as your prompt:</div>
-                        <ul class="model-prompts-list">
-                            ${promptsHtml}
-                        </ul>
-                    </div>
-                </div>
+                    ` : ''}
 
-                ${model.warnings ? `
-                <div class="model-section collapsible">
-                    <div class="model-section-header collapsed" data-section="warnings">
-                        <div class="model-section-title">Watch Out For</div>
-                        <span class="model-section-toggle">▼</span>
+                    ${model.warnings ? `
+                    <div class="model-section collapsible">
+                        <div class="model-section-header collapsed" data-section="warnings">
+                            <div class="model-section-title">Watch Out For</div>
+                            <span class="model-section-toggle">▼</span>
+                        </div>
+                        <div class="model-section-body">
+                            <div class="model-warnings"><ul>${warningsHtml}</ul></div>
+                        </div>
                     </div>
-                    <div class="model-section-body">
-                        <div class="model-warnings">
-                            <ul>${warningsHtml}</ul>
+                    ` : ''}
+
+                    ${model.relatedModels ? `
+                    <div class="model-section collapsible">
+                        <div class="model-section-header collapsed" data-section="related">
+                            <div class="model-section-title">Related Models</div>
+                            <span class="model-section-toggle">▼</span>
+                        </div>
+                        <div class="model-section-body">
+                            <div class="model-related">${relatedHtml}</div>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="response-section" style="margin-top: 1.5rem;">
+                        <textarea id="responseInput" placeholder="Apply this mental model to your situation..." rows="5"></textarea>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="saveBtn">Add to Journal</button>
+                            <button class="btn btn-secondary" id="clearBtn">Clear</button>
                         </div>
                     </div>
                 </div>
-                ` : ''}
-
-                ${model.relatedModels ? `
-                <div class="model-section collapsible">
-                    <div class="model-section-header collapsed" data-section="related">
-                        <div class="model-section-title">Related Models</div>
-                        <span class="model-section-toggle">▼</span>
-                    </div>
-                    <div class="model-section-body">
-                        <div class="model-related">${relatedHtml}</div>
-                    </div>
-                </div>
-                ` : ''}
             `;
-        }
 
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Set up click handlers for prompt selection
-        function setupPromptSelection() {
-            const promptItems = document.querySelectorAll('.model-prompts-list li');
-            promptItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Remove selection from others
-                    promptItems.forEach(p => p.classList.remove('selected-prompt'));
-                    // Add selection to clicked
-                    this.classList.add('selected-prompt');
-
-                    // Update the selected model's active prompt
-                    const selectedPrompt = this.getAttribute('data-prompt');
-                    if (selectedModel) {
-                        selectedModel.activePrompt = selectedPrompt;
-                    }
-
-                    // Update placeholder to show the selected question
-                    responseInput.placeholder = `Respond to: "${selectedPrompt.substring(0, 60)}${selectedPrompt.length > 60 ? '...' : ''}"`;
-                    responseInput.focus();
-                });
+            // Back button
+            document.getElementById('backToTree').addEventListener('click', () => {
+                selectedModel = null;
+                treeCurrentNode = null;
+                renderFocusView();
             });
 
-            // Auto-select first prompt
-            if (promptItems.length > 0) {
-                promptItems[0].click();
-            }
-        }
-
-        // Set up collapsible section handlers
-        function setupCollapsibleSections() {
-            const sectionHeaders = document.querySelectorAll('.model-section-header');
-            sectionHeaders.forEach(header => {
-                header.addEventListener('click', function() {
-                    this.classList.toggle('collapsed');
-                });
-            });
-        }
-
-        // Set up related model click handlers
-        function setupRelatedModelLinks() {
-            const relatedTags = document.querySelectorAll('.model-related-tag');
-            relatedTags.forEach(tag => {
-                tag.addEventListener('click', function() {
-                    const modelName = this.getAttribute('data-model');
-                    navigateToModel(modelName);
-                });
-            });
-        }
-
-        // Navigate to a model by name
-        function navigateToModel(modelName) {
-            // Search through all phases to find the model
-            for (const [phaseKey, phaseData] of Object.entries(mentalModelsData)) {
-                const model = phaseData.models.find(m => m.name === modelName);
-                if (model) {
-                    // Switch to that phase
-                    currentPhase = phaseKey;
-                    updatePhaseButtons();
-                    renderPhaseContent();
-
-                    // Find and click the model card after a short delay for rendering
-                    setTimeout(() => {
-                        const modelCards = document.querySelectorAll('.model-card');
-                        modelCards.forEach(card => {
-                            if (card.querySelector('.model-name').textContent === modelName) {
-                                card.click();
-                                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }
-                        });
-                    }, 100);
+            // Save button
+            document.getElementById('saveBtn').addEventListener('click', () => {
+                const responseInput = document.getElementById('responseInput');
+                if (!responseInput.value.trim()) {
+                    alert('Please enter your response.');
                     return;
                 }
-            }
+                const entry = {
+                    id: nextLogId++,
+                    phase: selectedModel.phase,
+                    modelName: selectedModel.name,
+                    modelPrompt: selectedModel.activePrompt || selectedModel.prompts[0],
+                    response: responseInput.value.trim(),
+                    timestamp: new Date().toLocaleString()
+                };
+                logEntries.unshift(entry);
+                renderJournal();
+                saveToLocalStorage();
+                openRightPanel();
+
+                // Clear response, stay on same model for more entries
+                responseInput.value = '';
+                responseInput.focus();
+            });
+
+            // Clear button
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                document.getElementById('responseInput').value = '';
+                document.getElementById('responseInput').focus();
+            });
+
+            // Prompt selection
+            setupPromptSelection();
+            setupCollapsibleSections();
+            setupRelatedModelLinks();
         }
 
-        // Create Flying Entry Animation
-        function createFlyingEntry(text) {
-            // Get the position of the work area
-            const workArea = document.querySelector('.work-area');
-            const workRect = workArea.getBoundingClientRect();
-            
-            // Create the flying element
-            const flyingEl = document.createElement('div');
-            flyingEl.className = 'flying-entry';
-            flyingEl.style.left = `${workRect.left}px`;
-            flyingEl.style.top = `${workRect.top + 100}px`;
-            flyingEl.innerHTML = `
-                <div class="flying-title">Problem Description</div>
-                <div class="flying-text">${text}</div>
+        // Browse all models for a phase (shown via sidebar click or "show me other options")
+        function renderBrowseModels(phase) {
+            const browsePhase = phase || currentPhase;
+            const phaseData = mentalModelsData[browsePhase];
+            focusArea.className = 'focus-area top-aligned';
+
+            let cardsHtml = '';
+            phaseData.models.forEach((model, index) => {
+                cardsHtml += `
+                    <div class="model-card ${browsePhase}" data-model-index="${index}">
+                        <div class="model-name">${model.name}</div>
+                        <div class="model-description">${model.description}</div>
+                    </div>
+                `;
+            });
+
+            focusArea.innerHTML = `
+                <div class="browse-models-view">
+                    <span class="browse-back-link" id="backFromBrowse">← Back to guided questions</span>
+                    <h3>${phaseData.title}</h3>
+                    <div class="browse-subtitle">${phaseData.purpose}</div>
+                    <div class="models-grid">${cardsHtml}</div>
+                </div>
             `;
-            
-            document.body.appendChild(flyingEl);
-            
-            // Remove after animation completes
-            setTimeout(() => {
-                flyingEl.remove();
-            }, 800);
+
+            document.getElementById('backFromBrowse').addEventListener('click', () => {
+                treeCurrentNode = null;
+                renderFocusView();
+            });
+
+            focusArea.querySelectorAll('.model-card').forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    const model = phaseData.models[card.dataset.modelIndex];
+                    currentPhase = browsePhase;
+                    updatePhaseButtons();
+                    selectedModel = { ...model, phase: browsePhase };
+                    renderFocusView();
+                });
+            });
         }
 
-        // Reveal Sections
-        function revealSections() {
-            // Move models section before work area
-            mainContent.insertBefore(modelsSection, workArea);
+        // ─── SIDEBAR PROBLEM DISPLAY ────────────────────────────
 
-            // Reveal models section
-            modelsSection.classList.add('revealed');
-
-            // Re-render phase content (starts tree walker if decisionMode is set)
-            renderPhaseContent();
-            updatePhaseButtons();
-
-            // Slide work area down
-            setTimeout(() => {
-                workArea.classList.add('slide-down');
-            }, 100);
+        function updateSidebarProblem(text) {
+            const label = decisionMode === 'decision' ? 'Your Decision' : 'Your Problem';
+            sidebarProblemLabel.textContent = label;
+            sidebarProblemText.textContent = text;
+            sidebarProblem.style.display = 'block';
         }
 
-        // Save Problem Description
-        function saveProblemDescription() {
-            const description = responseInput.value.trim();
-            if (!description) return;
+        // ─── CORE FUNCTIONS ─────────────────────────────────────
 
-            // Create flying animation
-            createFlyingEntry(description);
-
+        function saveProblemDescription(description) {
             const modeLabel = decisionMode === 'decision' ? 'Decision' : 'Problem';
             const entry = {
                 id: nextLogId++,
@@ -4695,84 +4436,77 @@ Next steps:
             logEntries.unshift(entry);
             problemDescribed = true;
 
-            // Update dashboard labels
-            updateModeLabels();
-            const dashboardProblem = document.getElementById('dashboardProblem');
-            if (dashboardProblem) dashboardProblem.textContent = description;
-
-            // Delay journal rendering to sync with animation
-            setTimeout(() => {
-                renderJournal();
-                saveToLocalStorage();
-                openRightPanel();
-            }, 400);
-
-            // Reveal the decision-making sections after brief delay
-            setTimeout(() => {
-                revealSections();
-            }, 900);
-            
-            // Clear the textarea and reset styling
-            responseInput.value = '';
-            responseInput.classList.remove('initial-entry');
-            saveBtn.textContent = 'Add to Log';
-        }
-
-        // Clear Selection
-        function clearSelection() {
-            selectedModel = null;
-            document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
-            
-            if (!problemDescribed) {
-                showInitialPrompt();
-            } else {
-                selectedModelDisplay.className = 'selected-model-display empty';
-                selectedModelDisplay.innerHTML = 'Select a mental model to continue...';
-                responseInput.placeholder = "Apply this mental model to your situation...";
-            }
-        }
-
-        // Save to Log
-        function saveToLog() {
-            // If we haven't described the problem yet, save the problem description
-            if (!problemDescribed) {
-                if (!decisionMode) {
-                    alert('Please choose whether you are making a decision or solving a problem.');
-                    return;
-                }
-                if (!responseInput.value.trim()) {
-                    alert('Please describe your ' + (decisionMode === 'decision' ? 'decision' : 'problem') + ' before continuing.');
-                    return;
-                }
-                saveProblemDescription();
-                return;
-            }
-            
-            // Otherwise, save a mental model response
-            if (!selectedModel || !responseInput.value.trim()) {
-                alert('Please select a mental model and enter your response.');
-                return;
-            }
-
-            const entry = {
-                id: nextLogId++,
-                phase: selectedModel.phase,
-                modelName: selectedModel.name,
-                modelPrompt: selectedModel.activePrompt || selectedModel.prompt,
-                response: responseInput.value.trim(),
-                timestamp: new Date().toLocaleString()
-            };
-
-            logEntries.unshift(entry);
+            updateSidebarProblem(description);
             renderJournal();
-            clearCurrentResponse();
             saveToLocalStorage();
-
-            // Open decision log panel
             openRightPanel();
 
-            // Check if we should show decision summary
-            checkShowDecisionSummary();
+            // Show tree view
+            treeCurrentNode = null;
+            renderFocusView();
+            updatePhaseButtons();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function setupPromptSelection() {
+            const promptItems = focusArea.querySelectorAll('.model-prompts-list li');
+            promptItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    promptItems.forEach(p => p.classList.remove('selected-prompt'));
+                    this.classList.add('selected-prompt');
+                    const selectedPrompt = this.getAttribute('data-prompt');
+                    if (selectedModel) {
+                        selectedModel.activePrompt = selectedPrompt;
+                    }
+                    const responseInput = document.getElementById('responseInput');
+                    if (responseInput) {
+                        responseInput.placeholder = `Respond to: "${selectedPrompt.substring(0, 60)}${selectedPrompt.length > 60 ? '...' : ''}"`;
+                        responseInput.focus();
+                    }
+                });
+            });
+            if (promptItems.length > 0) promptItems[0].click();
+        }
+
+        function setupCollapsibleSections() {
+            focusArea.querySelectorAll('.model-section-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('collapsed');
+                });
+            });
+        }
+
+        function setupRelatedModelLinks() {
+            focusArea.querySelectorAll('.model-related-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const modelName = this.getAttribute('data-model');
+                    navigateToModel(modelName);
+                });
+            });
+        }
+
+        function navigateToModel(modelName) {
+            for (const [phaseKey, phaseData] of Object.entries(mentalModelsData)) {
+                const model = phaseData.models.find(m => m.name === modelName);
+                if (model) {
+                    currentPhase = phaseKey;
+                    updatePhaseButtons();
+                    selectedModel = { ...model, phase: phaseKey };
+                    renderFocusView();
+                    return;
+                }
+            }
+        }
+
+        function updatePhaseButtons() {
+            document.querySelectorAll('.phase-sidebar-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.phase === currentPhase);
+            });
         }
 
         // Update sidebar phase progress indicators
@@ -4918,57 +4652,27 @@ Next steps:
 
         // Reset App to Initial State
         function resetApp() {
-            // Clear all data
             logEntries = [];
             nextLogId = 1;
             problemDescribed = false;
             decisionMode = null;
             selectedModel = null;
             currentPhase = 'diagnostic';
-
-            // Clear localStorage
-            localStorage.removeItem('mentalModelsLog');
-
-            // Reset UI
-            responseInput.value = '';
-            journalNoteInput.value = '';
-            renderJournal();
-
-            // Reset tree walker
-            treeWalker.style.display = 'none';
             treeHistory = [];
             treeCurrentNode = null;
 
-            // Reset dashboard
-            const dashboardProblem = document.getElementById('dashboardProblem');
-            if (dashboardProblem) dashboardProblem.textContent = 'No decision or problem defined yet.';
-            const dashboardTitle = document.querySelector('#dashboardGrid .dashboard-card-title');
-            if (dashboardTitle) dashboardTitle.textContent = '📋 Your Decision or Problem';
+            localStorage.removeItem('mentalModelsLog');
 
-            // Hide decision summary
-            decisionSummary.classList.remove('visible');
-            summaryInput.value = '';
+            journalNoteInput.value = '';
+            sidebarProblem.style.display = 'none';
+            sidebarProblemText.textContent = '';
 
-            // Remove split-pane layout
-            workAreaContent.classList.remove('split-pane');
+            // Close right panel
+            panelRight.classList.remove('open');
 
-            // Hide sections again
-            modelsSection.classList.remove('revealed');
-            workArea.classList.remove('slide-down');
-
-            // Close panels
-            closeRightPanel();
-
-            // Reset to initial prompt
-            showInitialPrompt();
+            renderJournal();
             updatePhaseButtons();
-            renderPhaseContent();
-        }
-
-        // Clear Current Response (just the textarea)
-        function clearCurrentResponse() {
-            responseInput.value = '';
-            responseInput.focus();
+            renderFocusView();
         }
 
         // Edit Entry
@@ -5011,29 +4715,151 @@ Next steps:
                 nextLogId = data.nextId || 1;
                 decisionMode = data.decisionMode || null;
 
-                // Check if problem was already described
-                const hasProblemDescription = logEntries.some(e => e.phase === 'initial');
-                if (hasProblemDescription) {
+                // Restore problem state
+                const problemEntry = logEntries.find(e => e.phase === 'initial');
+                if (problemEntry) {
                     problemDescribed = true;
-                    updateModeLabels();
-                    revealSections();
-
-                    const problemEntry = logEntries.find(e => e.phase === 'initial');
-                    if (problemEntry) {
-                        const dashboardProblem = document.getElementById('dashboardProblem');
-                        if (dashboardProblem) dashboardProblem.textContent = problemEntry.response;
-                    }
+                    updateSidebarProblem(problemEntry.response);
                 }
 
                 renderJournal();
-
-                // Check if decision summary should be shown
-                checkShowDecisionSummary();
             }
         }
 
-        // Initialize App
-        init();
+        // ─── CONFIRM MODAL ──────────────────────────────────────
+        function showConfirmModal() {
+            confirmModal.classList.add('active');
+        }
+        function closeConfirmModal() {
+            confirmModal.classList.remove('active');
+        }
+
+        // ─── RIGHT PANEL ────────────────────────────────────────
+        function openRightPanel() {
+            panelRight.classList.add('open');
+        }
+        function closeRightPanel() {
+            panelRight.classList.remove('open');
+        }
+
+        // ─── EVENT SETUP ────────────────────────────────────────
+        function setupApp() {
+            // Right panel toggle
+            logToggle.addEventListener('click', () => {
+                panelRight.classList.toggle('open');
+            });
+            panelRightClose.addEventListener('click', closeRightPanel);
+
+            // Journal note
+            addJournalNoteBtn.addEventListener('click', () => {
+                const note = journalNoteInput.value.trim();
+                if (!note) return;
+                logEntries.push({
+                    id: nextLogId++,
+                    modelName: 'Journal Note',
+                    phase: 'note',
+                    response: note,
+                    timestamp: new Date().toLocaleString()
+                });
+                journalNoteInput.value = '';
+                renderJournal();
+                saveToLocalStorage();
+            });
+
+            // Copy journal
+            copyJournalBtn.addEventListener('click', () => {
+                if (logEntries.length === 0) return;
+                const text = logEntries.map(e =>
+                    `[${e.phase}] ${e.modelName}: ${e.response} (${e.timestamp})`
+                ).join('\n\n');
+                navigator.clipboard.writeText(text);
+                copyJournalBtn.textContent = 'Copied!';
+                setTimeout(() => copyJournalBtn.textContent = 'Copy All', 2000);
+            });
+
+            // Export journal
+            exportJournalBtn.addEventListener('click', downloadSession);
+
+            // Sort buttons
+            sortNewestBtn.addEventListener('click', () => {
+                logSortOrder = 'newest';
+                sortNewestBtn.classList.add('active');
+                sortOldestBtn.classList.remove('active');
+                renderJournal();
+            });
+            sortOldestBtn.addEventListener('click', () => {
+                logSortOrder = 'oldest';
+                sortOldestBtn.classList.add('active');
+                sortNewestBtn.classList.remove('active');
+                renderJournal();
+            });
+
+            // Confirm modal
+            modalCancel.addEventListener('click', closeConfirmModal);
+            modalConfirm.addEventListener('click', () => {
+                closeConfirmModal();
+                resetApp();
+            });
+
+            // Sidebar phase clicks → browse models for that phase
+            document.querySelectorAll('.phase-sidebar-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (!problemDescribed) return;
+                    currentPhase = item.dataset.phase;
+                    updatePhaseButtons();
+                    renderBrowseModels(currentPhase);
+                });
+            });
+
+            // Sidebar actions
+            const quickSuggest = document.getElementById('quickSuggest');
+            if (quickSuggest) {
+                quickSuggest.addEventListener('click', () => {
+                    if (!problemDescribed) return;
+                    // Reset tree for current phase and show tree view
+                    const modeKey = decisionMode || 'decision';
+                    const treeKey = currentPhase + '_' + modeKey;
+                    treeCurrentNode = decisionTrees[treeKey] || null;
+                    treeHistory = [];
+                    renderTreeView();
+                });
+            }
+
+            const quickBrowse = document.getElementById('quickBrowse');
+            if (quickBrowse) {
+                quickBrowse.addEventListener('click', () => {
+                    if (!problemDescribed) return;
+                    renderBrowseModels(currentPhase);
+                });
+            }
+
+            const quickExport = document.getElementById('quickExport');
+            if (quickExport) {
+                quickExport.addEventListener('click', downloadSession);
+            }
+
+            const startOverBtn = document.getElementById('quickStartOver');
+            if (startOverBtn) {
+                startOverBtn.addEventListener('click', startOver);
+            }
+
+            // Edit problem from sidebar
+            const editProblem = document.getElementById('editProblem');
+            if (editProblem) {
+                editProblem.addEventListener('click', () => {
+                    // Go back to describe step
+                    problemDescribed = false;
+                    sidebarProblem.style.display = 'none';
+                    renderFocusView();
+                });
+            }
+        }
+
+        // ─── INITIALIZE ─────────────────────────────────────────
+        loadFromLocalStorage();
+        setupApp();
+        renderFocusView();
+        renderJournal();
     </script>
 </body>
 </html>
