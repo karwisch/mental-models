@@ -4429,7 +4429,7 @@
                     </div>
 
                     <div class="model-section collapsible">
-                        <div class="model-section-header" data-section="example">
+                        <div class="model-section-header collapsed" data-section="example">
                             <div class="model-section-title">Example</div>
                             <span class="model-section-toggle">▼</span>
                         </div>
@@ -4440,7 +4440,7 @@
 
                     ${model.prompts ? `
                     <div class="model-section collapsible">
-                        <div class="model-section-header" data-section="prompts">
+                        <div class="model-section-header collapsed" data-section="prompts">
                             <div class="model-section-title">Questions to Ask</div>
                             <span class="model-section-toggle">▼</span>
                         </div>
@@ -4631,7 +4631,16 @@
                     }
                 });
             });
-            if (promptItems.length > 0) promptItems[0].click();
+            // Pre-select first prompt without focusing textarea
+            if (promptItems.length > 0) {
+                promptItems[0].classList.add('selected-prompt');
+                const firstPrompt = promptItems[0].getAttribute('data-prompt');
+                if (selectedModel) selectedModel.activePrompt = firstPrompt;
+                const responseInput = document.getElementById('responseInput');
+                if (responseInput) {
+                    responseInput.placeholder = `Respond to: "${firstPrompt.substring(0, 60)}${firstPrompt.length > 60 ? '...' : ''}"`;
+                }
+            }
         }
 
         function setupCollapsibleSections() {
