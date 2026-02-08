@@ -82,7 +82,7 @@
         .sidebar-header {
             padding: 1rem 1.25rem;
             border-bottom: 1px solid #e0e0e0;
-            background: linear-gradient(135deg, rgba(100, 58, 91, 0.08), white);
+            background: white;
         }
 
         .sidebar-brand {
@@ -1800,6 +1800,21 @@
             max-height: 0;
             padding: 0 0.75rem;
             opacity: 0;
+        }
+
+        .section-next-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0.3rem 0;
+        }
+
+        .section-next-link:hover {
+            text-decoration: underline;
         }
 
         /* Confirmation Modal */
@@ -4410,6 +4425,38 @@
                 `<span class="model-related-tag" data-model="${escapeHtml(r)}">${r}</span>`
             ).join('') : '';
 
+            // Build sections array dynamically so "Next" links always point to the right place
+            const sections = [];
+            sections.push({ key: 'explanation', title: 'What It Is', body: `<div class="model-explanation">${model.explanation || ''}</div>` });
+            sections.push({ key: 'example', title: 'Example', body: `<div class="model-example">${model.example || ''}</div>` });
+            if (model.prompts) {
+                sections.push({ key: 'prompts', title: 'Questions to Ask', body: `<div class="prompt-instruction">Click a question to use it as your prompt:</div><ul class="model-prompts-list">${promptsHtml}</ul>` });
+            }
+            if (model.warnings) {
+                sections.push({ key: 'warnings', title: 'Watch Out For', body: `<div class="model-warnings"><ul>${warningsHtml}</ul></div>` });
+            }
+            if (model.relatedModels) {
+                sections.push({ key: 'related', title: 'Related Models', body: `<div class="model-related">${relatedHtml}</div>` });
+            }
+
+            const sectionsHtml = sections.map((sec, i) => {
+                const isFirst = i === 0;
+                const isLast = i === sections.length - 1;
+                const collapsedClass = isFirst ? '' : ' collapsed';
+                const nextLink = !isLast ? `<div class="section-next-link" data-next-section="${sections[i + 1].key}">Next: ${sections[i + 1].title} →</div>` : '';
+                return `
+                    <div class="model-section collapsible">
+                        <div class="model-section-header${collapsedClass}" data-section="${sec.key}">
+                            <div class="model-section-title">${sec.title}</div>
+                            <span class="model-section-toggle">▼</span>
+                        </div>
+                        <div class="model-section-body">
+                            ${sec.body}
+                            ${nextLink}
+                        </div>
+                    </div>`;
+            }).join('\n');
+
             focusArea.innerHTML = `
                 <div class="model-work-view">
                     <span class="browse-back-link" id="backToTree">← Back to ${mentalModelsData[currentPhase].title}</span>
@@ -4418,62 +4465,7 @@
                         <p>${model.description}</p>
                     </div>
 
-                    <div class="model-section collapsible">
-                        <div class="model-section-header" data-section="explanation">
-                            <div class="model-section-title">What It Is</div>
-                            <span class="model-section-toggle">▼</span>
-                        </div>
-                        <div class="model-section-body">
-                            <div class="model-explanation">${model.explanation || ''}</div>
-                        </div>
-                    </div>
-
-                    <div class="model-section collapsible">
-                        <div class="model-section-header collapsed" data-section="example">
-                            <div class="model-section-title">Example</div>
-                            <span class="model-section-toggle">▼</span>
-                        </div>
-                        <div class="model-section-body">
-                            <div class="model-example">${model.example || ''}</div>
-                        </div>
-                    </div>
-
-                    ${model.prompts ? `
-                    <div class="model-section collapsible">
-                        <div class="model-section-header collapsed" data-section="prompts">
-                            <div class="model-section-title">Questions to Ask</div>
-                            <span class="model-section-toggle">▼</span>
-                        </div>
-                        <div class="model-section-body">
-                            <div class="prompt-instruction">Click a question to use it as your prompt:</div>
-                            <ul class="model-prompts-list">${promptsHtml}</ul>
-                        </div>
-                    </div>
-                    ` : ''}
-
-                    ${model.warnings ? `
-                    <div class="model-section collapsible">
-                        <div class="model-section-header collapsed" data-section="warnings">
-                            <div class="model-section-title">Watch Out For</div>
-                            <span class="model-section-toggle">▼</span>
-                        </div>
-                        <div class="model-section-body">
-                            <div class="model-warnings"><ul>${warningsHtml}</ul></div>
-                        </div>
-                    </div>
-                    ` : ''}
-
-                    ${model.relatedModels ? `
-                    <div class="model-section collapsible">
-                        <div class="model-section-header collapsed" data-section="related">
-                            <div class="model-section-title">Related Models</div>
-                            <span class="model-section-toggle">▼</span>
-                        </div>
-                        <div class="model-section-body">
-                            <div class="model-related">${relatedHtml}</div>
-                        </div>
-                    </div>
-                    ` : ''}
+                    ${sectionsHtml}
 
                     <div class="response-section" style="margin-top: 1.5rem;">
                         <textarea id="responseInput" placeholder="Apply this mental model to your situation..." rows="5"></textarea>
@@ -4647,6 +4639,22 @@
             focusArea.querySelectorAll('.model-section-header').forEach(header => {
                 header.addEventListener('click', function() {
                     this.classList.toggle('collapsed');
+                });
+            });
+
+            // "Next" links: close current section, open next
+            focusArea.querySelectorAll('.section-next-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    const nextKey = this.getAttribute('data-next-section');
+                    // Collapse current section
+                    const currentHeader = this.closest('.model-section').querySelector('.model-section-header');
+                    if (currentHeader) currentHeader.classList.add('collapsed');
+                    // Open next section
+                    const nextHeader = focusArea.querySelector(`.model-section-header[data-section="${nextKey}"]`);
+                    if (nextHeader) {
+                        nextHeader.classList.remove('collapsed');
+                        nextHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 });
             });
         }
