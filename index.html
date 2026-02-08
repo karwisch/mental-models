@@ -1599,45 +1599,77 @@
             min-height: 150px;
         }
 
-        .response-prompt-display {
+        .response-workspace-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .response-workspace-hint {
+            font-size: 0.75rem;
+            color: var(--slate);
+            margin-bottom: 0.75rem;
+        }
+
+        .inline-prompts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .inline-prompt-card {
+            padding: 0.6rem 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-left: 3px solid var(--primary-light);
+            border-radius: 0 6px 6px 0;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            background: white;
+        }
+
+        .inline-prompt-card:hover {
+            border-left-color: var(--primary);
+            background: var(--primary-lightest);
+        }
+
+        .inline-prompt-card.selected {
+            border-left-color: var(--primary);
+            border-left-width: 3px;
+            background: var(--primary-lightest);
+            font-weight: 600;
+        }
+
+        .response-active-question {
             background: var(--cream);
             border-left: 3px solid var(--primary);
             border-radius: 0 8px 8px 0;
-            padding: 0.75rem 1rem;
+            padding: 0.6rem 0.85rem;
             margin-bottom: 0.75rem;
         }
 
         .response-prompt-label {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--primary);
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.25rem;
         }
 
         .response-prompt-text {
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--charcoal);
             line-height: 1.5;
             font-style: italic;
-        }
-
-        .response-prompt-hint {
-            font-size: 0.7rem;
-            color: var(--slate);
-            margin-top: 0.5rem;
-        }
-
-        .prompt-hint-link {
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .prompt-hint-link:hover {
-            text-decoration: underline;
         }
 
         .selected-model-display {
@@ -4582,13 +4614,10 @@
                 `<span class="model-related-tag" data-model="${escapeHtml(r)}">${r}</span>`
             ).join('') : '';
 
-            // Build sections array dynamically so "Next" links always point to the right place
+            // Build sections array — prompts are shown inline with response area, not as accordion
             const sections = [];
             sections.push({ key: 'explanation', title: 'What It Is', body: `<div class="model-explanation">${model.explanation || ''}</div>` });
             sections.push({ key: 'example', title: 'Example', body: `<div class="model-example">${model.example || ''}</div>` });
-            if (model.prompts) {
-                sections.push({ key: 'prompts', title: 'Questions to Answer', body: `<div class="prompt-instruction">Click a question to use it as your prompt:</div><ul class="model-prompts-list">${promptsHtml}</ul>` });
-            }
             if (model.warnings) {
                 sections.push({ key: 'warnings', title: 'Watch Out For', body: `<div class="model-warnings"><ul>${warningsHtml}</ul></div>` });
             }
@@ -4625,10 +4654,18 @@
                     ${sectionsHtml}
 
                     <div class="response-section" style="margin-top: 1.5rem;">
-                        <div class="response-prompt-display" id="responsePromptDisplay">
-                            <div class="response-prompt-label">Your question to answer:</div>
-                            <div class="response-prompt-text" id="responsePromptText"></div>
-                            <div class="response-prompt-hint">To use a different question, open the <span class="prompt-hint-link" id="openPromptsSection">Questions to Answer</span> section above and select one.</div>
+                        <div class="response-workspace-label">Questions to Answer</div>
+                        <div class="response-workspace-hint">Select a question, then write your response below</div>
+                        ${model.prompts ? `
+                        <div class="inline-prompts" id="inlinePrompts">
+                            ${model.prompts.map((prompt, i) =>
+                                `<div class="inline-prompt-card${i === 0 ? ' selected' : ''}" data-prompt="${escapeHtml(prompt)}">${prompt}</div>`
+                            ).join('')}
+                        </div>
+                        ` : ''}
+                        <div class="response-active-question" id="responseActiveQuestion">
+                            <div class="response-prompt-label">Your question:</div>
+                            <div class="response-prompt-text" id="responsePromptText">${model.prompts ? model.prompts[0] : ''}</div>
                         </div>
                         <textarea id="responseInput" placeholder="Write your response here..." rows="5"></textarea>
                         <div class="action-buttons">
@@ -4776,44 +4813,27 @@
         }
 
         function setupPromptSelection() {
-            const promptItems = focusArea.querySelectorAll('.model-prompts-list li');
+            const promptCards = focusArea.querySelectorAll('.inline-prompt-card');
             const promptDisplay = document.getElementById('responsePromptText');
-            const promptContainer = document.getElementById('responsePromptDisplay');
 
             function setActivePrompt(promptText) {
                 if (selectedModel) selectedModel.activePrompt = promptText;
                 if (promptDisplay) promptDisplay.textContent = promptText;
-                if (promptContainer) promptContainer.style.display = 'block';
             }
 
-            promptItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    promptItems.forEach(p => p.classList.remove('selected-prompt'));
-                    this.classList.add('selected-prompt');
-                    const selectedPrompt = this.getAttribute('data-prompt');
-                    setActivePrompt(selectedPrompt);
+            promptCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    promptCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    setActivePrompt(this.getAttribute('data-prompt'));
                     const responseInput = document.getElementById('responseInput');
                     if (responseInput) responseInput.focus();
                 });
             });
 
-            // Pre-select first prompt without focusing textarea
-            if (promptItems.length > 0) {
-                promptItems[0].classList.add('selected-prompt');
-                const firstPrompt = promptItems[0].getAttribute('data-prompt');
-                setActivePrompt(firstPrompt);
-            }
-
-            // "Open Questions to Answer" hint link
-            const openPromptsLink = document.getElementById('openPromptsSection');
-            if (openPromptsLink) {
-                openPromptsLink.addEventListener('click', () => {
-                    const promptsHeader = focusArea.querySelector('.model-section-header[data-section="prompts"]');
-                    if (promptsHeader) {
-                        promptsHeader.classList.remove('collapsed');
-                        promptsHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
+            // Pre-select first prompt
+            if (promptCards.length > 0 && selectedModel) {
+                selectedModel.activePrompt = promptCards[0].getAttribute('data-prompt');
             }
         }
 
