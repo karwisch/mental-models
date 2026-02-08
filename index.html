@@ -2517,7 +2517,6 @@
 
             .mobile-header {
                 display: flex;
-                flex-direction: column;
                 align-items: center;
                 position: fixed;
                 top: 0;
@@ -2526,46 +2525,39 @@
                 background: white;
                 border-bottom: 1px solid #e0e0e0;
                 z-index: 98;
-                padding: 0.75rem 1rem;
-                gap: 0.5rem;
+                padding: 0.6rem 0.75rem;
+                gap: 0.6rem;
                 box-shadow: 0 1px 4px rgba(0,0,0,0.06);
             }
 
-            .mobile-header-top {
-                display: flex;
-                align-items: center;
-                width: 100%;
-                gap: 0.75rem;
-            }
-
             .mobile-header-logo {
-                flex: 1;
-                text-align: center;
+                flex-shrink: 0;
             }
 
             .mobile-header-logo img {
-                height: 36px;
+                height: 44px;
                 width: auto;
-                display: inline-block;
+                display: block;
             }
 
             .mobile-header-title {
                 font-family: 'Montserrat', sans-serif;
-                font-size: 1rem;
+                font-size: 0.85rem;
                 font-weight: 700;
                 color: var(--primary);
-                text-align: center;
+                line-height: 1.15;
             }
 
             .mobile-header-title .beta-badge {
-                font-size: 0.55rem;
-                vertical-align: super;
+                display: inline-block;
+                font-size: 0.5rem;
+                vertical-align: middle;
                 background: var(--primary);
                 color: white;
-                padding: 0.1rem 0.35rem;
+                padding: 0.1rem 0.3rem;
                 border-radius: 3px;
                 font-weight: 700;
-                margin-left: 0.25rem;
+                margin-left: 0.15rem;
             }
 
             .sidebar-toggle {
@@ -2615,7 +2607,7 @@
 
             .main-area {
                 margin-left: 0;
-                padding-top: 100px;
+                padding-top: 72px;
             }
 
             .focus-area {
@@ -2687,12 +2679,10 @@
     <div class="app-layout">
         <!-- Mobile header (visible only on mobile) -->
         <div class="mobile-header" id="mobileHeader">
-            <div class="mobile-header-top">
-                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
-                <a class="mobile-header-logo" href="https://www.untanglednarrative.com" target="_blank" rel="noopener noreferrer">
-                    <img src="https://www.untanglednarrative.com/wp-content/uploads/2025/12/cropped-untangled-narrative-2026-logo-horizontal.png" alt="Untangled Narrative" />
-                </a>
-            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            <a class="mobile-header-logo" href="https://www.untanglednarrative.com" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.untanglednarrative.com/wp-content/uploads/2025/12/cropped-untangled-narrative-2026-logo-horizontal.png" alt="Untangled Narrative" />
+            </a>
             <div class="mobile-header-title">Mental Models Navigator <span class="beta-badge">BETA</span></div>
         </div>
         <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
