@@ -451,6 +451,114 @@
             cursor: not-allowed;
         }
 
+        /* Restore session prompt */
+        .restore-summary {
+            background: var(--cream);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .restore-detail {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+            padding: 0.2rem 0;
+            line-height: 1.5;
+        }
+
+        .restore-detail strong {
+            color: var(--primary);
+        }
+
+        .restore-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            width: 100%;
+        }
+
+        .restore-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .restore-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .restore-btn.primary:hover {
+            background: var(--primary-mid);
+        }
+
+        .restore-btn.secondary {
+            background: transparent;
+            color: var(--charcoal);
+            border: 1px solid #d0d0d0;
+        }
+
+        .restore-btn.secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .restore-export-row {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .restore-export-text {
+            font-size: 0.8rem;
+            color: var(--charcoal);
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .restore-export-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .restore-export-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 6px;
+            background: white;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .restore-export-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .restore-export-btn.muted {
+            border-color: #d0d0d0;
+            color: var(--slate);
+        }
+
+        .restore-export-btn.muted:hover {
+            border-color: var(--charcoal);
+            background: var(--charcoal);
+            color: white;
+        }
+
         /* Model work view (full-width when working on a model) */
         .model-work-view {
             max-width: 700px;
@@ -4708,27 +4816,135 @@
             localStorage.setItem('mentalModelsLog', JSON.stringify({
                 entries: logEntries,
                 nextId: nextLogId,
-                decisionMode: decisionMode
+                decisionMode: decisionMode,
+                currentPhase: currentPhase,
+                selectedModelName: selectedModel ? selectedModel.name : null,
+                selectedModelPhase: selectedModel ? selectedModel.phase : null
             }));
         }
 
+        // Returns true if a saved session was found, false otherwise
         function loadFromLocalStorage() {
             const saved = localStorage.getItem('mentalModelsLog');
-            if (saved) {
-                const data = JSON.parse(saved);
-                logEntries = data.entries || [];
-                nextLogId = data.nextId || 1;
-                decisionMode = data.decisionMode || null;
+            if (!saved) return false;
 
-                // Restore problem state
-                const problemEntry = logEntries.find(e => e.phase === 'initial');
-                if (problemEntry) {
-                    problemDescribed = true;
-                    updateSidebarProblem(problemEntry.response);
-                }
+            const data = JSON.parse(saved);
+            const savedEntries = data.entries || [];
+            const hasProblem = savedEntries.some(e => e.phase === 'initial');
 
-                renderJournal();
+            // Only count as a real session if there's meaningful progress
+            if (!data.decisionMode && savedEntries.length === 0) return false;
+
+            // Store parsed data for restore
+            window._pendingRestore = data;
+            return true;
+        }
+
+        function restoreSession() {
+            const data = window._pendingRestore;
+            if (!data) return;
+            delete window._pendingRestore;
+
+            logEntries = data.entries || [];
+            nextLogId = data.nextId || 1;
+            decisionMode = data.decisionMode || null;
+            currentPhase = data.currentPhase || 'diagnostic';
+
+            // Restore problem state
+            const problemEntry = logEntries.find(e => e.phase === 'initial');
+            if (problemEntry) {
+                problemDescribed = true;
+                updateSidebarProblem(problemEntry.response);
             }
+
+            // Restore selected model if saved
+            if (data.selectedModelName && data.selectedModelPhase) {
+                const phaseData = mentalModelsData[data.selectedModelPhase];
+                if (phaseData) {
+                    const model = phaseData.models.find(m => m.name === data.selectedModelName);
+                    if (model) {
+                        selectedModel = { ...model, phase: data.selectedModelPhase };
+                    }
+                }
+            }
+
+            updatePhaseButtons();
+            renderJournal();
+            renderFocusView();
+        }
+
+        function renderRestorePrompt() {
+            const data = window._pendingRestore;
+            if (!data) { renderFocusView(); return; }
+
+            const entries = data.entries || [];
+            const problemEntry = entries.find(e => e.phase === 'initial');
+            const problemText = problemEntry ? problemEntry.response : null;
+            const mode = data.decisionMode;
+            const phase = data.currentPhase || 'diagnostic';
+            const entryCount = entries.filter(e => e.phase !== 'initial').length;
+            const phaseLabel = phase.charAt(0).toUpperCase() + phase.slice(1);
+
+            let summaryHTML = '';
+            if (mode) {
+                summaryHTML += `<div class="restore-detail"><strong>Mode:</strong> ${mode === 'decision' ? 'Decision' : 'Problem'}</div>`;
+            }
+            if (problemText) {
+                summaryHTML += `<div class="restore-detail"><strong>${mode === 'decision' ? 'Decision' : 'Problem'}:</strong> ${escapeHtml(problemText)}</div>`;
+            }
+            if (entryCount > 0) {
+                summaryHTML += `<div class="restore-detail"><strong>Journal entries:</strong> ${entryCount}</div>`;
+            }
+            summaryHTML += `<div class="restore-detail"><strong>Last phase:</strong> ${phaseLabel}</div>`;
+
+            focusArea.className = 'focus-area';
+            focusArea.innerHTML = `
+                <div class="focus-card" style="max-width: 520px;">
+                    <div class="focus-title">Welcome Back</div>
+                    <div class="focus-subtitle">You have a previous session in progress</div>
+                    <div class="restore-summary">
+                        ${summaryHTML}
+                    </div>
+                    <div class="restore-actions">
+                        <button class="restore-btn primary" id="restoreContinue">Continue Where I Left Off</button>
+                        <button class="restore-btn secondary" id="restoreStartFresh">Start From Scratch</button>
+                    </div>
+                    <div class="restore-export-row" id="restoreExportRow" style="display: none;">
+                        <span class="restore-export-text">Would you like to export your previous work first?</span>
+                        <div class="restore-export-actions">
+                            <button class="restore-export-btn" id="restoreExportYes">Export &amp; Reset</button>
+                            <button class="restore-export-btn muted" id="restoreExportNo">Just Reset</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('restoreContinue').addEventListener('click', () => {
+                restoreSession();
+            });
+
+            document.getElementById('restoreStartFresh').addEventListener('click', () => {
+                // Hide the two main buttons, show export choice
+                document.getElementById('restoreContinue').style.display = 'none';
+                document.getElementById('restoreStartFresh').style.display = 'none';
+                document.getElementById('restoreExportRow').style.display = 'block';
+            });
+
+            document.getElementById('restoreExportYes').addEventListener('click', () => {
+                // Temporarily load the old entries to export them
+                const oldEntries = logEntries;
+                logEntries = data.entries || [];
+                downloadSession();
+                logEntries = oldEntries;
+                // Now clear and start fresh
+                delete window._pendingRestore;
+                resetApp();
+            });
+
+            document.getElementById('restoreExportNo').addEventListener('click', () => {
+                delete window._pendingRestore;
+                resetApp();
+            });
         }
 
         // ─── CONFIRM MODAL ──────────────────────────────────────
@@ -4860,9 +5076,13 @@
         }
 
         // ─── INITIALIZE ─────────────────────────────────────────
-        loadFromLocalStorage();
         setupApp();
-        renderFocusView();
+        const hasSavedSession = loadFromLocalStorage();
+        if (hasSavedSession) {
+            renderRestorePrompt();
+        } else {
+            renderFocusView();
+        }
         renderJournal();
     </script>
 </body>
