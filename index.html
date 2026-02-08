@@ -2100,7 +2100,7 @@
                             <div class="phase-progress-bar">
                                 <div class="phase-progress-fill diagnostic" id="progressDiagnostic" style="width: 0%"></div>
                             </div>
-                            <div class="phase-progress-text" id="progressTextDiagnostic">0/6 models</div>
+                            <div class="phase-progress-text" id="progressTextDiagnostic">0 entries</div>
                         </div>
                     </div>
 
@@ -2114,7 +2114,7 @@
                             <div class="phase-progress-bar">
                                 <div class="phase-progress-fill evaluative" id="progressEvaluative" style="width: 0%"></div>
                             </div>
-                            <div class="phase-progress-text" id="progressTextEvaluative">0/7 models</div>
+                            <div class="phase-progress-text" id="progressTextEvaluative">0 entries</div>
                         </div>
                     </div>
 
@@ -2128,7 +2128,7 @@
                             <div class="phase-progress-bar">
                                 <div class="phase-progress-fill protective" id="progressProtective" style="width: 0%"></div>
                             </div>
-                            <div class="phase-progress-text" id="progressTextProtective">0/7 models</div>
+                            <div class="phase-progress-text" id="progressTextProtective">0 entries</div>
                         </div>
                     </div>
 
@@ -2142,7 +2142,7 @@
                             <div class="phase-progress-bar">
                                 <div class="phase-progress-fill generative" id="progressGenerative" style="width: 0%"></div>
                             </div>
-                            <div class="phase-progress-text" id="progressTextGenerative">0/7 models</div>
+                            <div class="phase-progress-text" id="progressTextGenerative">0 entries</div>
                         </div>
                     </div>
 
@@ -2156,7 +2156,7 @@
                             <div class="phase-progress-bar">
                                 <div class="phase-progress-fill implementation" id="progressImplementation" style="width: 0%"></div>
                             </div>
-                            <div class="phase-progress-text" id="progressTextImplementation">0/7 models</div>
+                            <div class="phase-progress-text" id="progressTextImplementation">0 entries</div>
                         </div>
                     </div>
                 </div>
@@ -4775,11 +4775,38 @@ Next steps:
             checkShowDecisionSummary();
         }
 
+        // Update sidebar phase progress indicators
+        function updatePhaseProgress() {
+            const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
+            phases.forEach(phase => {
+                const phaseEntries = logEntries.filter(e => e.phase === phase);
+                const count = phaseEntries.length;
+                const capitalPhase = phase.charAt(0).toUpperCase() + phase.slice(1);
+
+                // Update progress text
+                const textEl = document.getElementById('progressText' + capitalPhase);
+                if (textEl) textEl.textContent = count === 1 ? '1 entry' : `${count} entries`;
+
+                // Update status badge
+                const statusEl = document.getElementById('status' + capitalPhase);
+                if (statusEl) {
+                    statusEl.className = 'status-badge ' + (count === 0 ? 'not-started' : count >= 3 ? 'completed' : 'in-progress');
+                    statusEl.textContent = count === 0 ? 'Not Started' : count >= 3 ? 'Complete' : 'In Progress';
+                }
+
+                // Update progress bar (approximate: 3+ entries = 100%)
+                const fillEl = document.getElementById('progress' + capitalPhase);
+                if (fillEl) {
+                    const pct = Math.min(100, Math.round((count / 3) * 100));
+                    fillEl.style.width = pct + '%';
+                }
+            });
+        }
+
         // Render Journal Entries
         function renderJournal() {
-            // Update sidebar log count
-            const logCountEl = document.getElementById('logCount');
-            if (logCountEl) logCountEl.textContent = `${logEntries.length} entries`;
+            // Update sidebar phase progress
+            updatePhaseProgress();
 
             if (logEntries.length === 0) {
                 journalEntriesContainer.innerHTML = '<div class="empty-state">Your decision journal will appear here as you work through the process.</div>';
