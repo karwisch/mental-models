@@ -50,8 +50,10 @@
             box-sizing: border-box;
         }
 
-        html {
+        html, body {
             overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
         }
@@ -62,7 +64,6 @@
             color: var(--charcoal);
             line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         /* App Layout with Persistent Sidebar */
@@ -2515,14 +2516,18 @@
         /* Mobile/Tablet: collapse sidebar to hamburger */
         @media (max-width: 1024px) {
             .app-layout {
-                overflow-x: hidden;
+                overflow: hidden;
+                width: 100%;
                 max-width: 100vw;
+                position: relative;
             }
 
             .sidebar {
                 left: 0;
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                width: 280px;
+                max-width: 80vw;
             }
 
             .sidebar.open {
@@ -2622,10 +2627,15 @@
             .main-area {
                 margin-left: 0;
                 padding-top: 84px;
+                width: 100%;
+                max-width: 100vw;
+                box-sizing: border-box;
             }
 
             .focus-area {
                 padding: 1rem;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
             .models-grid {
@@ -2653,6 +2663,7 @@
 
             .right-panel {
                 width: calc(100% - 60px);
+                max-width: calc(100vw - 60px);
                 right: 0;
                 transform: translateX(100%);
             }
@@ -5618,13 +5629,28 @@
             }
         }
 
-        // ─── ORIENTATION CHANGE FIX ─────────────────────────────
+        // ─── ORIENTATION / RESIZE FIX ───────────────────────────
+        function resetViewport() {
+            // Force layout recalculation
+            document.body.style.display = 'none';
+            // Reading offsetHeight forces a reflow
+            void document.body.offsetHeight;
+            document.body.style.display = '';
+            window.scrollTo(0, 0);
+        }
+
         window.addEventListener('orientationchange', () => {
-            setTimeout(() => {
+            setTimeout(resetViewport, 50);
+            setTimeout(resetViewport, 300);
+        });
+
+        // Also catch resize events (covers rotation on some browsers)
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
                 window.scrollTo(0, 0);
-                document.documentElement.style.width = '100%';
-                document.body.style.width = '100%';
-            }, 100);
+            }, 150);
         });
 
         // ─── INITIALIZE ─────────────────────────────────────────
