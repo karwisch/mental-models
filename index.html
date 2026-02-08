@@ -91,11 +91,33 @@
         }
 
         .sidebar-brand-logo {
-            max-width: 180px;
+            max-width: 140px;
             height: auto;
             display: block;
-            font-weight: 600;
-            letter-spacing: 0.03em;
+        }
+
+        .sidebar-app-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .beta-badge {
+            display: inline-block;
+            font-size: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            background: var(--generative-color);
+            color: white;
+            padding: 0.15rem 0.35rem;
+            border-radius: 3px;
+            vertical-align: middle;
+            line-height: 1;
         }
 
         .sidebar-nav {
@@ -1217,8 +1239,16 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             font-family: 'Montserrat', sans-serif;
+        }
+
+        .tree-phase-desc {
+            font-size: 0.78rem;
+            color: var(--slate);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            font-style: italic;
         }
 
         .tree-buttons {
@@ -2458,6 +2488,7 @@
                 <div class="sidebar-brand">
                     <img class="sidebar-brand-logo" src="https://www.untanglednarrative.com/wp-content/uploads/2025/12/cropped-untangled-narrative-2026-logo-horizontal.png" alt="Untangled Narrative" />
                 </div>
+                <div class="sidebar-app-title">Mental Models Navigator <span class="beta-badge">BETA</span></div>
             </div>
 
             <!-- Problem/Decision Description (shown after user describes it) -->
@@ -4375,6 +4406,7 @@
                 focusArea.innerHTML = `
                     <div class="focus-card" style="max-width: 600px;">
                         <div class="tree-step-label">${phaseData.title}</div>
+                        <div class="tree-phase-desc">${phaseData.purpose}</div>
                         ${historyHTML}
                         <div class="tree-recommendation">
                             <div class="rec-label">Recommended Model</div>
@@ -4421,6 +4453,7 @@
             focusArea.innerHTML = `
                 <div class="focus-card" style="max-width: 600px;">
                     <div class="tree-step-label">${phaseData.title} — Question ${stepNum}</div>
+                    <div class="tree-phase-desc">${phaseData.purpose}</div>
                     ${historyHTML}
                     <div class="tree-question">${treeCurrentNode.q}</div>
                     <div class="tree-buttons">
