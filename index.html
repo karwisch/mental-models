@@ -4587,7 +4587,7 @@
             sections.push({ key: 'explanation', title: 'What It Is', body: `<div class="model-explanation">${model.explanation || ''}</div>` });
             sections.push({ key: 'example', title: 'Example', body: `<div class="model-example">${model.example || ''}</div>` });
             if (model.prompts) {
-                sections.push({ key: 'prompts', title: 'Questions to Ask', body: `<div class="prompt-instruction">Click a question to use it as your prompt:</div><ul class="model-prompts-list">${promptsHtml}</ul>` });
+                sections.push({ key: 'prompts', title: 'Questions to Answer', body: `<div class="prompt-instruction">Click a question to use it as your prompt:</div><ul class="model-prompts-list">${promptsHtml}</ul>` });
             }
             if (model.warnings) {
                 sections.push({ key: 'warnings', title: 'Watch Out For', body: `<div class="model-warnings"><ul>${warningsHtml}</ul></div>` });
@@ -4628,7 +4628,7 @@
                         <div class="response-prompt-display" id="responsePromptDisplay">
                             <div class="response-prompt-label">Your question to answer:</div>
                             <div class="response-prompt-text" id="responsePromptText"></div>
-                            <div class="response-prompt-hint">To use a different question, open the <span class="prompt-hint-link" id="openPromptsSection">Questions to Ask</span> section above and select one.</div>
+                            <div class="response-prompt-hint">To use a different question, open the <span class="prompt-hint-link" id="openPromptsSection">Questions to Answer</span> section above and select one.</div>
                         </div>
                         <textarea id="responseInput" placeholder="Write your response here..." rows="5"></textarea>
                         <div class="action-buttons">
@@ -4804,7 +4804,7 @@
                 setActivePrompt(firstPrompt);
             }
 
-            // "Open Questions to Ask" hint link
+            // "Open Questions to Answer" hint link
             const openPromptsLink = document.getElementById('openPromptsSection');
             if (openPromptsLink) {
                 openPromptsLink.addEventListener('click', () => {
@@ -4884,8 +4884,8 @@
                 // Update status badge
                 const statusEl = document.getElementById('status' + capitalPhase);
                 if (statusEl) {
-                    statusEl.className = 'status-badge ' + (count === 0 ? 'not-started' : count >= 3 ? 'completed' : 'in-progress');
-                    statusEl.textContent = count === 0 ? 'Not Started' : count >= 3 ? 'Complete' : 'In Progress';
+                    statusEl.className = 'status-badge ' + (count === 0 ? 'not-started' : 'in-progress');
+                    statusEl.textContent = count === 0 ? 'Not Started' : 'In Progress';
                 }
 
                 // Update progress bar (approximate: 3+ entries = 100%)
