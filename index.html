@@ -408,6 +408,33 @@
             line-height: 1.4;
         }
 
+        /* Welcome section on mode selection */
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .welcome-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+        }
+
+        .welcome-description {
+            font-size: 0.82rem;
+            color: var(--charcoal);
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .welcome-divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 1.25rem 0;
+        }
+
         /* Describe input step */
         .focus-input-area {
             width: 100%;
@@ -4306,7 +4333,12 @@
         function renderModeSelection() {
             focusArea.className = 'focus-area';
             focusArea.innerHTML = `
-                <div class="focus-card">
+                <div class="focus-card" style="max-width: 560px;">
+                    <div class="welcome-header">
+                        <div class="welcome-title">Welcome to the Mental Models Navigator</div>
+                        <div class="welcome-description">This tool teaches you how to think through decisions and problems using proven mental models — structured frameworks used by the world's best thinkers. You'll be guided step by step: choose a model, explore how it works, and practice applying it to your own real situation.</div>
+                    </div>
+                    <div class="welcome-divider"></div>
                     <div class="focus-title">What are you working through?</div>
                     <div class="focus-subtitle">Choose your starting point</div>
                     <div class="mode-selector">
