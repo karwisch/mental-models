@@ -4970,18 +4970,26 @@
         // Download Session as Text File
         function downloadSession() {
             let content = 'MENTAL MODELS DECISION-MAKING SESSION\n';
-            content += '=' .repeat(60) + '\n';
+            content += '='.repeat(60) + '\n';
             content += `Date: ${new Date().toLocaleString()}\n\n`;
-            
-            // Add problem description if exists
-            const problemEntry = logEntries.find(e => e.phase === 'initial');
-            if (problemEntry) {
-                content += 'PROBLEM/DECISION:\n';
-                content += problemEntry.response + '\n\n';
-                content += '=' .repeat(60) + '\n\n';
+
+            // Export ALL initial entries (mode selection, problem description, etc.)
+            const initialEntries = logEntries.filter(e => e.phase === 'initial');
+            if (initialEntries.length > 0) {
+                content += 'GETTING STARTED\n';
+                content += '-'.repeat(60) + '\n\n';
+                // Show in chronological order (oldest first)
+                [...initialEntries].reverse().forEach(entry => {
+                    if (entry.modelPrompt) {
+                        content += `Q: ${entry.modelPrompt}\n`;
+                    }
+                    content += `${entry.modelName}: ${entry.response}\n`;
+                    content += `(${entry.timestamp})\n\n`;
+                });
+                content += '\n';
             }
-            
-            // Add all mental model responses grouped by phase
+
+            // Add all entries grouped by phase
             const phases = ['diagnostic', 'evaluative', 'protective', 'generative', 'implementation'];
             const phaseNames = {
                 diagnostic: 'DIAGNOSTIC PHASE',
@@ -4990,16 +4998,20 @@
                 generative: 'GENERATIVE PHASE',
                 implementation: 'IMPLEMENTATION PHASE'
             };
-            
+
             phases.forEach(phase => {
                 const phaseEntries = logEntries.filter(e => e.phase === phase);
                 if (phaseEntries.length > 0) {
                     content += phaseNames[phase] + '\n';
                     content += '-'.repeat(60) + '\n\n';
 
-                    phaseEntries.forEach(entry => {
+                    // Show in chronological order (oldest first)
+                    [...phaseEntries].reverse().forEach(entry => {
                         content += `${entry.modelName}:\n`;
-                        content += `${entry.response}\n`;
+                        if (entry.modelPrompt) {
+                            content += `Q: ${entry.modelPrompt}\n`;
+                        }
+                        content += `A: ${entry.response}\n`;
                         content += `(${entry.timestamp})\n\n`;
                     });
 
@@ -5012,7 +5024,7 @@
             if (noteEntries.length > 0) {
                 content += 'NOTES\n';
                 content += '-'.repeat(60) + '\n\n';
-                noteEntries.forEach(entry => {
+                [...noteEntries].reverse().forEach(entry => {
                     content += `${entry.response}\n`;
                     content += `(${entry.timestamp})\n\n`;
                 });
