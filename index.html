@@ -59,23 +59,36 @@
         }
 
         .sidebar-header {
-            padding: 1.25rem;
+            padding: 1rem 1.25rem;
             border-bottom: 1px solid #e0e0e0;
             background: linear-gradient(135deg, rgba(27, 127, 146, 0.08), white);
         }
 
-        .sidebar-greeting {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--charcoal);
-            margin-bottom: 0.25rem;
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
 
-        .sidebar-subgreeting {
-            font-size: 0.8rem;
+        .sidebar-logo {
             color: var(--teal);
-            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            line-height: 1.2;
+        }
+
+        .sidebar-brand-tool {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.65rem;
+            color: var(--teal);
+            font-weight: 600;
+            letter-spacing: 0.03em;
         }
 
         .sidebar-nav {
@@ -583,51 +596,6 @@
             flex: 1;
             margin-left: 50px; /* Space for left toggle button */
             margin-right: 50px; /* Space for right toggle button */
-        }
-
-        /* Problem Reference Banner */
-        .problem-reference {
-            background: linear-gradient(135deg, rgba(27, 127, 146, 0.08), white);
-            border: 1px solid var(--teal);
-            border-left: 4px solid var(--teal);
-            border-radius: 8px;
-            padding: 1rem;
-            display: none;
-            margin-bottom: 0.5rem;
-        }
-
-        .problem-reference.visible {
-            display: block;
-            animation: slideIn 0.4s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .problem-reference-header {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 700;
-            color: var(--teal);
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
-        }
-
-        .problem-reference-text {
-            font-size: 0.85rem;
-            line-height: 1.5;
-            color: var(--charcoal);
-            font-weight: 500;
         }
 
         /* Problem Type Selection */
@@ -2003,8 +1971,16 @@
         <!-- Persistent Left Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-greeting" id="sidebarGreeting">Welcome!</div>
-                <div class="sidebar-subgreeting">How can I help you decide?</div>
+                <div class="sidebar-brand">
+                    <svg class="sidebar-logo" viewBox="0 0 32 32" width="28" height="28">
+                        <path d="M16 4 C10 4 6 8 6 12 C6 16 10 18 14 16 C18 14 22 16 22 20 C22 24 18 28 16 28" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path d="M16 4 C22 4 26 8 26 12 C26 16 22 18 18 16 C14 14 10 16 10 20 C10 24 14 28 16 28" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <div class="sidebar-brand-text">
+                        <div class="sidebar-brand-name">Untangled Narrative</div>
+                        <div class="sidebar-brand-tool">Mental Models Navigator</div>
+                    </div>
+                </div>
             </div>
 
             <nav class="sidebar-nav">
@@ -2138,12 +2114,6 @@
             </div>
 
             <div class="container">
-                <!-- Problem Reference Banner - shows after problem is described -->
-                <div class="problem-reference" id="problemReference">
-                    <div class="problem-reference-header">Your Decision / Problem</div>
-                    <div class="problem-reference-text" id="problemReferenceText"></div>
-                </div>
-
                 <!-- Problem Type Selector - shows after problem description, before models -->
                 <div class="problem-type-selector" id="problemTypeSelector">
                     <h3>What type of problem is this?</h3>
@@ -2990,8 +2960,6 @@ Next steps:
 
         // DOM Elements
         const container = document.querySelector('.container');
-        const problemReference = document.getElementById('problemReference');
-        const problemReferenceText = document.getElementById('problemReferenceText');
         const problemTypeSelector = document.getElementById('problemTypeSelector');
         const problemTypesGrid = document.getElementById('problemTypesGrid');
         const continueBtn = document.getElementById('continueBtn');
@@ -3187,7 +3155,6 @@ Next steps:
                     const newProblem = prompt('Edit your problem description:', problemEntry.response);
                     if (newProblem && newProblem.trim()) {
                         problemEntry.response = newProblem.trim();
-                        problemReferenceText.textContent = newProblem.trim();
                         const dashboardProblem = document.getElementById('dashboardProblem');
                         if (dashboardProblem) dashboardProblem.textContent = newProblem.trim();
                         renderJournal();
@@ -3656,12 +3623,6 @@ Next steps:
             logEntries.unshift(entry);
             problemDescribed = true;
             
-            // Show problem reference banner
-            problemReferenceText.textContent = description;
-            setTimeout(() => {
-                problemReference.classList.add('visible');
-            }, 100);
-
             // Update dashboard problem text
             const dashboardProblem = document.getElementById('dashboardProblem');
             if (dashboardProblem) dashboardProblem.textContent = description;
@@ -3870,9 +3831,7 @@ Next steps:
             journalNoteInput.value = '';
             renderJournal();
 
-            // Hide problem reference and type selector
-            problemReference.classList.remove('visible');
-            problemReferenceText.textContent = '';
+            // Hide type selector
             problemTypeSelector.classList.remove('visible');
             continueBtn.classList.remove('visible');
 
@@ -3952,9 +3911,6 @@ Next steps:
 
                     const problemEntry = logEntries.find(e => e.phase === 'initial');
                     if (problemEntry) {
-                        problemReferenceText.textContent = problemEntry.response;
-                        problemReference.classList.add('visible');
-
                         const dashboardProblem = document.getElementById('dashboardProblem');
                         if (dashboardProblem) dashboardProblem.textContent = problemEntry.response;
                     }
