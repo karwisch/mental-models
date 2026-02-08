@@ -2492,6 +2492,14 @@
             }
         }
 
+        .sidebar-toggle {
+            display: none;
+        }
+
+        .sidebar-backdrop {
+            display: none;
+        }
+
         /* Mobile: collapse sidebar too */
         @media (max-width: 768px) {
             .sidebar {
@@ -2503,12 +2511,75 @@
                 left: 0;
             }
 
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                top: 0.75rem;
+                left: 0.75rem;
+                width: 40px;
+                height: 40px;
+                background: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                cursor: pointer;
+                z-index: 99;
+                font-size: 1.25rem;
+                color: var(--charcoal);
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                transition: opacity 0.2s ease;
+            }
+
+            .sidebar-toggle:hover {
+                border-color: var(--primary);
+                color: var(--primary);
+            }
+
+            .sidebar-toggle.hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .sidebar-backdrop {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.3);
+                z-index: 99;
+            }
+
+            .sidebar-backdrop.visible {
+                display: block;
+            }
+
             .main-area {
                 margin-left: 0;
             }
 
+            .focus-area {
+                padding: 1rem;
+            }
+
             .models-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .inline-prompt-card {
+                border-radius: 0;
+                border-left: 3px solid var(--primary-light);
+                border-right: none;
+                margin-left: -1rem;
+                margin-right: -1rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .inline-prompts {
+                margin-left: 0;
+                margin-right: 0;
             }
 
             .right-panel {
@@ -2556,6 +2627,10 @@
 </head>
 <body>
     <div class="app-layout">
+        <!-- Sidebar toggle (visible only on mobile) -->
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- Persistent Left Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -5293,6 +5368,57 @@
                 // Swipe right by at least 80px to close
                 if (deltaX > 80) {
                     closeRightPanel();
+                }
+                isSwiping = false;
+            }, { passive: true });
+        })();
+
+        // ─── SIDEBAR (MOBILE) ──────────────────────────────────
+        const sidebarEl = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+        function openSidebar() {
+            sidebarEl.classList.add('open');
+            sidebarBackdrop.classList.add('visible');
+            sidebarToggle.classList.add('hidden');
+        }
+        function closeSidebar() {
+            sidebarEl.classList.remove('open');
+            sidebarBackdrop.classList.remove('visible');
+            sidebarToggle.classList.remove('hidden');
+        }
+
+        sidebarToggle.addEventListener('click', openSidebar);
+        sidebarBackdrop.addEventListener('click', closeSidebar);
+
+        // Swipe left to close sidebar
+        (function initSidebarSwipe() {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let isSwiping = false;
+
+            sidebarEl.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isSwiping = true;
+            }, { passive: true });
+
+            sidebarEl.addEventListener('touchmove', (e) => {
+                if (!isSwiping) return;
+                const deltaX = e.touches[0].clientX - touchStartX;
+                const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+                if (deltaY > Math.abs(deltaX)) {
+                    isSwiping = false;
+                }
+            }, { passive: true });
+
+            sidebarEl.addEventListener('touchend', (e) => {
+                if (!isSwiping) return;
+                const deltaX = e.changedTouches[0].clientX - touchStartX;
+                // Swipe left by at least 80px to close
+                if (deltaX < -80) {
+                    closeSidebar();
                 }
                 isSwiping = false;
             }, { passive: true });
