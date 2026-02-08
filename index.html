@@ -87,22 +87,13 @@
 
         .sidebar-brand {
             display: flex;
-            flex-direction: column;
-            gap: 0.15rem;
+            align-items: center;
         }
 
-        .sidebar-brand-name {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--charcoal);
-            line-height: 1.2;
-        }
-
-        .sidebar-brand-tool {
-            font-family: 'Open Sans', sans-serif;
-            font-size: 0.65rem;
-            color: var(--primary);
+        .sidebar-brand-logo {
+            max-width: 100%;
+            height: auto;
+            display: block;
             font-weight: 600;
             letter-spacing: 0.03em;
         }
@@ -401,7 +392,8 @@
             text-align: left;
         }
 
-        .focus-input-area input[type="text"] {
+        .focus-input-area input[type="text"],
+        .focus-input-area textarea {
             width: 100%;
             padding: 0.75rem 1rem;
             border: 2px solid #e0e0e0;
@@ -412,9 +404,11 @@
             outline: none;
             transition: border-color 0.2s;
             box-sizing: border-box;
+            resize: vertical;
         }
 
-        .focus-input-area input[type="text"]:focus {
+        .focus-input-area input[type="text"]:focus,
+        .focus-input-area textarea:focus {
             border-color: var(--primary);
         }
 
@@ -2250,8 +2244,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-brand">
-                    <div class="sidebar-brand-name">Untangled Narrative</div>
-                    <div class="sidebar-brand-tool">Mental Models Navigator</div>
+                    <img class="sidebar-brand-logo" src="https://www.untanglednarrative.com/wp-content/uploads/2025/12/cropped-untangled-narrative-2026-logo-horizontal.png" alt="Untangled Narrative" />
                 </div>
             </div>
 
@@ -4094,17 +4087,17 @@
             });
         }
 
-        // Step 2: Describe your decision/problem (10 words or less)
+        // Step 2: Describe your decision/problem (30 words or less)
         function renderDescribeStep() {
             const modeLabel = decisionMode === 'decision' ? 'decision' : 'problem';
             focusArea.className = 'focus-area';
             focusArea.innerHTML = `
                 <div class="focus-card">
                     <div class="focus-title">${decisionMode === 'decision' ? '⚖️' : '🔍'} Describe your ${modeLabel}</div>
-                    <div class="focus-subtitle">Keep it short — 10 words or less</div>
+                    <div class="focus-subtitle">Briefly describe what you're working through — 30 words or less</div>
                     <div class="focus-input-area">
-                        <input type="text" id="describeInput" placeholder="${decisionMode === 'decision' ? 'e.g., Should I change careers or stay?' : 'e.g., Our customer churn rate is increasing'}" maxlength="120" />
-                        <div class="focus-word-count" id="wordCount">0 / 10 words</div>
+                        <textarea id="describeInput" rows="3" placeholder="${decisionMode === 'decision' ? 'e.g., Should I leave my stable job to start a business, or stay and pursue an internal promotion?' : 'e.g., Our customer churn rate has doubled in the last quarter and we cannot identify the root cause'}" maxlength="300"></textarea>
+                        <div class="focus-word-count" id="wordCount">0 / 30 words</div>
                     </div>
                     <button class="focus-submit-btn" id="describeSubmit" disabled>Continue</button>
                 </div>
@@ -4116,9 +4109,9 @@
             input.addEventListener('input', () => {
                 const words = input.value.trim().split(/\s+/).filter(w => w.length > 0);
                 const count = words.length;
-                wordCount.textContent = `${count} / 10 words`;
-                wordCount.className = 'focus-word-count' + (count > 10 ? ' over-limit' : '');
-                submitBtn.disabled = count === 0 || count > 10;
+                wordCount.textContent = `${count} / 30 words`;
+                wordCount.className = 'focus-word-count' + (count > 30 ? ' over-limit' : '');
+                submitBtn.disabled = count === 0 || count > 30;
             });
 
             submitBtn.addEventListener('click', () => {
