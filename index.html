@@ -4196,7 +4196,8 @@
                 });
                 document.getElementById('treeRestart').addEventListener('click', () => {
                     treeCurrentNode = null;
-                    renderFocusView();
+                    treeHistory = [];
+                    renderTreeView();
                 });
                 return;
             }
@@ -4228,17 +4229,18 @@
             document.getElementById('treeYes').addEventListener('click', () => {
                 treeHistory.push({ question: treeCurrentNode.q, answer: 'Yes' });
                 treeCurrentNode = treeCurrentNode.yes;
-                renderFocusView();
+                renderTreeView();
             });
             document.getElementById('treeNo').addEventListener('click', () => {
                 treeHistory.push({ question: treeCurrentNode.q, answer: 'No' });
                 treeCurrentNode = treeCurrentNode.no;
-                renderFocusView();
+                renderTreeView();
             });
             const restartBtn = document.getElementById('treeRestart');
             if (restartBtn) restartBtn.addEventListener('click', () => {
                 treeCurrentNode = null;
-                renderFocusView();
+                treeHistory = [];
+                renderTreeView();
             });
         }
 
@@ -4826,10 +4828,9 @@
             if (quickSuggest) {
                 quickSuggest.addEventListener('click', () => {
                     if (!problemDescribed) return;
-                    // Reset tree for current phase and show tree view
-                    const modeKey = decisionMode || 'decision';
-                    const treeKey = currentPhase + '_' + modeKey;
-                    treeCurrentNode = decisionTrees[treeKey] || null;
+                    // Clear current model selection and start fresh tree
+                    selectedModel = null;
+                    treeCurrentNode = null;
                     treeHistory = [];
                     renderTreeView();
                 });
