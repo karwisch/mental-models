@@ -278,10 +278,11 @@
             box-shadow: 0 2px 8px rgba(27, 127, 146, 0.3);
         }
 
-        /* Main Content Area - adjusted for sidebar */
+        /* Main Content Area - adjusted for sidebar and journal panel */
         .main-area {
             flex: 1;
             margin-left: 280px;
+            margin-right: 340px;
             padding: 1.5rem;
             min-height: 100vh;
         }
@@ -427,52 +428,121 @@
             text-align: right;
         }
 
-        /* Right Panel for Notes/Log */
+        /* Right Panel - Decision Journal (persistent on desktop) */
         .right-panel {
+            width: 340px;
+            flex-shrink: 0;
             position: fixed;
             top: 0;
-            right: -380px;
-            width: 380px;
+            right: 0;
             height: 100vh;
             background: white;
-            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
-            transition: right 0.3s ease;
+            border-left: 1px solid #e0e0e0;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
             z-index: 100;
             display: flex;
             flex-direction: column;
         }
 
-        .right-panel.open {
-            right: 0;
-        }
-
         .right-panel-toggle {
-            position: fixed;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--teal);
-            color: white;
-            border: none;
-            padding: 1rem 0.5rem;
-            border-radius: 8px 0 0 8px;
-            cursor: pointer;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
+            display: none; /* Hidden on desktop — panel is always visible */
+        }
+
+        .panel-title {
             font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--teal);
+        }
+
+        .panel-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .panel-action-btn {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
             font-weight: 600;
+            color: var(--charcoal);
+            opacity: 0.7;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .panel-action-btn:hover {
+            opacity: 1;
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .panel-close {
+            display: none; /* Hidden on desktop — panel is always visible */
+        }
+
+        .journal-sort {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #e8e8e8;
+            flex-shrink: 0;
+        }
+
+        .journal-entries {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .journal-input-bar {
+            padding: 0.75rem;
+            border-top: 1px solid #e0e0e0;
+            background: var(--cream);
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+            flex-shrink: 0;
+        }
+
+        .journal-input-bar textarea {
+            flex: 1;
+            min-height: 36px;
+            max-height: 80px;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: 'Open Sans', sans-serif;
             font-size: 0.75rem;
-            z-index: 99;
-            transition: all 0.3s ease;
+            resize: none;
+            line-height: 1.4;
         }
 
-        .right-panel-toggle:hover {
-            background: var(--light-teal);
-            padding-right: 0.75rem;
+        .journal-input-bar textarea:focus {
+            outline: none;
+            border-color: var(--teal);
         }
 
-        .right-panel-toggle.active {
-            right: 380px;
+        .journal-input-bar .btn {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Note entries in journal */
+        .log-entry.note {
+            border-left: 3px solid #FFD54F;
+            background: linear-gradient(135deg, rgba(255, 213, 79, 0.06), white);
+        }
+
+        .log-entry.note .log-model-name {
+            color: #F9A825;
         }
 
         .container {
@@ -655,165 +725,6 @@
         .continue-btn:hover {
             background: var(--light-teal);
             box-shadow: 0 2px 8px rgba(27, 127, 146, 0.3);
-        }
-
-        /* Toggle Buttons */
-        .toggle-buttons {
-            position: fixed;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            z-index: 100;
-        }
-
-        .toggle-btn {
-            background: var(--teal);
-            color: white;
-            border: none;
-            padding: 0.75rem 0.5rem;
-            border-radius: 8px 0 0 8px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 0.75rem;
-            cursor: pointer;
-            box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            width: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .toggle-btn::before {
-            content: '◀';
-            font-size: 1rem;
-            display: block;
-            transition: transform 0.3s ease;
-            writing-mode: horizontal-tb;
-            text-orientation: upright;
-        }
-
-        .toggle-btn:hover {
-            background: var(--light-teal);
-            transform: translateX(-5px);
-            box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .toggle-btn:hover::before {
-            transform: translateX(-3px);
-        }
-
-        .toggle-btn.active {
-            background: var(--charcoal);
-            transform: translateX(-5px);
-        }
-
-        .toggle-btn.active::before {
-            content: '▶';
-        }
-
-        /* Left toggle buttons (for notepad) */
-        .toggle-buttons-left {
-            position: fixed;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            z-index: 100;
-        }
-
-        .toggle-btn-left {
-            background: var(--mauve);
-            color: white;
-            border: none;
-            padding: 0.75rem 0.5rem;
-            border-radius: 0 8px 8px 0;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 0.75rem;
-            cursor: pointer;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(180deg);
-            width: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .toggle-btn-left::before {
-            content: '◀';
-            font-size: 1rem;
-            display: block;
-            transition: transform 0.3s ease;
-            writing-mode: horizontal-tb;
-            text-orientation: upright;
-        }
-
-        .toggle-btn-left:hover {
-            background: var(--light-mauve);
-            transform: rotate(180deg) translateX(-5px);
-            box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .toggle-btn-left.active {
-            background: var(--charcoal);
-            transform: rotate(180deg) translateX(-5px);
-        }
-
-        .toggle-btn-left.active::before {
-            content: '▶';
-        }
-
-        /* Right Panel - Decision Log */
-        .panel-right {
-            position: fixed;
-            top: 0;
-            right: -350px;
-            width: 350px;
-            height: 100vh;
-            background: white;
-            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
-            transition: right 0.3s ease;
-            z-index: 90;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .panel-right.open {
-            right: 0;
-        }
-
-        /* Left Panel - Notepad */
-        .panel-left {
-            position: fixed;
-            top: 0;
-            left: -350px;
-            width: 350px;
-            height: 100vh;
-            background: white;
-            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
-            transition: left 0.3s ease;
-            z-index: 90;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .panel-left.open {
-            left: 0;
         }
 
         .panel-header {
@@ -1901,74 +1812,7 @@
             margin-top: 0.3rem;
         }
 
-        /* Notepad - Now in Drawer */
-        .notepad {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .notepad h3 {
-            display: none; /* Header now in drawer-header */
-        }
-
-        .notepad-area {
-            flex: 1;
-            padding: 0.6rem;
-            border: 2px dashed var(--teal);
-            border-radius: 6px;
-            background: var(--cream);
-            font-size: 0.75rem;
-            line-height: 1.4;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-y: auto;
-            min-height: 300px;
-            cursor: text;
-            outline: none;
-        }
-
-        .notepad-area:focus {
-            border-color: var(--light-teal);
-            border-style: solid;
-            background: white;
-        }
-
-        .notepad-area.drag-over {
-            background: rgba(27, 127, 146, 0.15);
-            border-color: var(--light-teal);
-        }
-
-        .notepad-area.empty {
-            opacity: 0.5;
-            font-style: italic;
-        }
-
-        .notepad-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .notepad-actions button {
-            flex: 1;
-            padding: 0.4rem;
-            border: 2px solid var(--mauve);
-            background: white;
-            color: var(--mauve);
-            border-radius: 6px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .notepad-actions button:hover {
-            background: var(--mauve);
-            color: white;
-            transform: translateY(-2px);
-        }
+        /* (Notepad styles removed — merged into Decision Journal) */
 
         /* Empty States */
         .empty-state {
@@ -2027,62 +1871,75 @@
         }
 
         /* Scrollbar Styling */
-        .log-entries::-webkit-scrollbar,
-        .notepad-area::-webkit-scrollbar {
+        .journal-entries::-webkit-scrollbar {
             width: 8px;
         }
 
-        .log-entries::-webkit-scrollbar-track,
-        .notepad-area::-webkit-scrollbar-track {
+        .journal-entries::-webkit-scrollbar-track {
             background: var(--cream);
             border-radius: 4px;
         }
 
-        .log-entries::-webkit-scrollbar-thumb,
-        .notepad-area::-webkit-scrollbar-thumb {
+        .journal-entries::-webkit-scrollbar-thumb {
             background: var(--teal);
             border-radius: 4px;
         }
 
-        .log-entries::-webkit-scrollbar-thumb:hover,
-        .notepad-area::-webkit-scrollbar-thumb:hover {
+        .journal-entries::-webkit-scrollbar-thumb:hover {
             background: var(--light-teal);
         }
 
         /* Responsive Design */
-        @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr;
+
+        /* Tablet: collapse right panel to drawer */
+        @media (max-width: 1024px) {
+            .main-area {
+                margin-right: 0;
             }
 
-            .sidebar {
-                order: 2;
+            .right-panel {
+                right: -340px;
+                transition: right 0.3s ease;
+                box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
             }
 
-            /* Panels take more space on medium screens */
-            .panel-left, .panel-right {
-                width: 300px;
+            .right-panel.open {
+                right: 0;
             }
 
-            body.panel-right-open .container {
-                margin-right: 300px;
+            .right-panel-toggle {
+                display: block;
+                position: fixed;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                background: var(--teal);
+                color: white;
+                border: none;
+                padding: 1rem 0.5rem;
+                border-radius: 8px 0 0 8px;
+                cursor: pointer;
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 600;
+                font-size: 0.75rem;
+                z-index: 99;
+                transition: all 0.3s ease;
             }
 
-            body.panel-left-open .container {
-                margin-left: 300px;
+            .right-panel-toggle:hover {
+                background: var(--light-teal);
             }
 
-            body.panel-right-open .toggle-buttons {
-                right: 300px;
+            .right-panel-toggle.active {
+                right: 340px;
             }
 
-            body.panel-left-open .toggle-buttons-left {
-                left: 300px;
+            .panel-close {
+                display: block;
             }
-        }
 
-        @media (max-width: 900px) {
-            /* Split pane becomes stacked on smaller screens */
             .work-area-content.split-pane {
                 flex-wrap: wrap;
             }
@@ -2093,100 +1950,50 @@
             }
         }
 
+        /* Mobile: collapse sidebar too */
         @media (max-width: 768px) {
-            .phase-buttons {
-                flex-direction: column;
+            .sidebar {
+                left: -280px;
+                transition: left 0.3s ease;
             }
 
-            .phase-btn {
-                min-width: 100%;
+            .sidebar.open {
+                left: 0;
+            }
+
+            .main-area {
+                margin-left: 0;
             }
 
             .models-grid {
                 grid-template-columns: 1fr;
             }
 
-            /* Panels become full-width bottom sheets on mobile */
-            .panel-left, .panel-right {
+            .right-panel {
                 width: 100%;
-                height: 70vh;
-                top: auto;
-                bottom: -70vh;
-                left: 0;
-                right: 0;
-                transition: bottom 0.3s ease;
-                border-radius: 16px 16px 0 0;
+                right: -100%;
             }
 
-            .panel-left.open, .panel-right.open {
-                bottom: 0;
-                left: 0;
+            .right-panel.open {
                 right: 0;
             }
 
-            /* Don't shift container on mobile, panels overlay */
-            body.panel-right-open .container,
-            body.panel-left-open .container,
-            body.panel-right-open.panel-left-open .container {
-                margin-left: 50px;
-                margin-right: 50px;
-            }
-
-            /* Toggle buttons stay in place */
-            body.panel-right-open .toggle-buttons {
+            .right-panel-toggle.active {
                 right: 0;
+                display: none;
             }
 
-            body.panel-left-open .toggle-buttons-left {
-                left: 0;
-            }
-
-            /* Main content margins */
-            .main-content {
-                margin-left: 45px;
-                margin-right: 45px;
-            }
-
-            /* Toggle buttons smaller on mobile */
-            .toggle-btn, .toggle-btn-left {
-                width: 35px;
-                font-size: 0.65rem;
-                padding: 0.5rem 0.3rem;
-            }
-
-            /* Modal adjustments */
             .modal {
                 width: 95%;
                 margin: 1rem;
             }
 
-            /* Action buttons stack on mobile */
             .action-buttons {
                 flex-wrap: wrap;
             }
 
             .action-buttons .btn {
                 flex: 1 1 auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1.2rem;
-            }
-
-            .header p {
-                font-size: 0.75rem;
-            }
-
-            .main-content {
-                margin-left: 40px;
-                margin-right: 40px;
-            }
-
-            .toggle-btn, .toggle-btn-left {
-                width: 32px;
-                font-size: 0.6rem;
             }
         }
     </style>
@@ -2210,17 +2017,10 @@
                             <div class="sidebar-item-label">Home</div>
                         </div>
                     </div>
-                    <div class="sidebar-item" id="navNotepad">
-                        <div class="sidebar-item-icon">📝</div>
-                        <div class="sidebar-item-content">
-                            <div class="sidebar-item-label">Notepad</div>
-                            <div class="sidebar-item-sublabel">Compile your thinking</div>
-                        </div>
-                    </div>
-                    <div class="sidebar-item" id="navLog">
+                    <div class="sidebar-item" id="navJournal">
                         <div class="sidebar-item-icon">📋</div>
                         <div class="sidebar-item-content">
-                            <div class="sidebar-item-label">Decision Log</div>
+                            <div class="sidebar-item-label">Decision Journal</div>
                             <div class="sidebar-item-sublabel" id="logCount">0 entries</div>
                         </div>
                     </div>
@@ -2411,46 +2211,32 @@ Next steps:
             </div>
         </main>
 
-        <!-- Right Panel Toggle -->
-        <button class="right-panel-toggle" id="rightPanelToggle">📋 Log & Notes</button>
+        <!-- Right Panel Toggle (visible only on tablet/mobile) -->
+        <button class="right-panel-toggle" id="rightPanelToggle">📋 Journal</button>
 
-        <!-- Right Panel - Combined Log and Notepad -->
+        <!-- Right Panel - Decision Journal -->
         <div class="right-panel" id="rightPanel">
             <div class="panel-header panel-header-right">
-                <div class="panel-tabs">
-                    <button class="panel-tab active" id="tabLog">Decision Log</button>
-                    <button class="panel-tab" id="tabNotepad">Notepad</button>
+                <div class="panel-title">Decision Journal</div>
+                <div class="panel-header-actions">
+                    <button class="panel-action-btn" id="copyJournal" title="Copy all">Copy</button>
+                    <button class="panel-action-btn" id="exportJournal" title="Export session">Export</button>
+                    <button class="panel-close" id="rightPanelClose">&times;</button>
                 </div>
-                <button class="panel-close" id="rightPanelClose">&times;</button>
             </div>
-            <div class="panel-content">
-                <!-- Decision Log Section -->
-                <div class="panel-section active" id="logSection">
-                    <div class="log-header">
-                        <span class="log-header-title">Entries</span>
-                        <div class="log-sort-toggle">
-                            <span>Sort:</span>
-                            <button id="sortNewest" class="active">Newest</button>
-                            <button id="sortOldest">Oldest</button>
-                        </div>
-                    </div>
-                    <div class="log-entries" id="logEntries">
-                        <div class="empty-state">No entries yet. Start by describing your problem.</div>
-                    </div>
+            <div class="journal-sort">
+                <div class="log-sort-toggle">
+                    <span>Sort:</span>
+                    <button id="sortNewest" class="active">Newest</button>
+                    <button id="sortOldest">Oldest</button>
                 </div>
-
-                <!-- Notepad Section -->
-                <div class="panel-section" id="notepadSection">
-                    <div class="notepad">
-                        <div class="notepad-area empty" id="notepadArea" contenteditable="true">
-                            Drag log entries here to compile your thinking...
-                        </div>
-                        <div class="notepad-actions">
-                            <button id="clearNotepad">Clear</button>
-                            <button id="copyNotepad">Copy</button>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="journal-entries" id="journalEntries">
+                <div class="empty-state">Your decision journal will appear here as you work through the process.</div>
+            </div>
+            <div class="journal-input-bar">
+                <textarea id="journalNoteInput" placeholder="Add a note..." rows="2"></textarea>
+                <button class="btn btn-primary" id="addJournalNote">+ Note</button>
             </div>
         </div>
 
@@ -2458,7 +2244,7 @@ Next steps:
         <div class="modal-overlay" id="confirmModal">
             <div class="modal">
                 <h3>Start Over?</h3>
-                <p>This will clear all your work including your problem description, all log entries, and notepad content. This action cannot be undone.</p>
+                <p>This will clear all your work including your problem description and all journal entries. This action cannot be undone.</p>
                 <div class="modal-buttons">
                     <button class="modal-btn modal-btn-cancel" id="modalCancel">Cancel</button>
                     <button class="modal-btn modal-btn-confirm" id="modalConfirm">Yes, Start Over</button>
@@ -3219,19 +3005,15 @@ Next steps:
         const saveBtn = document.getElementById('saveBtn');
         const clearBtn = document.getElementById('clearBtn');
         const startOverBtn = document.getElementById('startOverBtn');
-        const logEntriesContainer = document.getElementById('logEntries');
-        const notepadArea = document.getElementById('notepadArea');
-        const clearNotepadBtn = document.getElementById('clearNotepad');
-        const copyNotepadBtn = document.getElementById('copyNotepad');
-        
-        // Panel elements
+        // Journal panel elements
         const panelRight = document.getElementById('rightPanel');
         const logToggle = document.getElementById('rightPanelToggle');
         const panelRightClose = document.getElementById('rightPanelClose');
-        const tabLog = document.getElementById('tabLog');
-        const tabNotepad = document.getElementById('tabNotepad');
-        const logSection = document.getElementById('logSection');
-        const notepadSection = document.getElementById('notepadSection');
+        const journalEntriesContainer = document.getElementById('journalEntries');
+        const journalNoteInput = document.getElementById('journalNoteInput');
+        const addJournalNoteBtn = document.getElementById('addJournalNote');
+        const copyJournalBtn = document.getElementById('copyJournal');
+        const exportJournalBtn = document.getElementById('exportJournal');
 
         // New UI elements
         const workAreaContent = document.getElementById('workAreaContent');
@@ -3316,35 +3098,33 @@ Next steps:
             logToggle.addEventListener('click', toggleRightPanel);
             panelRightClose.addEventListener('click', closeRightPanel);
 
-            // Tab switching in right panel
-            tabLog.addEventListener('click', () => {
-                tabLog.classList.add('active');
-                tabNotepad.classList.remove('active');
-                logSection.classList.add('active');
-                notepadSection.classList.remove('active');
-            });
-
-            tabNotepad.addEventListener('click', () => {
-                tabNotepad.classList.add('active');
-                tabLog.classList.remove('active');
-                notepadSection.classList.add('active');
-                logSection.classList.remove('active');
-            });
-
             // Sort button listeners
             sortNewestBtn.addEventListener('click', () => {
                 logSortOrder = 'newest';
                 sortNewestBtn.classList.add('active');
                 sortOldestBtn.classList.remove('active');
-                renderLogEntries();
+                renderJournal();
             });
 
             sortOldestBtn.addEventListener('click', () => {
                 logSortOrder = 'oldest';
                 sortOldestBtn.classList.add('active');
                 sortNewestBtn.classList.remove('active');
-                renderLogEntries();
+                renderJournal();
             });
+
+            // Journal note input
+            addJournalNoteBtn.addEventListener('click', addJournalNote);
+            journalNoteInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    addJournalNote();
+                }
+            });
+
+            // Journal actions
+            copyJournalBtn.addEventListener('click', copyJournal);
+            exportJournalBtn.addEventListener('click', downloadSession);
 
             // Modal listeners
             modalCancel.addEventListener('click', closeConfirmModal);
@@ -3381,7 +3161,6 @@ Next steps:
 
             if (quickSuggest) quickSuggest.addEventListener('click', () => {
                 if (problemDescribed) {
-                    // Suggest a random model from current phase
                     const phaseData = mentalModelsData[currentPhase];
                     const randomModel = phaseData.models[Math.floor(Math.random() * phaseData.models.length)];
                     const modelCards = document.querySelectorAll('.model-card');
@@ -3411,10 +3190,57 @@ Next steps:
                         problemReferenceText.textContent = newProblem.trim();
                         const dashboardProblem = document.getElementById('dashboardProblem');
                         if (dashboardProblem) dashboardProblem.textContent = newProblem.trim();
-                        renderLogEntries();
+                        renderJournal();
                         saveToLocalStorage();
                     }
                 }
+            });
+        }
+
+        // Add free-form note to journal
+        function addJournalNote() {
+            const text = journalNoteInput.value.trim();
+            if (!text) return;
+
+            const entry = {
+                id: nextLogId++,
+                phase: 'note',
+                modelName: 'Note',
+                modelPrompt: null,
+                response: text,
+                timestamp: new Date().toLocaleString()
+            };
+
+            logEntries.unshift(entry);
+            renderJournal();
+            saveToLocalStorage();
+            journalNoteInput.value = '';
+        }
+
+        // Copy journal to clipboard
+        function copyJournal() {
+            if (logEntries.length === 0) {
+                alert('Journal is empty.');
+                return;
+            }
+
+            const sorted = [...logEntries].sort((a, b) => a.id - b.id);
+            let text = 'DECISION JOURNAL\n' + '='.repeat(50) + '\n\n';
+            sorted.forEach(entry => {
+                if (entry.phase === 'note') {
+                    text += `[Note] ${entry.response}\n(${entry.timestamp})\n\n`;
+                } else {
+                    text += `[${entry.modelName}]\n`;
+                    if (entry.modelPrompt) text += `Q: ${entry.modelPrompt}\n`;
+                    text += `${entry.response}\n(${entry.timestamp})\n\n`;
+                }
+            });
+
+            navigator.clipboard.writeText(text).then(() => {
+                copyJournalBtn.textContent = 'Copied!';
+                setTimeout(() => { copyJournalBtn.textContent = 'Copy'; }, 1500);
+            }).catch(() => {
+                alert('Failed to copy. Please try again.');
             });
         }
 
@@ -3450,7 +3276,7 @@ Next steps:
             };
 
             logEntries.unshift(entry);
-            renderLogEntries();
+            renderJournal();
             saveToLocalStorage();
             openRightPanel();
 
@@ -3476,17 +3302,24 @@ Next steps:
             }
         }
 
+        function isDesktop() {
+            return window.innerWidth > 1024;
+        }
+
         function toggleRightPanel() {
+            if (isDesktop()) return; // Always visible on desktop
             panelRight.classList.toggle('open');
             logToggle.classList.toggle('active');
         }
 
         function closeRightPanel() {
+            if (isDesktop()) return;
             panelRight.classList.remove('open');
             logToggle.classList.remove('active');
         }
 
         function openRightPanel() {
+            if (isDesktop()) return;
             panelRight.classList.add('open');
             logToggle.classList.add('active');
         }
@@ -3497,13 +3330,6 @@ Next steps:
             clearBtn.addEventListener('click', clearCurrentResponse);
             startOverBtn.addEventListener('click', startOver);
             continueBtn.addEventListener('click', continueToProblemSolving);
-            clearNotepadBtn.addEventListener('click', clearNotepad);
-            copyNotepadBtn.addEventListener('click', copyNotepad);
-
-            // Drag and drop for notepad
-            notepadArea.addEventListener('dragover', handleDragOver);
-            notepadArea.addEventListener('drop', handleDrop);
-            notepadArea.addEventListener('dragleave', handleDragLeave);
         }
 
         // Update Phase Buttons (sidebar items)
@@ -3840,19 +3666,13 @@ Next steps:
             const dashboardProblem = document.getElementById('dashboardProblem');
             if (dashboardProblem) dashboardProblem.textContent = description;
             
-            // Delay log rendering and panel opening to sync with animation
+            // Delay journal rendering to sync with animation
             setTimeout(() => {
-                renderLogEntries();
+                renderJournal();
                 saveToLocalStorage();
-
-                // Open decision log panel
                 openRightPanel();
             }, 400);
-            
-            // Add problem description to notepad automatically
-            notepadArea.innerText = `PROBLEM/DECISION:\n${description}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
-            notepadArea.classList.remove('empty');
-            
+
             // Show problem type selector after brief delay
             setTimeout(() => {
                 problemTypeSelector.classList.add('visible');
@@ -3907,7 +3727,7 @@ Next steps:
             };
 
             logEntries.unshift(entry);
-            renderLogEntries();
+            renderJournal();
             clearCurrentResponse();
             saveToLocalStorage();
 
@@ -3918,10 +3738,14 @@ Next steps:
             checkShowDecisionSummary();
         }
 
-        // Render Log Entries
-        function renderLogEntries() {
+        // Render Journal Entries
+        function renderJournal() {
+            // Update sidebar log count
+            const logCountEl = document.getElementById('logCount');
+            if (logCountEl) logCountEl.textContent = `${logEntries.length} entries`;
+
             if (logEntries.length === 0) {
-                logEntriesContainer.innerHTML = '<div class="empty-state">No entries yet. Start by selecting a mental model and responding.</div>';
+                journalEntriesContainer.innerHTML = '<div class="empty-state">Your decision journal will appear here as you work through the process.</div>';
                 return;
             }
 
@@ -3933,14 +3757,13 @@ Next steps:
                 return b.id - a.id; // newest first (default)
             });
 
-            logEntriesContainer.innerHTML = '';
+            journalEntriesContainer.innerHTML = '';
             sortedEntries.forEach(entry => {
                 const logEntry = document.createElement('div');
                 logEntry.className = `log-entry ${entry.phase}`;
-                logEntry.draggable = true;
                 logEntry.dataset.entryId = entry.id;
 
-                // Show prompt if available
+                // Show prompt if available (not for notes)
                 const promptHtml = entry.modelPrompt ?
                     `<div class="log-prompt">"${entry.modelPrompt}"</div>` : '';
 
@@ -3957,9 +3780,7 @@ Next steps:
                     <div class="log-timestamp">${entry.timestamp}</div>
                 `;
 
-                // Add drag event listeners
-                logEntry.addEventListener('dragstart', handleDragStart);
-                logEntriesContainer.appendChild(logEntry);
+                journalEntriesContainer.appendChild(logEntry);
             });
         }
 
@@ -3997,23 +3818,26 @@ Next steps:
                 if (phaseEntries.length > 0) {
                     content += phaseNames[phase] + '\n';
                     content += '-'.repeat(60) + '\n\n';
-                    
+
                     phaseEntries.forEach(entry => {
                         content += `${entry.modelName}:\n`;
                         content += `${entry.response}\n`;
                         content += `(${entry.timestamp})\n\n`;
                     });
-                    
+
                     content += '\n';
                 }
             });
-            
-            // Add notepad content if not empty
-            if (!notepadArea.classList.contains('empty')) {
-                content += '=' .repeat(60) + '\n';
-                content += 'COMPILED NOTES:\n';
-                content += '=' .repeat(60) + '\n\n';
-                content += (notepadArea.innerText || notepadArea.textContent) + '\n';
+
+            // Add notes if any
+            const noteEntries = logEntries.filter(e => e.phase === 'note');
+            if (noteEntries.length > 0) {
+                content += 'NOTES\n';
+                content += '-'.repeat(60) + '\n\n';
+                noteEntries.forEach(entry => {
+                    content += `${entry.response}\n`;
+                    content += `(${entry.timestamp})\n\n`;
+                });
             }
             
             // Create and download file
@@ -4043,9 +3867,8 @@ Next steps:
 
             // Reset UI
             responseInput.value = '';
-            notepadArea.innerText = 'Drag log entries here to compile your thinking...';
-            notepadArea.classList.add('empty');
-            renderLogEntries();
+            journalNoteInput.value = '';
+            renderJournal();
 
             // Hide problem reference and type selector
             problemReference.classList.remove('visible');
@@ -4092,7 +3915,7 @@ Next steps:
             if (newResponse !== null && newResponse.trim()) {
                 entry.response = newResponse.trim();
                 entry.timestamp = new Date().toLocaleString() + ' (edited)';
-                renderLogEntries();
+                renderJournal();
                 saveToLocalStorage();
             }
         };
@@ -4101,102 +3924,10 @@ Next steps:
         window.deleteEntry = function(id) {
             if (confirm('Delete this entry?')) {
                 logEntries = logEntries.filter(e => e.id !== id);
-                renderLogEntries();
+                renderJournal();
                 saveToLocalStorage();
             }
         };
-
-        // Drag and Drop Handlers
-        function handleDragStart(e) {
-            e.dataTransfer.effectAllowed = 'copy';
-            e.dataTransfer.setData('text/plain', e.target.dataset.entryId);
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'copy';
-            notepadArea.classList.add('drag-over');
-        }
-
-        function handleDragLeave(e) {
-            if (e.target === notepadArea) {
-                notepadArea.classList.remove('drag-over');
-            }
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            notepadArea.classList.remove('drag-over');
-
-            const entryId = parseInt(e.dataTransfer.getData('text/plain'));
-            const entry = logEntries.find(e => e.id === entryId);
-            
-            if (entry) {
-                const currentContent = notepadArea.classList.contains('empty') ? '' : (notepadArea.innerText || notepadArea.textContent);
-                
-                // Format the new entry
-                const newEntryText = `${entry.modelName}:\n${entry.response}\n${'-'.repeat(60)}\n\n`;
-                
-                // If notepad is empty, just add the entry
-                if (notepadArea.classList.contains('empty')) {
-                    notepadArea.innerText = newEntryText.trim();
-                } else {
-                    // If there's a problem description section, append after the divider
-                    if (currentContent.includes('MENTAL MODEL RESPONSES:')) {
-                        notepadArea.innerText = currentContent + newEntryText;
-                    } else {
-                        // Otherwise just append
-                        notepadArea.innerText = `${currentContent}\n\n${newEntryText}`;
-                    }
-                }
-                
-                notepadArea.classList.remove('empty');
-            }
-        }
-
-        // Clear Notepad
-        function clearNotepad() {
-            if (notepadArea.classList.contains('empty')) {
-                return;
-            }
-            
-            if (confirm('Clear notepad? This will remove all compiled responses but keep your problem description in the log.')) {
-                // If there's a problem description saved, keep it
-                if (problemDescribed) {
-                    const problemEntry = logEntries.find(e => e.phase === 'initial');
-                    if (problemEntry) {
-                        notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
-                        notepadArea.classList.remove('empty');
-                    } else {
-                        notepadArea.innerText = 'Drag log entries here to compile your thinking...';
-                        notepadArea.classList.add('empty');
-                    }
-                } else {
-                    notepadArea.innerText = 'Drag log entries here to compile your thinking...';
-                    notepadArea.classList.add('empty');
-                }
-            }
-        }
-
-        // Copy Notepad
-        function copyNotepad() {
-            if (notepadArea.classList.contains('empty')) {
-                alert('Notepad is empty.');
-                return;
-            }
-
-            const text = notepadArea.textContent || notepadArea.innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                // Visual feedback
-                const originalBorder = notepadArea.style.borderColor;
-                notepadArea.style.borderColor = '#4CAF50';
-                setTimeout(() => {
-                    notepadArea.style.borderColor = originalBorder;
-                }, 500);
-            }).catch(() => {
-                alert('Failed to copy. Please select and copy manually.');
-            });
-        }
 
         // Local Storage
         function saveToLocalStorage() {
@@ -4219,19 +3950,17 @@ Next steps:
                     problemDescribed = true;
                     revealSections();
 
-                    // Restore notepad with problem description
                     const problemEntry = logEntries.find(e => e.phase === 'initial');
                     if (problemEntry) {
-                        // Show problem reference banner
                         problemReferenceText.textContent = problemEntry.response;
                         problemReference.classList.add('visible');
 
-                        notepadArea.innerText = `PROBLEM/DECISION:\n${problemEntry.response}\n\n${'='.repeat(60)}\n\nMENTAL MODEL RESPONSES:\n\n`;
-                        notepadArea.classList.remove('empty');
+                        const dashboardProblem = document.getElementById('dashboardProblem');
+                        if (dashboardProblem) dashboardProblem.textContent = problemEntry.response;
                     }
                 }
 
-                renderLogEntries();
+                renderJournal();
 
                 // Check if decision summary should be shown
                 checkShowDecisionSummary();
