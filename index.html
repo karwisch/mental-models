@@ -1541,6 +1541,47 @@
             min-height: 150px;
         }
 
+        .response-prompt-display {
+            background: var(--cream);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 8px 8px 0;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .response-prompt-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            margin-bottom: 0.35rem;
+        }
+
+        .response-prompt-text {
+            font-size: 0.88rem;
+            color: var(--charcoal);
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .response-prompt-hint {
+            font-size: 0.7rem;
+            color: var(--slate);
+            margin-top: 0.5rem;
+        }
+
+        .prompt-hint-link {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .prompt-hint-link:hover {
+            text-decoration: underline;
+        }
+
         .selected-model-display {
             padding: 0.5rem;
             background: var(--cream);
@@ -4468,7 +4509,12 @@
                     ${sectionsHtml}
 
                     <div class="response-section" style="margin-top: 1.5rem;">
-                        <textarea id="responseInput" placeholder="Apply this mental model to your situation..." rows="5"></textarea>
+                        <div class="response-prompt-display" id="responsePromptDisplay">
+                            <div class="response-prompt-label">Your question to answer:</div>
+                            <div class="response-prompt-text" id="responsePromptText"></div>
+                            <div class="response-prompt-hint">To use a different question, open the <span class="prompt-hint-link" id="openPromptsSection">Questions to Ask</span> section above and select one.</div>
+                        </div>
+                        <textarea id="responseInput" placeholder="Write your response here..." rows="5"></textarea>
                         <div class="action-buttons">
                             <button class="btn btn-primary" id="saveBtn">Add to Journal</button>
                             <button class="btn btn-secondary" id="clearBtn">Clear</button>
@@ -4608,30 +4654,43 @@
 
         function setupPromptSelection() {
             const promptItems = focusArea.querySelectorAll('.model-prompts-list li');
+            const promptDisplay = document.getElementById('responsePromptText');
+            const promptContainer = document.getElementById('responsePromptDisplay');
+
+            function setActivePrompt(promptText) {
+                if (selectedModel) selectedModel.activePrompt = promptText;
+                if (promptDisplay) promptDisplay.textContent = promptText;
+                if (promptContainer) promptContainer.style.display = 'block';
+            }
+
             promptItems.forEach(item => {
                 item.addEventListener('click', function() {
                     promptItems.forEach(p => p.classList.remove('selected-prompt'));
                     this.classList.add('selected-prompt');
                     const selectedPrompt = this.getAttribute('data-prompt');
-                    if (selectedModel) {
-                        selectedModel.activePrompt = selectedPrompt;
-                    }
+                    setActivePrompt(selectedPrompt);
                     const responseInput = document.getElementById('responseInput');
-                    if (responseInput) {
-                        responseInput.placeholder = `Respond to: "${selectedPrompt.substring(0, 60)}${selectedPrompt.length > 60 ? '...' : ''}"`;
-                        responseInput.focus();
-                    }
+                    if (responseInput) responseInput.focus();
                 });
             });
+
             // Pre-select first prompt without focusing textarea
             if (promptItems.length > 0) {
                 promptItems[0].classList.add('selected-prompt');
                 const firstPrompt = promptItems[0].getAttribute('data-prompt');
-                if (selectedModel) selectedModel.activePrompt = firstPrompt;
-                const responseInput = document.getElementById('responseInput');
-                if (responseInput) {
-                    responseInput.placeholder = `Respond to: "${firstPrompt.substring(0, 60)}${firstPrompt.length > 60 ? '...' : ''}"`;
-                }
+                setActivePrompt(firstPrompt);
+            }
+
+            // "Open Questions to Ask" hint link
+            const openPromptsLink = document.getElementById('openPromptsSection');
+            if (openPromptsLink) {
+                openPromptsLink.addEventListener('click', () => {
+                    const promptsHeader = focusArea.querySelector('.model-section-header[data-section="prompts"]');
+                    if (promptsHeader) {
+                        promptsHeader.classList.remove('collapsed');
+                        promptsHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
             }
         }
 
