@@ -560,6 +560,69 @@
             margin-right: 50px; /* Space for right toggle button */
         }
 
+        /* Decision/Problem Mode Selector */
+        .mode-selector {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .mode-card {
+            flex: 1;
+            padding: 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .mode-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 2px 12px rgba(27, 127, 146, 0.15);
+        }
+
+        .mode-card .mode-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-card .mode-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            margin-bottom: 0.25rem;
+        }
+
+        .mode-card .mode-desc {
+            font-size: 0.75rem;
+            color: var(--charcoal);
+            opacity: 0.7;
+            line-height: 1.4;
+        }
+
+        .mode-card.selected {
+            border-color: var(--teal);
+            background: rgba(27, 127, 146, 0.05);
+            box-shadow: 0 2px 12px rgba(27, 127, 146, 0.15);
+        }
+
+        .show-all-types {
+            display: inline-block;
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--teal);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .show-all-types:hover {
+            text-decoration: underline;
+        }
+
         /* Problem Type Selection */
         .problem-type-selector {
             background: white;
@@ -2052,11 +2115,11 @@
             <div class="dashboard-grid" id="dashboardGrid">
                 <div class="dashboard-card">
                     <div class="dashboard-card-header">
-                        <div class="dashboard-card-title">📋 Your Problem</div>
+                        <div class="dashboard-card-title">📋 Your Decision or Problem</div>
                         <span class="dashboard-card-action" id="editProblem">Edit</span>
                     </div>
                     <div id="dashboardProblem" style="font-size: 0.85rem; color: var(--charcoal); opacity: 0.8;">
-                        No problem defined yet. Start by describing your decision or problem.
+                        No decision or problem defined yet.
                     </div>
                 </div>
             </div>
@@ -2064,8 +2127,8 @@
             <div class="container">
                 <!-- Problem Type Selector - shows after problem description, before models -->
                 <div class="problem-type-selector" id="problemTypeSelector">
-                    <h3>What type of problem is this?</h3>
-                    <p>Selecting a problem type will show you the most relevant mental models for your situation.</p>
+                    <h3 id="typeSelectorHeading">What type of problem is this?</h3>
+                    <p>Selecting a type will show you the most relevant mental models for your situation.</p>
                     <div class="problem-types-grid" id="problemTypesGrid">
                         <!-- Problem types will be populated by JavaScript -->
                     </div>
@@ -2905,6 +2968,7 @@ Next steps:
         let nextLogId = 1;
         let problemDescribed = false;
         let problemType = null;
+        let decisionMode = null; // 'decision' or 'problem'
 
         // DOM Elements
         const container = document.querySelector('.container');
@@ -2946,12 +3010,20 @@ Next steps:
         // State
         let logSortOrder = 'newest'; // 'newest' or 'oldest'
 
+        // Problem type categories for filtering
+        const decisionTypes = ['strategic', 'personal', 'creative'];
+        const problemTypeKeys = ['operational', 'interpersonal', 'technical'];
+
         // Render Problem Type Selector
-        function renderProblemTypeSelector() {
+        function renderProblemTypeSelector(showAll) {
             problemTypesGrid.innerHTML = '';
-            
-            Object.keys(problemTypes).forEach(typeKey => {
+
+            const relevantKeys = showAll ? Object.keys(problemTypes)
+                : decisionMode === 'decision' ? decisionTypes : problemTypeKeys;
+
+            relevantKeys.forEach(typeKey => {
                 const type = problemTypes[typeKey];
+                if (!type) return;
                 const card = document.createElement('div');
                 card.className = 'problem-type-card';
                 card.dataset.typeKey = typeKey;
@@ -2962,6 +3034,18 @@ Next steps:
                 card.addEventListener('click', () => selectProblemType(typeKey, card));
                 problemTypesGrid.appendChild(card);
             });
+
+            // Add "Show all types" link if not already showing all
+            const existingToggle = problemTypeSelector.querySelector('.show-all-types');
+            if (existingToggle) existingToggle.remove();
+
+            if (!showAll && decisionMode) {
+                const toggle = document.createElement('span');
+                toggle.className = 'show-all-types';
+                toggle.textContent = 'Show all types →';
+                toggle.addEventListener('click', () => renderProblemTypeSelector(true));
+                problemTypesGrid.parentNode.insertBefore(toggle, continueBtn);
+            }
         }
 
         // Select Problem Type
@@ -3001,12 +3085,59 @@ Next steps:
         function showInitialPrompt() {
             selectedModelDisplay.className = 'selected-model-display initial';
             selectedModelDisplay.innerHTML = `
-                <div class="instruction-text">Welcome! Let's start with your decision or problem.</div>
-                <div class="instruction-subtext">Before exploring mental models, describe the situation you're facing. What decision do you need to make? What problem are you trying to solve?</div>
+                <div class="instruction-text">Welcome! What are you working through?</div>
+                <div class="mode-selector">
+                    <div class="mode-card" data-mode="decision">
+                        <div class="mode-icon">⚖️</div>
+                        <div class="mode-title">I'm making a decision</div>
+                        <div class="mode-desc">Choosing between options, determining a direction, weighing trade-offs</div>
+                    </div>
+                    <div class="mode-card" data-mode="problem">
+                        <div class="mode-icon">🔍</div>
+                        <div class="mode-title">I'm solving a problem</div>
+                        <div class="mode-desc">Diagnosing an issue, finding a root cause, working toward a solution</div>
+                    </div>
+                </div>
             `;
-            responseInput.placeholder = "Describe your decision or problem here...";
+            responseInput.placeholder = "First, choose whether you're making a decision or solving a problem...";
+            responseInput.disabled = true;
+            saveBtn.disabled = true;
             responseInput.classList.add('initial-entry');
             saveBtn.textContent = 'Add to Log';
+
+            // Attach mode card click listeners
+            selectedModelDisplay.querySelectorAll('.mode-card').forEach(card => {
+                card.addEventListener('click', () => selectMode(card.dataset.mode));
+            });
+        }
+
+        // Update labels throughout the UI based on mode
+        function updateModeLabels() {
+            const modeLabel = decisionMode === 'decision' ? 'Decision' : 'Problem';
+            const dashboardTitle = document.querySelector('#dashboardGrid .dashboard-card-title');
+            if (dashboardTitle) dashboardTitle.textContent = `📋 Your ${modeLabel}`;
+        }
+
+        // Select Decision or Problem Mode
+        function selectMode(mode) {
+            decisionMode = mode;
+            const modeLabel = mode === 'decision' ? 'decision' : 'problem';
+
+            // Update the prompt area
+            selectedModelDisplay.className = 'selected-model-display initial';
+            selectedModelDisplay.innerHTML = `
+                <div class="instruction-text">${mode === 'decision' ? '⚖️' : '🔍'} Describe your ${modeLabel}</div>
+                <div class="instruction-subtext">${mode === 'decision'
+                    ? 'What decision are you facing? What options are you considering?'
+                    : 'What problem are you trying to solve? What symptoms are you seeing?'
+                }</div>
+            `;
+            responseInput.placeholder = mode === 'decision'
+                ? "Describe the decision you're facing..."
+                : "Describe the problem you're trying to solve...";
+            responseInput.disabled = false;
+            saveBtn.disabled = false;
+            responseInput.focus();
         }
 
         // Setup Panel Controls
@@ -3086,7 +3217,7 @@ Next steps:
                         }
                     });
                 } else {
-                    alert('Please describe your problem first.');
+                    alert('Please describe your decision or problem first.');
                 }
             });
 
@@ -3554,22 +3685,26 @@ Next steps:
             // Create flying animation
             createFlyingEntry(description);
 
+            const modeLabel = decisionMode === 'decision' ? 'Decision' : 'Problem';
             const entry = {
                 id: nextLogId++,
                 phase: 'initial',
-                modelName: 'Problem Description',
-                modelPrompt: 'What decision or problem are you trying to solve?',
+                modelName: `${modeLabel} Description`,
+                modelPrompt: decisionMode === 'decision'
+                    ? 'What decision are you facing?'
+                    : 'What problem are you trying to solve?',
                 response: description,
                 timestamp: new Date().toLocaleString()
             };
 
             logEntries.unshift(entry);
             problemDescribed = true;
-            
-            // Update dashboard problem text
+
+            // Update dashboard labels
+            updateModeLabels();
             const dashboardProblem = document.getElementById('dashboardProblem');
             if (dashboardProblem) dashboardProblem.textContent = description;
-            
+
             // Delay journal rendering to sync with animation
             setTimeout(() => {
                 renderJournal();
@@ -3579,8 +3714,12 @@ Next steps:
 
             // Show problem type selector after brief delay
             setTimeout(() => {
+                const heading = document.getElementById('typeSelectorHeading');
+                if (heading) heading.textContent = decisionMode === 'decision'
+                    ? 'What kind of decision is this?'
+                    : 'What kind of problem is this?';
                 problemTypeSelector.classList.add('visible');
-                renderProblemTypeSelector();
+                renderProblemTypeSelector(false);
             }, 900);
             
             // Clear the textarea and reset styling
@@ -3607,8 +3746,12 @@ Next steps:
         function saveToLog() {
             // If we haven't described the problem yet, save the problem description
             if (!problemDescribed) {
+                if (!decisionMode) {
+                    alert('Please choose whether you are making a decision or solving a problem.');
+                    return;
+                }
                 if (!responseInput.value.trim()) {
-                    alert('Please describe your decision or problem before continuing.');
+                    alert('Please describe your ' + (decisionMode === 'decision' ? 'decision' : 'problem') + ' before continuing.');
                     return;
                 }
                 saveProblemDescription();
@@ -3763,6 +3906,7 @@ Next steps:
             nextLogId = 1;
             problemDescribed = false;
             problemType = null;
+            decisionMode = null;
             selectedModel = null;
             currentPhase = 'diagnostic';
 
@@ -3780,7 +3924,9 @@ Next steps:
 
             // Reset dashboard
             const dashboardProblem = document.getElementById('dashboardProblem');
-            if (dashboardProblem) dashboardProblem.textContent = 'No problem defined yet. Start by describing your decision or problem.';
+            if (dashboardProblem) dashboardProblem.textContent = 'No decision or problem defined yet.';
+            const dashboardTitle = document.querySelector('#dashboardGrid .dashboard-card-title');
+            if (dashboardTitle) dashboardTitle.textContent = '📋 Your Decision or Problem';
 
             // Hide decision summary
             decisionSummary.classList.remove('visible');
@@ -3835,7 +3981,8 @@ Next steps:
         function saveToLocalStorage() {
             localStorage.setItem('mentalModelsLog', JSON.stringify({
                 entries: logEntries,
-                nextId: nextLogId
+                nextId: nextLogId,
+                decisionMode: decisionMode
             }));
         }
 
@@ -3845,11 +3992,13 @@ Next steps:
                 const data = JSON.parse(saved);
                 logEntries = data.entries || [];
                 nextLogId = data.nextId || 1;
+                decisionMode = data.decisionMode || null;
 
                 // Check if problem was already described
                 const hasProblemDescription = logEntries.some(e => e.phase === 'initial');
                 if (hasProblemDescription) {
                     problemDescribed = true;
+                    updateModeLabels();
                     revealSections();
 
                     const problemEntry = logEntries.find(e => e.phase === 'initial');
