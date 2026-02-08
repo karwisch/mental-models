@@ -2512,16 +2512,30 @@
             }
 
             .right-panel {
-                width: 100%;
-                right: -100%;
+                width: calc(100% - 60px);
+                right: calc(-100% + 60px);
             }
 
             .right-panel.open {
                 right: 0;
             }
 
+            .drawer-backdrop {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 60px;
+                height: 100%;
+                z-index: 99;
+                background: rgba(0, 0, 0, 0.3);
+            }
+
+            .drawer-backdrop.visible {
+                display: block;
+            }
+
             .right-panel-toggle.active {
-                right: 0;
                 display: none;
             }
 
@@ -2673,6 +2687,9 @@
                 <!-- Content swapped dynamically based on current step -->
             </div>
         </main>
+
+        <!-- Drawer backdrop (visible on mobile when journal is open) -->
+        <div class="drawer-backdrop" id="drawerBackdrop"></div>
 
         <!-- Right Panel Toggle (visible only on tablet/mobile) -->
         <button class="right-panel-toggle" id="rightPanelToggle">📋 Journal</button>
@@ -5060,7 +5077,7 @@
             sidebarProblemText.textContent = '';
 
             // Close right panel
-            panelRight.classList.remove('open');
+            closeRightPanel();
 
             renderJournal();
             updatePhaseButtons();
@@ -5235,20 +5252,64 @@
         }
 
         // ─── RIGHT PANEL ────────────────────────────────────────
+        const drawerBackdrop = document.getElementById('drawerBackdrop');
+
         function openRightPanel() {
             panelRight.classList.add('open');
+            logToggle.classList.add('active');
+            drawerBackdrop.classList.add('visible');
         }
         function closeRightPanel() {
             panelRight.classList.remove('open');
+            logToggle.classList.remove('active');
+            drawerBackdrop.classList.remove('visible');
         }
+
+        // Swipe-to-close on the journal panel (swipe right closes)
+        (function initSwipeToClose() {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let isSwiping = false;
+
+            panelRight.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isSwiping = true;
+            }, { passive: true });
+
+            panelRight.addEventListener('touchmove', (e) => {
+                if (!isSwiping) return;
+                const deltaX = e.touches[0].clientX - touchStartX;
+                const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+                // If vertical scroll is dominant, cancel swipe detection
+                if (deltaY > Math.abs(deltaX)) {
+                    isSwiping = false;
+                }
+            }, { passive: true });
+
+            panelRight.addEventListener('touchend', (e) => {
+                if (!isSwiping) return;
+                const deltaX = e.changedTouches[0].clientX - touchStartX;
+                // Swipe right by at least 80px to close
+                if (deltaX > 80) {
+                    closeRightPanel();
+                }
+                isSwiping = false;
+            }, { passive: true });
+        })();
 
         // ─── EVENT SETUP ────────────────────────────────────────
         function setupApp() {
             // Right panel toggle
             logToggle.addEventListener('click', () => {
-                panelRight.classList.toggle('open');
+                if (panelRight.classList.contains('open')) {
+                    closeRightPanel();
+                } else {
+                    openRightPanel();
+                }
             });
             panelRightClose.addEventListener('click', closeRightPanel);
+            drawerBackdrop.addEventListener('click', closeRightPanel);
 
             // Journal note
             addJournalNoteBtn.addEventListener('click', () => {
