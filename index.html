@@ -4331,7 +4331,7 @@
         }
 
         // Step 2: Describe your decision/problem (30 words or less)
-        function renderDescribeStep() {
+        function renderDescribeStep(prefill) {
             const modeLabel = decisionMode === 'decision' ? 'decision' : 'problem';
             focusArea.className = 'focus-area';
             focusArea.innerHTML = `
@@ -4356,6 +4356,12 @@
                 wordCount.className = 'focus-word-count' + (count > 30 ? ' over-limit' : '');
                 submitBtn.disabled = count === 0 || count > 30;
             });
+
+            // Pre-fill if editing existing description
+            if (prefill) {
+                input.value = prefill;
+                input.dispatchEvent(new Event('input'));
+            }
 
             submitBtn.addEventListener('click', () => {
                 const description = input.value.trim();
@@ -4654,18 +4660,25 @@
 
         function saveProblemDescription(description) {
             const modeLabel = decisionMode === 'decision' ? 'Decision' : 'Problem';
-            const entry = {
-                id: nextLogId++,
-                phase: 'initial',
-                modelName: `${modeLabel} Description`,
-                modelPrompt: decisionMode === 'decision'
-                    ? 'What decision are you facing?'
-                    : 'What problem are you trying to solve?',
-                response: description,
-                timestamp: new Date().toLocaleString()
-            };
 
-            logEntries.unshift(entry);
+            // Update existing entry if editing, otherwise create new
+            const existingEntry = logEntries.find(e => e.phase === 'initial');
+            if (existingEntry) {
+                existingEntry.response = description;
+                existingEntry.timestamp = new Date().toLocaleString() + ' (edited)';
+            } else {
+                const entry = {
+                    id: nextLogId++,
+                    phase: 'initial',
+                    modelName: `${modeLabel} Description`,
+                    modelPrompt: decisionMode === 'decision'
+                        ? 'What decision are you facing?'
+                        : 'What problem are you trying to solve?',
+                    response: description,
+                    timestamp: new Date().toLocaleString()
+                };
+                logEntries.unshift(entry);
+            }
             problemDescribed = true;
 
             updateSidebarProblem(description);
@@ -5224,10 +5237,11 @@
             const editProblem = document.getElementById('editProblem');
             if (editProblem) {
                 editProblem.addEventListener('click', () => {
-                    // Go back to describe step
+                    // Go back to describe step with existing text pre-filled
+                    const existingText = sidebarProblemText.textContent || '';
                     problemDescribed = false;
                     sidebarProblem.style.display = 'none';
-                    renderFocusView();
+                    renderDescribeStep(existingText);
                 });
             }
         }
