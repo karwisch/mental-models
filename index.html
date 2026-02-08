@@ -2335,15 +2335,6 @@
                         No problem defined yet. Start by describing your decision or problem.
                     </div>
                 </div>
-
-                <div class="dashboard-card">
-                    <div class="dashboard-card-header">
-                        <div class="dashboard-card-title">📈 Progress Overview</div>
-                    </div>
-                    <div class="progress-overview" id="progressOverview">
-                        <!-- Progress rows will be populated by JS -->
-                    </div>
-                </div>
             </div>
 
             <div class="container">
@@ -2403,28 +2394,6 @@ Next steps:
                     <div class="decision-summary-actions">
                         <button class="btn btn-summary" id="saveSummaryBtn">Save Summary to Log</button>
                         <button class="btn btn-secondary" id="exportSessionBtn">Export Full Session</button>
-                    </div>
-                </div>
-
-                <!-- Phase Navigation - hidden initially -->
-                <div class="phase-navigation">
-                    <h2>Decision-Making Sequence</h2>
-                    <div class="phase-buttons">
-                        <button class="phase-btn diagnostic active" data-phase="diagnostic">
-                            1. Diagnose
-                        </button>
-                        <button class="phase-btn evaluative" data-phase="evaluative">
-                            2. Evaluate
-                        </button>
-                        <button class="phase-btn protective" data-phase="protective">
-                            3. Protect
-                        </button>
-                        <button class="phase-btn generative" data-phase="generative">
-                            4. Generate
-                        </button>
-                        <button class="phase-btn implementation" data-phase="implementation">
-                            5. Implement
-                        </button>
                     </div>
                 </div>
 
@@ -3240,8 +3209,6 @@ Next steps:
         const problemTypeSelector = document.getElementById('problemTypeSelector');
         const problemTypesGrid = document.getElementById('problemTypesGrid');
         const continueBtn = document.getElementById('continueBtn');
-        const phaseButtons = document.querySelectorAll('.phase-btn');
-        const phaseNavigation = document.querySelector('.phase-navigation');
         const modelsSection = document.querySelector('.models-section');
         const workArea = document.querySelector('.work-area');
         const mainContent = document.querySelector('.container');
@@ -3526,15 +3493,6 @@ Next steps:
 
         // Setup Event Listeners
         function setupEventListeners() {
-            phaseButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    currentPhase = btn.dataset.phase;
-                    updatePhaseButtons();
-                    renderPhaseContent();
-                    clearSelection();
-                });
-            });
-
             saveBtn.addEventListener('click', saveToLog);
             clearBtn.addEventListener('click', clearCurrentResponse);
             startOverBtn.addEventListener('click', startOver);
@@ -3548,10 +3506,10 @@ Next steps:
             notepadArea.addEventListener('dragleave', handleDragLeave);
         }
 
-        // Update Phase Buttons
+        // Update Phase Buttons (sidebar items)
         function updatePhaseButtons() {
-            phaseButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.phase === currentPhase);
+            document.querySelectorAll('.phase-sidebar-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.phase === currentPhase);
             });
         }
 
@@ -3840,22 +3798,16 @@ Next steps:
 
         // Reveal Sections
         function revealSections() {
-            // Move phase navigation and models section before work area
-            mainContent.insertBefore(phaseNavigation, workArea);
+            // Move models section before work area
             mainContent.insertBefore(modelsSection, workArea);
-            
-            // Reveal phase navigation first
-            phaseNavigation.classList.add('revealed');
-            
-            // Then reveal models section with a slight delay
-            setTimeout(() => {
-                modelsSection.classList.add('revealed');
-            }, 100);
-            
+
+            // Reveal models section
+            modelsSection.classList.add('revealed');
+
             // Slide work area down
             setTimeout(() => {
                 workArea.classList.add('slide-down');
-            }, 200);
+            }, 100);
         }
 
         // Save Problem Description
@@ -4113,15 +4065,11 @@ Next steps:
             workAreaContent.classList.remove('split-pane');
 
             // Hide sections again
-            phaseNavigation.classList.remove('revealed');
             modelsSection.classList.remove('revealed');
             workArea.classList.remove('slide-down');
 
             // Close panels
             closeRightPanel();
-
-            // Reorder DOM back to initial state (work area first)
-            mainContent.insertBefore(workArea, phaseNavigation);
 
             // Reset to initial prompt
             showInitialPrompt();
