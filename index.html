@@ -4358,6 +4358,16 @@
             focusArea.querySelectorAll('.mode-card').forEach(card => {
                 card.addEventListener('click', () => {
                     decisionMode = card.dataset.mode;
+                    const modeLabel = decisionMode === 'decision' ? 'Making a Decision' : 'Solving a Problem';
+                    logEntries.unshift({
+                        id: nextLogId++,
+                        phase: 'initial',
+                        modelName: 'Mode Selected',
+                        modelPrompt: 'What are you working through?',
+                        response: modeLabel,
+                        timestamp: new Date().toLocaleString()
+                    });
+                    renderJournal();
                     saveToLocalStorage();
                     renderFocusView();
                 });
@@ -4463,6 +4473,16 @@
 
                 document.getElementById('treeUseModel').addEventListener('click', () => {
                     if (model) {
+                        logEntries.unshift({
+                            id: nextLogId++,
+                            phase: currentPhase,
+                            modelName: 'Model Selected',
+                            modelPrompt: 'Recommended model from guided questions',
+                            response: model.name,
+                            timestamp: new Date().toLocaleString()
+                        });
+                        renderJournal();
+                        saveToLocalStorage();
                         selectedModel = { ...model, phase: currentPhase };
                         renderFocusView();
                     }
@@ -4505,11 +4525,33 @@
             `;
 
             document.getElementById('treeYes').addEventListener('click', () => {
+                const phaseData = mentalModelsData[currentPhase];
+                logEntries.unshift({
+                    id: nextLogId++,
+                    phase: currentPhase,
+                    modelName: phaseData.title + ' — Guided Question',
+                    modelPrompt: treeCurrentNode.q,
+                    response: 'Yes',
+                    timestamp: new Date().toLocaleString()
+                });
+                renderJournal();
+                saveToLocalStorage();
                 treeHistory.push({ question: treeCurrentNode.q, answer: 'Yes' });
                 treeCurrentNode = treeCurrentNode.yes;
                 renderTreeView();
             });
             document.getElementById('treeNo').addEventListener('click', () => {
+                const phaseData = mentalModelsData[currentPhase];
+                logEntries.unshift({
+                    id: nextLogId++,
+                    phase: currentPhase,
+                    modelName: phaseData.title + ' — Guided Question',
+                    modelPrompt: treeCurrentNode.q,
+                    response: 'No',
+                    timestamp: new Date().toLocaleString()
+                });
+                renderJournal();
+                saveToLocalStorage();
                 treeHistory.push({ question: treeCurrentNode.q, answer: 'No' });
                 treeCurrentNode = treeCurrentNode.no;
                 renderTreeView();
