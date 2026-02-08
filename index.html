@@ -898,6 +898,7 @@
             padding: 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             margin-bottom: 1rem;
+            display: none;
         }
 
         .tree-question {
@@ -4215,15 +4216,20 @@ Next steps:
 
             if (quickSuggest) quickSuggest.addEventListener('click', () => {
                 if (problemDescribed) {
+                    // Hide tree walker and show grid if needed
+                    treeWalker.style.display = 'none';
+                    showAllModels();
                     const phaseData = mentalModelsData[currentPhase];
                     const randomModel = phaseData.models[Math.floor(Math.random() * phaseData.models.length)];
-                    const modelCards = document.querySelectorAll('.model-card');
-                    modelCards.forEach(card => {
-                        if (card.querySelector('.model-name').textContent === randomModel.name) {
-                            card.click();
-                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    });
+                    setTimeout(() => {
+                        const modelCards = document.querySelectorAll('.model-card');
+                        modelCards.forEach(card => {
+                            if (card.querySelector('.model-name').textContent === randomModel.name) {
+                                card.click();
+                                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        });
+                    }, 100);
                 } else {
                     alert('Please describe your decision or problem first.');
                 }
@@ -4655,6 +4661,10 @@ Next steps:
 
             // Reveal models section
             modelsSection.classList.add('revealed');
+
+            // Re-render phase content (starts tree walker if decisionMode is set)
+            renderPhaseContent();
+            updatePhaseButtons();
 
             // Slide work area down
             setTimeout(() => {
