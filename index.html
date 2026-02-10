@@ -2872,7 +2872,7 @@
                         <img class="sidebar-brand-logo" src="https://www.untanglednarrative.com/wp-content/uploads/2025/12/cropped-untangled-narrative-2026-logo-horizontal.png" alt="Untangled Narrative" />
                     </a>
                 </div>
-                <div class="sidebar-app-title">Mental Models Navigator <span class="beta-badge">BETA</span> <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle dark mode">🌙</button></div>
+                <div class="sidebar-app-title">Mental Models Navigator <span class="beta-badge">BETA</span></div>
             </div>
 
             <!-- Problem/Decision Description (shown after user describes it) -->
@@ -2902,6 +2902,12 @@
                         <div class="sidebar-item-icon">📤</div>
                         <div class="sidebar-item-content">
                             <div class="sidebar-item-label">Export Session</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-item" id="darkModeToggle">
+                        <div class="sidebar-item-icon">🌙</div>
+                        <div class="sidebar-item-content">
+                            <div class="sidebar-item-label">Dark Mode</div>
                         </div>
                     </div>
                 </div>
@@ -5779,9 +5785,13 @@
         function setDarkMode(enabled) {
             document.body.classList.toggle('dark-mode', enabled);
             const icon = enabled ? '☀️' : '🌙';
+            const label = enabled ? 'Light Mode' : 'Dark Mode';
             const desktopBtn = document.getElementById('darkModeToggle');
             const mobileBtn = document.getElementById('darkModeToggleMobile');
-            if (desktopBtn) desktopBtn.textContent = icon;
+            if (desktopBtn) {
+                desktopBtn.querySelector('.sidebar-item-icon').textContent = icon;
+                desktopBtn.querySelector('.sidebar-item-label').textContent = label;
+            }
             if (mobileBtn) mobileBtn.textContent = icon;
             localStorage.setItem('darkMode', enabled ? 'on' : 'off');
         }
