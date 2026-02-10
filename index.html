@@ -83,6 +83,105 @@
             --white-overlay: rgba(255, 255, 255, 0.08);
         }
 
+        /* ─── DARK MODE ──────────────────────────────────────── */
+        body.dark-mode {
+            --primary: #C89ABF;
+            --primary-mid: #A96A9C;
+            --primary-light: #5A3751;
+            --primary-lightest: #3D2636;
+            --shadow-primary: rgba(200, 154, 191, 0.2);
+
+            --rose: #D98A9B;
+            --rose-mid: #A5697A;
+            --rose-light: #4A2E38;
+            --rose-lightest: #3A2028;
+
+            --charcoal: #E0E0E0;
+            --slate: #A0A8B2;
+            --cream: #1a1a1e;
+            --warm-white: #141418;
+
+            --diagnostic-color: #3BB5D8;
+            --diagnostic-mid: #1D7A96;
+            --diagnostic-light: #1A3340;
+            --evaluative-color: #9498C4;
+            --evaluative-mid: #6A6E98;
+            --evaluative-light: #2A2C3E;
+            --protective-color: #D98A9B;
+            --protective-mid: #A5697A;
+            --protective-light: #3A2028;
+            --generative-color: #F0B860;
+            --generative-mid: #B88530;
+            --generative-light: #3A2E18;
+            --implementation-color: #8EC886;
+            --implementation-mid: #5A8E54;
+            --implementation-light: #233020;
+
+            --bg-surface: #1e1e22;
+            --bg-overlay: rgba(0, 0, 0, 0.7);
+
+            --border-light: #333338;
+            --border-lighter: #2a2a2e;
+            --border-medium: #444448;
+
+            --shadow-xs: rgba(0, 0, 0, 0.15);
+            --shadow-sm: rgba(0, 0, 0, 0.2);
+            --shadow-md: rgba(0, 0, 0, 0.25);
+            --shadow-lg: rgba(0, 0, 0, 0.35);
+            --shadow-xl: rgba(0, 0, 0, 0.5);
+
+            --primary-tint-xs: rgba(200, 154, 191, 0.04);
+            --primary-tint-sm: rgba(200, 154, 191, 0.08);
+            --primary-tint-md: rgba(200, 154, 191, 0.12);
+            --primary-tint-lg: rgba(200, 154, 191, 0.18);
+            --primary-tint-xl: rgba(200, 154, 191, 0.25);
+
+            --rose-tint-xs: rgba(217, 138, 155, 0.04);
+            --rose-tint-md: rgba(217, 138, 155, 0.1);
+            --rose-tint-lg: rgba(217, 138, 155, 0.2);
+
+            --color-danger: #E86050;
+            --color-danger-shadow: rgba(232, 96, 80, 0.3);
+            --color-note: #FFD54F;
+            --color-note-border: #C8A030;
+            --color-note-tint: rgba(255, 213, 79, 0.08);
+            --color-purple: #B565CC;
+
+            --white-overlay: rgba(255, 255, 255, 0.06);
+        }
+
+        body.dark-mode textarea,
+        body.dark-mode input[type="text"] {
+            background: #252528;
+            color: var(--charcoal);
+            border-color: var(--border-light);
+        }
+
+        body.dark-mode .sidebar-brand-logo,
+        body.dark-mode .mobile-header-logo img {
+            filter: brightness(0.85) contrast(1.1);
+        }
+
+        body.dark-mode .mobile-header {
+            background: var(--bg-surface);
+            border-bottom-color: var(--border-light);
+        }
+
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.25rem;
+            line-height: 1;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            opacity: 1;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -2648,6 +2747,13 @@
                 pointer-events: none;
             }
 
+            .mobile-dark-toggle {
+                position: absolute;
+                top: 0.6rem;
+                right: 0.6rem;
+                font-size: 1.2rem;
+            }
+
             .sidebar-backdrop {
                 display: none;
                 position: fixed;
@@ -2753,6 +2859,7 @@
             <a class="mobile-header-logo" href="https://www.untanglednarrative.com" target="_blank" rel="noopener noreferrer">
                 <img src="https://www.untanglednarrative.com/wp-content/uploads/2025/12/cropped-untangled-narrative-2026-logo-horizontal.png" alt="Untangled Narrative" />
             </a>
+            <button class="dark-mode-toggle mobile-dark-toggle" id="darkModeToggleMobile" title="Toggle dark mode">🌙</button>
             <div class="mobile-header-title">MENTAL MODELS NAVIGATOR <span class="beta-badge">BETA</span></div>
         </div>
         <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
@@ -2765,7 +2872,7 @@
                         <img class="sidebar-brand-logo" src="https://www.untanglednarrative.com/wp-content/uploads/2025/12/cropped-untangled-narrative-2026-logo-horizontal.png" alt="Untangled Narrative" />
                     </a>
                 </div>
-                <div class="sidebar-app-title">Mental Models Navigator <span class="beta-badge">BETA</span></div>
+                <div class="sidebar-app-title">Mental Models Navigator <span class="beta-badge">BETA</span> <button class="dark-mode-toggle" id="darkModeToggle" title="Toggle dark mode">🌙</button></div>
             </div>
 
             <!-- Problem/Decision Description (shown after user describes it) -->
@@ -5667,6 +5774,30 @@
                 });
             }
         }
+
+        // ─── DARK MODE ──────────────────────────────────────────
+        function setDarkMode(enabled) {
+            document.body.classList.toggle('dark-mode', enabled);
+            const icon = enabled ? '☀️' : '🌙';
+            const desktopBtn = document.getElementById('darkModeToggle');
+            const mobileBtn = document.getElementById('darkModeToggleMobile');
+            if (desktopBtn) desktopBtn.textContent = icon;
+            if (mobileBtn) mobileBtn.textContent = icon;
+            localStorage.setItem('darkMode', enabled ? 'on' : 'off');
+        }
+
+        // Initialize from saved preference
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'on') {
+            setDarkMode(true);
+        }
+
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        });
+        document.getElementById('darkModeToggleMobile').addEventListener('click', () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        });
 
         // ─── ORIENTATION / RESIZE FIX ───────────────────────────
         function resetViewport() {
