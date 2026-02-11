@@ -157,8 +157,7 @@
             border-color: var(--border-light);
         }
 
-        body.dark-mode .sidebar-brand-logo,
-        body.dark-mode .mobile-header-logo img {
+        body.dark-mode .sidebar-brand-logo {
             filter: brightness(0.85) contrast(1.1);
         }
 
@@ -2687,14 +2686,12 @@
                 box-shadow: 0 1px 4px rgba(0,0,0,0.06);
             }
 
-            .mobile-header-logo {
-                display: block;
-            }
-
-            .mobile-header-logo img {
-                height: 58px;
-                width: auto;
-                display: block;
+            .mobile-header-brand {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: var(--primary);
+                text-decoration: none;
             }
 
             .mobile-header-title {
@@ -2856,9 +2853,7 @@
         <!-- Mobile header (visible only on mobile) -->
         <div class="mobile-header" id="mobileHeader">
             <button class="sidebar-toggle" id="sidebarToggle">☰</button>
-            <a class="mobile-header-logo" href="https://www.untanglednarrative.com" target="_blank" rel="noopener noreferrer">
-                <img src="https://www.untanglednarrative.com/wp-content/uploads/2026/02/Untangled%20Narrative%202026%20Logo.png" alt="Untangled Narrative" />
-            </a>
+            <a class="mobile-header-brand" href="https://www.untanglednarrative.com" target="_blank" rel="noopener noreferrer">Untangled Narrative</a>
             <button class="dark-mode-toggle mobile-dark-toggle" id="darkModeToggleMobile" title="Toggle dark mode">🌙</button>
             <div class="mobile-header-title">MENTAL MODELS NAVIGATOR <span class="beta-badge">BETA</span></div>
         </div>
