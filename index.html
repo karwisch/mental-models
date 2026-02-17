@@ -1562,6 +1562,77 @@
             opacity: 1;
         }
 
+        /* Filter progress bar */
+        .filter-progress {
+            margin: 0.75rem 0;
+        }
+
+        .filter-progress-bar {
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.4rem;
+        }
+
+        .filter-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+
+        .filter-progress-fill.diagnostic { background: var(--diagnostic-color); }
+        .filter-progress-fill.evaluative { background: var(--evaluative-color); }
+        .filter-progress-fill.protective { background: var(--protective-color); }
+        .filter-progress-fill.generative { background: var(--generative-color); }
+        .filter-progress-fill.implementation { background: var(--implementation-color); }
+
+        .filter-progress-text {
+            font-size: 0.75rem;
+            color: var(--charcoal);
+            opacity: 0.7;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+        }
+
+        .filter-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.75rem;
+        }
+
+        .filter-results-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .filter-results-label.other-models-label {
+            color: var(--slate);
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .model-card.recommended {
+            border-left-width: 4px;
+            box-shadow: 0 2px 8px var(--shadow-md);
+        }
+
+        .model-score-badge {
+            font-size: 0.7rem;
+            color: var(--primary);
+            margin-top: 0.4rem;
+            letter-spacing: 1px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
         .models-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
@@ -4311,331 +4382,185 @@
             }
         };
 
-        // Decision Trees for Yes/No Model Selection
-        // Each node is either: { q: "question", yes: node, no: node } or { model: "Model Name" }
-        const decisionTrees = {
-            decision: {
-                diagnostic: {
-                    q: "Does this decision involve multiple people or groups with competing interests?",
-                    yes: {
-                        q: "Are you clear on who all the stakeholders are and what they want?",
-                        yes: { model: "Perspective-Taking" },
-                        no: { model: "Stakeholder Mapping" }
-                    },
-                    no: {
-                        q: "Do you feel confident you deeply understand the domain this decision is in?",
-                        yes: {
-                            q: "Is the situation complex with many interconnected moving parts?",
-                            yes: { model: "Systems Thinking" },
-                            no: {
-                                q: "Have you clearly defined what you're actually deciding?",
-                                yes: { model: "SWOT Analysis" },
-                                no: { model: "Problem Definition" }
-                            }
-                        },
-                        no: {
-                            q: "Are you worried your existing beliefs might be biasing your understanding?",
-                            yes: { model: "Confirmation Bias Recognition" },
-                            no: {
-                                q: "Are you making assumptions based on success stories you've seen or heard about?",
-                                yes: { model: "Survivorship Bias Recognition" },
-                                no: { model: "Circle of Competence" }
-                            }
-                        }
-                    }
+        // Filter-based Model Selection
+        // Each question has tags: "yes" answer boosts models with yesModels, "no" boosts noModels
+        // Models accumulate scores; highest-scored models rise to top as recommendations
+        const filterQuestions = {
+            diagnostic: [
+                {
+                    q: "Does this involve multiple people or groups with different interests?",
+                    yesModels: ["Stakeholder Mapping", "Perspective-Taking", "Systems Thinking"],
+                    noModels: ["Circle of Competence", "First Principles", "Occam's Razor"]
                 },
-                evaluative: {
-                    q: "Is this primarily about choosing between specific options you've already identified?",
-                    yes: {
-                        q: "Do you have more than two options to compare?",
-                        yes: { model: "Weighted Scoring / Decision Matrix" },
-                        no: {
-                            q: "Is this a high-stakes, potentially life-changing decision?",
-                            yes: { model: "Regret Minimization" },
-                            no: {
-                                q: "Are there significant hidden costs or trade-offs you might be missing?",
-                                yes: { model: "Opportunity Cost" },
-                                no: { model: "Cost-Benefit Analysis" }
-                            }
-                        }
-                    },
-                    no: {
-                        q: "Are you struggling with whether to keep investing in something you've already started?",
-                        yes: { model: "Sunk Cost Awareness" },
-                        no: {
-                            q: "Are you torn between what's best now vs. what's best long-term?",
-                            yes: { model: "Short-term vs Long-term Tradeoffs" },
-                            no: {
-                                q: "Does this decision involve uncertain outcomes with varying probabilities?",
-                                yes: { model: "Expected Value" },
-                                no: {
-                                    q: "Are you overthinking this - trying to find the perfect answer when good enough would work?",
-                                    yes: { model: "Satisficing vs. Optimizing" },
-                                    no: { model: "Second-Order Thinking" }
-                                }
-                            }
-                        }
-                    }
+                {
+                    q: "Is this situation complex with many interconnected parts?",
+                    yesModels: ["Systems Thinking", "Root Cause Analysis", "Constraint Identification"],
+                    noModels: ["Occam's Razor", "Problem Definition", "First Principles"]
                 },
-                protective: {
+                {
+                    q: "Are you worried your assumptions or biases might be distorting your understanding?",
+                    yesModels: ["Confirmation Bias Recognition", "Availability Bias Recognition", "Survivorship Bias Recognition"],
+                    noModels: ["SWOT Analysis", "Stakeholder Mapping", "Base Rate Analysis"]
+                },
+                {
+                    q: "Are you operating outside your core area of expertise?",
+                    yesModels: ["Circle of Competence", "Base Rate Analysis", "Survivorship Bias Recognition"],
+                    noModels: ["First Principles", "Root Cause Analysis", "SWOT Analysis"]
+                },
+                {
+                    q: "Do you suspect you might be treating symptoms rather than the underlying cause?",
+                    yesModels: ["Root Cause Analysis", "First Principles", "Problem Definition"],
+                    noModels: ["SWOT Analysis", "Perspective-Taking", "Stakeholder Mapping"]
+                },
+                {
+                    q: "Do you have data or evidence to work with, or are you relying on gut feeling?",
+                    yesModels: ["Base Rate Analysis", "SWOT Analysis", "Root Cause Analysis"],
+                    noModels: ["Availability Bias Recognition", "Confirmation Bias Recognition", "Circle of Competence"]
+                }
+            ],
+            evaluative: [
+                {
+                    q: "Are you comparing multiple specific options against each other?",
+                    yesModels: ["Weighted Scoring / Decision Matrix", "Cost-Benefit Analysis", "Opportunity Cost"],
+                    noModels: ["Second-Order Thinking", "Incentives", "Values Alignment"]
+                },
+                {
+                    q: "Is this a high-stakes decision that's hard to reverse?",
+                    yesModels: ["Regret Minimization", "Expected Value", "Sensitivity Analysis"],
+                    noModels: ["Satisficing vs. Optimizing", "Pareto Principle (80/20)", "Eisenhower Matrix"]
+                },
+                {
+                    q: "Are there significant hidden costs, trade-offs, or opportunity costs you might be missing?",
+                    yesModels: ["Opportunity Cost", "Cost-Benefit Analysis", "Sunk Cost Awareness"],
+                    noModels: ["Satisficing vs. Optimizing", "Eisenhower Matrix", "Values Alignment"]
+                },
+                {
+                    q: "Are you torn between what's best now versus what's best long-term?",
+                    yesModels: ["Short-term vs Long-term Tradeoffs", "Second-Order Thinking", "Regret Minimization"],
+                    noModels: ["Weighted Scoring / Decision Matrix", "Pareto Principle (80/20)", "Cost-Benefit Analysis"]
+                },
+                {
+                    q: "Does this involve uncertain outcomes where probability matters?",
+                    yesModels: ["Expected Value", "Sensitivity Analysis", "Cost-Benefit Analysis"],
+                    noModels: ["Values Alignment", "Eisenhower Matrix", "Satisficing vs. Optimizing"]
+                },
+                {
+                    q: "Are you overthinking this or struggling to stop optimizing?",
+                    yesModels: ["Satisficing vs. Optimizing", "Eisenhower Matrix", "Pareto Principle (80/20)"],
+                    noModels: ["Expected Value", "Weighted Scoring / Decision Matrix", "Sensitivity Analysis"]
+                },
+                {
+                    q: "Are you struggling to let go of past investments (time, money, effort)?",
+                    yesModels: ["Sunk Cost Awareness", "Opportunity Cost", "Regret Minimization"],
+                    noModels: ["Incentives", "Second-Order Thinking", "Values Alignment"]
+                }
+            ],
+            protective: [
+                {
                     q: "Is this decision difficult or impossible to reverse once made?",
-                    yes: {
-                        q: "Have you imagined this going wrong in specific, concrete ways?",
-                        yes: {
-                            q: "Are you confident your reasoning is solid, or might you be rationalizing?",
-                            yes: { model: "Black Swan Awareness" },
-                            no: { model: "Devil's Advocate" }
-                        },
-                        no: { model: "Pre-mortem" }
-                    },
-                    no: {
-                        q: "Are you choosing this mostly because it's what you're already doing?",
-                        yes: { model: "Status Quo Bias Check" },
-                        no: {
-                            q: "Is a specific number, price, or estimate anchoring your thinking?",
-                            yes: { model: "Anchoring Bias Check" },
-                            no: {
-                                q: "Do you need to build in safeguards or buffer for uncertainty?",
-                                yes: { model: "Margin of Safety" },
-                                no: {
-                                    q: "Would it help to define clear conditions for when to change course?",
-                                    yes: { model: "Tripwire / Kill Criteria" },
-                                    no: { model: "Inversion" }
-                                }
-                            }
-                        }
-                    }
+                    yesModels: ["Pre-mortem", "Margin of Safety", "Reversible vs. Irreversible Decisions", "Black Swan Awareness"],
+                    noModels: ["Status Quo Bias Check", "Antifragility", "Tripwire / Kill Criteria"]
                 },
-                generative: {
-                    q: "Do you feel stuck with the options you currently see?",
-                    yes: {
-                        q: "Is the problem that your current options all feel inadequate?",
-                        yes: {
-                            q: "Have you questioned whether the constraints limiting your options are real?",
-                            yes: { model: "Zero-Based Thinking" },
-                            no: { model: "Constraint Removal" }
-                        },
-                        no: {
-                            q: "Would it help to look at how others have solved similar challenges?",
-                            yes: { model: "Reverse Engineering" },
-                            no: { model: "Reframing" }
-                        }
-                    },
-                    no: {
-                        q: "Are you looking for a bold, innovative direction rather than an incremental one?",
-                        yes: {
-                            q: "Is there an opportunity to create something entirely new rather than competing in existing space?",
-                            yes: { model: "Blue Ocean Strategy" },
-                            no: { model: "First Principles (Generative)" }
-                        },
-                        no: {
-                            q: "Would it help to plan for multiple possible futures?",
-                            yes: { model: "Scenario Planning" },
-                            no: {
-                                q: "Do you have a clear end state in mind and need to figure out the path?",
-                                yes: { model: "Working Backwards" },
-                                no: { model: "Second-Order Opportunities" }
-                            }
-                        }
-                    }
+                {
+                    q: "Could there be extreme, low-probability events that would change everything?",
+                    yesModels: ["Black Swan Awareness", "Antifragility", "Redundancy", "Precautionary Principle"],
+                    noModels: ["Anchoring Bias Check", "Status Quo Bias Check", "Inversion"]
                 },
-                implementation: {
-                    q: "Can you test this decision at a small scale before fully committing?",
-                    yes: {
-                        q: "Do you already have a way to measure whether the test is working?",
-                        yes: { model: "Pilot Testing" },
-                        no: { model: "Feedback Loops" }
-                    },
-                    no: {
-                        q: "Does this implementation involve multiple stages or phases?",
-                        yes: {
-                            q: "Is the sequencing and dependency between steps the main challenge?",
-                            yes: { model: "Critical Path" },
-                            no: { model: "Staged Rollout" }
-                        },
-                        no: {
-                            q: "Are other people affected by this decision who need to be brought along?",
-                            yes: { model: "Communication Planning" },
-                            no: {
-                                q: "Are you struggling with follow-through or maintaining momentum?",
-                                yes: { model: "If-Then Planning" },
-                                no: {
-                                    q: "Are you trying to do too much at once?",
-                                    yes: { model: "80/20 Action" },
-                                    no: { model: "Leverage" }
-                                }
-                            }
-                        }
-                    }
+                {
+                    q: "Have you stress-tested your reasoning by imagining failure?",
+                    yesModels: ["Devil's Advocate", "Steelmanning", "Black Swan Awareness"],
+                    noModels: ["Pre-mortem", "Inversion", "Precautionary Principle"]
+                },
+                {
+                    q: "Might you be sticking with this option because it's familiar, not because it's best?",
+                    yesModels: ["Status Quo Bias Check", "Anchoring Bias Check", "Inversion"],
+                    noModels: ["Margin of Safety", "Redundancy", "Pre-mortem"]
+                },
+                {
+                    q: "Do you need to build in safeguards, buffers, or backup plans?",
+                    yesModels: ["Margin of Safety", "Redundancy", "Tripwire / Kill Criteria"],
+                    noModels: ["Devil's Advocate", "Steelmanning", "Anchoring Bias Check"]
+                },
+                {
+                    q: "Are there single points of failure that could bring everything down?",
+                    yesModels: ["Redundancy", "Antifragility", "Precautionary Principle"],
+                    noModels: ["Status Quo Bias Check", "Steelmanning", "Anchoring Bias Check"]
+                },
+                {
+                    q: "Would it help to define in advance when to stop or pivot?",
+                    yesModels: ["Tripwire / Kill Criteria", "Pre-mortem", "Reversible vs. Irreversible Decisions"],
+                    noModels: ["Devil's Advocate", "Steelmanning", "Black Swan Awareness"]
                 }
-            },
-            problem: {
-                diagnostic: {
-                    q: "Do you know what the problem is, or are you still figuring that out?",
-                    yes: {
-                        q: "Is this a complex problem with many interacting parts?",
-                        yes: {
-                            q: "Do you understand the connections and feedback loops between the parts?",
-                            yes: { model: "Root Cause Analysis" },
-                            no: { model: "Systems Thinking" }
-                        },
-                        no: {
-                            q: "Are there multiple competing theories about what's causing this?",
-                            yes: { model: "Occam's Razor" },
-                            no: {
-                                q: "Do you suspect you might be treating symptoms rather than the underlying cause?",
-                                yes: { model: "Root Cause Analysis" },
-                                no: { model: "First Principles" }
-                            }
-                        }
-                    },
-                    no: {
-                        q: "Is your understanding of this problem based mainly on recent events or vivid examples?",
-                        yes: { model: "Availability Bias Recognition" },
-                        no: {
-                            q: "Are you operating in an area outside your core expertise?",
-                            yes: { model: "Circle of Competence" },
-                            no: {
-                                q: "Do you have data on how often this type of problem resolves successfully?",
-                                yes: { model: "Base Rate Analysis" },
-                                no: { model: "Problem Definition" }
-                            }
-                        }
-                    }
+            ],
+            generative: [
+                {
+                    q: "Do you feel stuck with your current options?",
+                    yesModels: ["Constraint Removal", "Reframing", "Zero-Based Thinking", "Lateral Thinking"],
+                    noModels: ["Scenario Planning", "Working Backwards", "Second-Order Opportunities"]
                 },
-                evaluative: {
-                    q: "Are you evaluating different possible solutions to the problem?",
-                    yes: {
-                        q: "Do you need a structured way to compare multiple solutions against criteria?",
-                        yes: { model: "Weighted Scoring / Decision Matrix" },
-                        no: {
-                            q: "Are there significant costs involved that need to be justified?",
-                            yes: { model: "Cost-Benefit Analysis" },
-                            no: {
-                                q: "Is the outcome uncertain - could the solution fail?",
-                                yes: { model: "Expected Value" },
-                                no: { model: "Pareto Principle (80/20)" }
-                            }
-                        }
-                    },
-                    no: {
-                        q: "Are you trying to understand why the problem exists - what's driving it?",
-                        yes: { model: "Incentives" },
-                        no: {
-                            q: "Is there tension between fixing this quickly vs. fixing it properly?",
-                            yes: { model: "Short-term vs Long-term Tradeoffs" },
-                            no: {
-                                q: "Are you worried about unintended consequences of the fix?",
-                                yes: { model: "Second-Order Thinking" },
-                                no: {
-                                    q: "Are your key assumptions about this problem reliable?",
-                                    yes: { model: "Eisenhower Matrix" },
-                                    no: { model: "Sensitivity Analysis" }
-                                }
-                            }
-                        }
-                    }
+                {
+                    q: "Are assumed constraints limiting your solution space?",
+                    yesModels: ["Constraint Removal", "First Principles (Generative)", "Zero-Based Thinking"],
+                    noModels: ["Combinatorial Thinking", "Analogical Thinking", "SCAMPER"]
                 },
-                protective: {
-                    q: "Is the proposed solution risky or high-stakes?",
-                    yes: {
-                        q: "Could the fix itself cause new problems?",
-                        yes: {
-                            q: "Have you stress-tested the solution by imagining it failing?",
-                            yes: { model: "Devil's Advocate" },
-                            no: { model: "Pre-mortem" }
-                        },
-                        no: {
-                            q: "Is there a chance of rare but catastrophic failure?",
-                            yes: { model: "Black Swan Awareness" },
-                            no: { model: "Margin of Safety" }
-                        }
-                    },
-                    no: {
-                        q: "Are you sticking with the current approach mainly because it's familiar?",
-                        yes: { model: "Status Quo Bias Check" },
-                        no: {
-                            q: "Can this solution be easily reversed if it doesn't work?",
-                            yes: { model: "Reversible vs. Irreversible Decisions" },
-                            no: {
-                                q: "Do you need single-point-of-failure protection?",
-                                yes: { model: "Redundancy" },
-                                no: {
-                                    q: "Would it help to define clear criteria for when to abandon this approach?",
-                                    yes: { model: "Tripwire / Kill Criteria" },
-                                    no: { model: "Antifragility" }
-                                }
-                            }
-                        }
-                    }
+                {
+                    q: "Could the solution come from combining existing ideas or borrowing from other fields?",
+                    yesModels: ["Combinatorial Thinking", "Analogical Thinking", "Reverse Engineering"],
+                    noModels: ["First Principles (Generative)", "Reframing", "Blue Ocean Strategy"]
                 },
-                generative: {
-                    q: "Have the obvious solutions already been tried or considered?",
-                    yes: {
-                        q: "Is the problem that your solutions keep addressing symptoms, not the root issue?",
-                        yes: {
-                            q: "Would it help to question whether the problem itself is correctly framed?",
-                            yes: { model: "Reframing" },
-                            no: { model: "First Principles (Generative)" }
-                        },
-                        no: {
-                            q: "Could the solution come from combining existing elements in a new way?",
-                            yes: { model: "Combinatorial Thinking" },
-                            no: {
-                                q: "Has a similar problem been solved in a completely different field?",
-                                yes: { model: "Analogical Thinking" },
-                                no: { model: "Lateral Thinking" }
-                            }
-                        }
-                    },
-                    no: {
-                        q: "Are assumed constraints limiting your solution space?",
-                        yes: { model: "Constraint Removal" },
-                        no: {
-                            q: "Would it help to systematically modify what already exists?",
-                            yes: { model: "SCAMPER" },
-                            no: {
-                                q: "Do you have a clear picture of the solved state to work backwards from?",
-                                yes: { model: "Working Backwards" },
-                                no: { model: "Worst Possible Idea" }
-                            }
-                        }
-                    }
+                {
+                    q: "Are you looking for a bold, innovative direction rather than an incremental improvement?",
+                    yesModels: ["Blue Ocean Strategy", "First Principles (Generative)", "Lateral Thinking"],
+                    noModels: ["SCAMPER", "Working Backwards", "Scenario Planning"]
                 },
-                implementation: {
-                    q: "Is this a fix you can test before rolling out fully?",
-                    yes: {
-                        q: "Do you need to validate that the fix actually addresses the root cause?",
-                        yes: { model: "Pilot Testing" },
-                        no: { model: "Minimum Viable Product (MVP)" }
-                    },
-                    no: {
-                        q: "Is this a complex fix involving multiple steps or teams?",
-                        yes: {
-                            q: "Is the main challenge coordinating the sequence of changes?",
-                            yes: { model: "Critical Path" },
-                            no: {
-                                q: "Do others need to be informed or onboarded as part of the fix?",
-                                yes: { model: "Communication Planning" },
-                                no: { model: "Staged Rollout" }
-                            }
-                        },
-                        no: {
-                            q: "Is this a recurring problem that needs a lasting behavioral change?",
-                            yes: {
-                                q: "Can you link the new behavior to an existing routine?",
-                                yes: { model: "Habit Stacking" },
-                                no: { model: "If-Then Planning" }
-                            },
-                            no: {
-                                q: "Do you need to build in monitoring to know if the fix is working?",
-                                yes: { model: "Feedback Loops" },
-                                no: { model: "After-Action Review" }
-                            }
-                        }
-                    }
+                {
+                    q: "Would it help to approach the problem backwards or from a completely different angle?",
+                    yesModels: ["Working Backwards", "Lateral Thinking", "Worst Possible Idea", "Reframing"],
+                    noModels: ["Combinatorial Thinking", "SCAMPER", "Reverse Engineering"]
+                },
+                {
+                    q: "Do you need to plan for multiple possible futures or outcomes?",
+                    yesModels: ["Scenario Planning", "Second-Order Opportunities", "Working Backwards"],
+                    noModels: ["Constraint Removal", "Zero-Based Thinking", "Lateral Thinking"]
                 }
-            }
+            ],
+            implementation: [
+                {
+                    q: "Can you test this at a small scale before fully committing?",
+                    yesModels: ["Pilot Testing", "Minimum Viable Product (MVP)", "Feedback Loops"],
+                    noModels: ["Critical Path", "Communication Planning", "Staged Rollout"]
+                },
+                {
+                    q: "Does this involve multiple steps, phases, or teams?",
+                    yesModels: ["Critical Path", "Staged Rollout", "Communication Planning"],
+                    noModels: ["If-Then Planning", "Habit Stacking", "Leverage"]
+                },
+                {
+                    q: "Are other people affected who need to be brought along or informed?",
+                    yesModels: ["Communication Planning", "Staged Rollout", "Feedback Loops"],
+                    noModels: ["Habit Stacking", "If-Then Planning", "Leverage"]
+                },
+                {
+                    q: "Is maintaining momentum or follow-through the main challenge?",
+                    yesModels: ["If-Then Planning", "Habit Stacking", "Timeboxing / Parkinson's Law", "80/20 Action"],
+                    noModels: ["Critical Path", "Communication Planning", "Pilot Testing"]
+                },
+                {
+                    q: "Are you trying to do too much at once?",
+                    yesModels: ["80/20 Action", "Leverage", "Timeboxing / Parkinson's Law"],
+                    noModels: ["Staged Rollout", "After-Action Review", "Minimum Viable Product (MVP)"]
+                },
+                {
+                    q: "Do you need to build in monitoring to know if this is working?",
+                    yesModels: ["Feedback Loops", "After-Action Review", "Pilot Testing"],
+                    noModels: ["Habit Stacking", "If-Then Planning", "Leverage"]
+                },
+                {
+                    q: "Does this require compounding effort or long-term consistency?",
+                    yesModels: ["Compound Interest", "Habit Stacking", "Feedback Loops"],
+                    noModels: ["Pilot Testing", "80/20 Action", "Minimum Viable Product (MVP)"]
+                }
+            ]
         };
 
         // State Management
@@ -4667,8 +4592,9 @@
 
         // State
         let logSortOrder = 'newest';
-        let treeHistory = [];
-        let treeCurrentNode = null;
+        let filterHistory = [];      // [{ question, answer: 'Yes'|'No' }]
+        let filterQuestionIndex = 0; // Current question index within phase
+        let modelScores = {};        // { "Model Name": score }
 
         // ─── FOCUS AREA RENDERING ───────────────────────────────
         // The center panel shows ONLY the current step. One function per view.
@@ -4684,7 +4610,7 @@
             } else if (selectedModel) {
                 renderModelWorkView();
             } else {
-                renderTreeView();
+                renderFilterView();
             }
         }
 
@@ -4781,62 +4707,245 @@
             input.focus();
         }
 
-        // Step 3: Tree walker (yes/no questions)
-        function renderTreeView() {
+        // Step 3: Filter-based model selection (yes/no questions narrow down models)
+        function getFilteredModels() {
+            const phaseData = mentalModelsData[currentPhase];
+            // Score all models: start at 0, add/subtract based on answers
+            const scores = {};
+            phaseData.models.forEach(m => { scores[m.name] = 0; });
+
+            const questions = filterQuestions[currentPhase] || [];
+            filterHistory.forEach((entry, i) => {
+                const question = questions[i];
+                if (!question) return;
+                if (entry.answer === 'Yes') {
+                    (question.yesModels || []).forEach(name => { if (scores[name] !== undefined) scores[name] += 1; });
+                    (question.noModels || []).forEach(name => { if (scores[name] !== undefined) scores[name] -= 1; });
+                } else {
+                    (question.noModels || []).forEach(name => { if (scores[name] !== undefined) scores[name] += 1; });
+                    (question.yesModels || []).forEach(name => { if (scores[name] !== undefined) scores[name] -= 1; });
+                }
+            });
+
+            // Sort models by score descending
+            const sorted = phaseData.models
+                .map(m => ({ ...m, score: scores[m.name] || 0 }))
+                .sort((a, b) => b.score - a.score);
+
+            return sorted;
+        }
+
+        function getTopModels() {
+            const sorted = getFilteredModels();
+            if (sorted.length === 0) return [];
+            const topScore = sorted[0].score;
+            // Return all models within 1 point of the top score
+            return sorted.filter(m => m.score >= topScore - 1 && m.score > 0);
+        }
+
+        function renderFilterView() {
             focusArea.className = 'focus-area';
             const phaseData = mentalModelsData[currentPhase];
-            const tree = decisionTrees[decisionMode] && decisionTrees[decisionMode][currentPhase];
+            const questions = filterQuestions[currentPhase] || [];
 
-            if (!tree) {
-                // No tree for this phase/mode combo - show browse view
+            if (questions.length === 0) {
                 renderBrowseModels();
                 return;
             }
 
-            if (!treeCurrentNode) {
-                treeHistory = [];
-                treeCurrentNode = tree;
+            // Initialize filter state if fresh
+            if (filterQuestionIndex === 0 && filterHistory.length === 0) {
+                modelScores = {};
             }
 
-            // If leaf node - show recommendation
-            if (treeCurrentNode.model) {
-                const model = phaseData.models.find(m => m.name === treeCurrentNode.model);
-                const desc = model ? model.description : '';
+            const allModels = phaseData.models;
+            const sortedModels = getFilteredModels();
+            const topModels = getTopModels();
+            const questionsRemaining = questions.length - filterHistory.length;
+            const questionsAnswered = filterHistory.length;
 
-                let historyHTML = '';
-                if (treeHistory.length > 0) {
-                    historyHTML = '<div class="tree-history">';
-                    treeHistory.forEach(h => {
-                        historyHTML += `<div class="tree-history-item">${h.question} <span class="answer">${h.answer}</span></div>`;
-                    });
-                    historyHTML += '</div>';
-                }
+            // If all questions answered or we've narrowed to 1-3 strong recommendations, show results
+            if (filterQuestionIndex >= questions.length || (questionsAnswered >= 2 && topModels.length >= 1 && topModels.length <= 3)) {
+                renderFilterResults(sortedModels, topModels);
+                return;
+            }
 
-                focusArea.innerHTML = `
-                    <div class="focus-card" style="max-width: 600px;">
-                        <div class="tree-step-label">${phaseData.title}</div>
-                        <div class="tree-phase-desc">${phaseData.purpose}</div>
-                        ${historyHTML}
-                        <div class="tree-recommendation">
-                            <div class="rec-label">Recommended Model</div>
-                            <div class="rec-model-name">${treeCurrentNode.model}</div>
-                            <div class="rec-model-desc">${desc}</div>
-                            <div class="rec-actions">
-                                <button class="tree-rec-btn primary" id="treeUseModel">Use This Model</button>
-                                <button class="tree-rec-btn secondary" id="treeShowOthers">Show Me Other Options</button>
-                            </div>
-                            <span class="tree-restart-link" id="treeRestart">↩ Start Over</span>
+            const currentQuestion = questions[filterQuestionIndex];
+
+            // Build history display
+            let historyHTML = '';
+            if (filterHistory.length > 0) {
+                historyHTML = '<div class="tree-history">';
+                filterHistory.forEach(h => {
+                    historyHTML += `<div class="tree-history-item">${h.question} <span class="answer">${h.answer}</span></div>`;
+                });
+                historyHTML += '</div>';
+            }
+
+            // Build progress indicator showing how many models are rising to top
+            const topCount = topModels.length > 0 ? topModels.length : allModels.length;
+            const totalCount = allModels.length;
+            const progressPct = Math.round(((totalCount - topCount) / totalCount) * 100);
+
+            const stepNum = filterHistory.length + 1;
+            focusArea.innerHTML = `
+                <div class="focus-card" style="max-width: 600px;">
+                    <div class="tree-step-label">${phaseData.title} - Question ${stepNum} of ${questions.length}</div>
+                    <div class="tree-phase-desc">${phaseData.purpose}</div>
+                    ${questionsAnswered > 0 ? `
+                    <div class="filter-progress">
+                        <div class="filter-progress-bar">
+                            <div class="filter-progress-fill ${currentPhase}" style="width: ${Math.round((questionsAnswered / questions.length) * 100)}%"></div>
                         </div>
+                        <div class="filter-progress-text">${topCount > 0 && questionsAnswered > 0 ? `${topCount} model${topCount !== 1 ? 's' : ''} rising to the top` : `${totalCount} models — answer questions to narrow down`}</div>
+                    </div>
+                    ` : `<div class="filter-progress"><div class="filter-progress-text">${totalCount} models in this phase — your answers will narrow them down</div></div>`}
+                    ${historyHTML}
+                    <div class="tree-question">${currentQuestion.q}</div>
+                    <div class="tree-buttons">
+                        <button class="tree-btn yes" id="filterYes">Yes</button>
+                        <button class="tree-btn no" id="filterNo">No</button>
+                    </div>
+                    <div class="filter-actions">
+                        ${questionsAnswered > 0 ? `<span class="tree-restart-link" id="filterShowResults">Show results so far (${topCount > 0 ? topCount + ' top' : totalCount} models)</span>` : ''}
+                        ${questionsAnswered > 0 ? '<span class="tree-restart-link" id="filterRestart">↩ Start Over</span>' : ''}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('filterYes').addEventListener('click', () => {
+                logEntries.unshift({
+                    id: nextLogId++,
+                    phase: currentPhase,
+                    modelName: phaseData.title + ' - Guided Question',
+                    modelPrompt: currentQuestion.q,
+                    response: 'Yes',
+                    timestamp: new Date().toLocaleString()
+                });
+                renderJournal();
+                saveToLocalStorage();
+                filterHistory.push({ question: currentQuestion.q, answer: 'Yes' });
+                filterQuestionIndex++;
+                renderFilterView();
+            });
+            document.getElementById('filterNo').addEventListener('click', () => {
+                logEntries.unshift({
+                    id: nextLogId++,
+                    phase: currentPhase,
+                    modelName: phaseData.title + ' - Guided Question',
+                    modelPrompt: currentQuestion.q,
+                    response: 'No',
+                    timestamp: new Date().toLocaleString()
+                });
+                renderJournal();
+                saveToLocalStorage();
+                filterHistory.push({ question: currentQuestion.q, answer: 'No' });
+                filterQuestionIndex++;
+                renderFilterView();
+            });
+
+            const showResultsBtn = document.getElementById('filterShowResults');
+            if (showResultsBtn) showResultsBtn.addEventListener('click', () => {
+                renderFilterResults(sortedModels, topModels);
+            });
+
+            const restartBtn = document.getElementById('filterRestart');
+            if (restartBtn) restartBtn.addEventListener('click', () => {
+                filterHistory = [];
+                filterQuestionIndex = 0;
+                modelScores = {};
+                renderFilterView();
+            });
+        }
+
+        function renderFilterResults(sortedModels, topModels) {
+            const phaseData = mentalModelsData[currentPhase];
+            focusArea.className = 'focus-area top-aligned';
+
+            // If we have strong recommendations (score > 0), show them prominently
+            const recommended = sortedModels.filter(m => m.score > 0);
+            const others = sortedModels.filter(m => m.score <= 0);
+
+            let historyHTML = '';
+            if (filterHistory.length > 0) {
+                historyHTML = '<div class="tree-history" style="margin-bottom: 1rem;">';
+                filterHistory.forEach(h => {
+                    historyHTML += `<div class="tree-history-item">${h.question} <span class="answer">${h.answer}</span></div>`;
+                });
+                historyHTML += '</div>';
+            }
+
+            let recCardsHtml = '';
+            recommended.forEach((model, index) => {
+                recCardsHtml += `
+                    <div class="model-card ${currentPhase} recommended" data-model-name="${escapeHtml(model.name)}">
+                        <div class="model-name">${model.name}</div>
+                        <div class="model-description">${model.description}</div>
+                        <div class="model-score-badge">Match strength: ${'●'.repeat(Math.min(model.score, 5))}${'○'.repeat(Math.max(0, 5 - model.score))}</div>
                     </div>
                 `;
+            });
 
-                document.getElementById('treeUseModel').addEventListener('click', () => {
+            let otherCardsHtml = '';
+            others.forEach((model, index) => {
+                otherCardsHtml += `
+                    <div class="model-card ${currentPhase}" data-model-name="${escapeHtml(model.name)}">
+                        <div class="model-name">${model.name}</div>
+                        <div class="model-description">${model.description}</div>
+                    </div>
+                `;
+            });
+
+            focusArea.innerHTML = `
+                <div class="browse-models-view phase-${currentPhase}">
+                    <span class="browse-back-link" id="backToFilter">← Back to questions (${filterQuestions[currentPhase].length - filterHistory.length} remaining)</span>
+                    <h3>${phaseData.title}</h3>
+                    <div class="browse-subtitle">${phaseData.purpose}</div>
+                    ${historyHTML}
+                    ${recommended.length > 0 ? `
+                        <div class="filter-results-label">Recommended for you (${recommended.length})</div>
+                        <div class="models-grid">${recCardsHtml}</div>
+                    ` : ''}
+                    ${others.length > 0 ? `
+                        <div class="filter-results-label other-models-label">${recommended.length > 0 ? 'Other models in this phase' : 'All models'} (${others.length})</div>
+                        <div class="models-grid">${otherCardsHtml}</div>
+                    ` : ''}
+                    <div style="margin-top: 1rem;">
+                        <span class="tree-restart-link" id="filterRestart2">↩ Start questions over</span>
+                    </div>
+                </div>
+            `;
+
+            const backBtn = document.getElementById('backToFilter');
+            if (backBtn) backBtn.addEventListener('click', () => {
+                // If all questions answered, restart; otherwise continue
+                if (filterQuestionIndex >= filterQuestions[currentPhase].length) {
+                    // All done, restart
+                    filterHistory = [];
+                    filterQuestionIndex = 0;
+                    modelScores = {};
+                }
+                renderFilterView();
+            });
+
+            const restartBtn2 = document.getElementById('filterRestart2');
+            if (restartBtn2) restartBtn2.addEventListener('click', () => {
+                filterHistory = [];
+                filterQuestionIndex = 0;
+                modelScores = {};
+                renderFilterView();
+            });
+
+            focusArea.querySelectorAll('.model-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const modelName = card.dataset.modelName;
+                    const model = phaseData.models.find(m => m.name === modelName);
                     if (model) {
                         logEntries.unshift({
                             id: nextLogId++,
                             phase: currentPhase,
                             modelName: 'Model Selected',
-                            modelPrompt: 'Recommended model from guided questions',
+                            modelPrompt: 'Selected from filtered recommendations',
                             response: model.name,
                             timestamp: new Date().toLocaleString()
                         });
@@ -4846,80 +4955,6 @@
                         renderFocusView();
                     }
                 });
-                document.getElementById('treeShowOthers').addEventListener('click', () => {
-                    treeCurrentNode = null;
-                    renderBrowseModels();
-                });
-                document.getElementById('treeRestart').addEventListener('click', () => {
-                    treeCurrentNode = null;
-                    treeHistory = [];
-                    renderTreeView();
-                });
-                return;
-            }
-
-            // Question node
-            let historyHTML = '';
-            if (treeHistory.length > 0) {
-                historyHTML = '<div class="tree-history">';
-                treeHistory.forEach(h => {
-                    historyHTML += `<div class="tree-history-item">${h.question} <span class="answer">${h.answer}</span></div>`;
-                });
-                historyHTML += '</div>';
-            }
-
-            const stepNum = treeHistory.length + 1;
-            focusArea.innerHTML = `
-                <div class="focus-card" style="max-width: 600px;">
-                    <div class="tree-step-label">${phaseData.title} - Question ${stepNum}</div>
-                    <div class="tree-phase-desc">${phaseData.purpose}</div>
-                    ${historyHTML}
-                    <div class="tree-question">${treeCurrentNode.q}</div>
-                    <div class="tree-buttons">
-                        <button class="tree-btn yes" id="treeYes">Yes</button>
-                        <button class="tree-btn no" id="treeNo">No</button>
-                    </div>
-                    ${stepNum > 1 ? '<span class="tree-restart-link" id="treeRestart">↩ Start Over</span>' : ''}
-                </div>
-            `;
-
-            document.getElementById('treeYes').addEventListener('click', () => {
-                const phaseData = mentalModelsData[currentPhase];
-                logEntries.unshift({
-                    id: nextLogId++,
-                    phase: currentPhase,
-                    modelName: phaseData.title + ' - Guided Question',
-                    modelPrompt: treeCurrentNode.q,
-                    response: 'Yes',
-                    timestamp: new Date().toLocaleString()
-                });
-                renderJournal();
-                saveToLocalStorage();
-                treeHistory.push({ question: treeCurrentNode.q, answer: 'Yes' });
-                treeCurrentNode = treeCurrentNode.yes;
-                renderTreeView();
-            });
-            document.getElementById('treeNo').addEventListener('click', () => {
-                const phaseData = mentalModelsData[currentPhase];
-                logEntries.unshift({
-                    id: nextLogId++,
-                    phase: currentPhase,
-                    modelName: phaseData.title + ' - Guided Question',
-                    modelPrompt: treeCurrentNode.q,
-                    response: 'No',
-                    timestamp: new Date().toLocaleString()
-                });
-                renderJournal();
-                saveToLocalStorage();
-                treeHistory.push({ question: treeCurrentNode.q, answer: 'No' });
-                treeCurrentNode = treeCurrentNode.no;
-                renderTreeView();
-            });
-            const restartBtn = document.getElementById('treeRestart');
-            if (restartBtn) restartBtn.addEventListener('click', () => {
-                treeCurrentNode = null;
-                treeHistory = [];
-                renderTreeView();
             });
         }
 
@@ -5005,7 +5040,6 @@
             // Back button
             document.getElementById('backToTree').addEventListener('click', () => {
                 selectedModel = null;
-                treeCurrentNode = null;
                 renderFocusView();
             });
 
@@ -5072,7 +5106,9 @@
             `;
 
             document.getElementById('backFromBrowse').addEventListener('click', () => {
-                treeCurrentNode = null;
+                filterHistory = [];
+                filterQuestionIndex = 0;
+                modelScores = {};
                 renderFocusView();
             });
 
@@ -5126,8 +5162,10 @@
             saveToLocalStorage();
             openRightPanel();
 
-            // Show tree view
-            treeCurrentNode = null;
+            // Show filter view
+            filterHistory = [];
+            filterQuestionIndex = 0;
+            modelScores = {};
             renderFocusView();
             updatePhaseButtons();
         }
@@ -5376,8 +5414,9 @@
             decisionMode = null;
             selectedModel = null;
             currentPhase = 'diagnostic';
-            treeHistory = [];
-            treeCurrentNode = null;
+            filterHistory = [];
+            filterQuestionIndex = 0;
+            modelScores = {};
 
             localStorage.removeItem('mentalModelsLog');
 
@@ -5722,13 +5761,17 @@
                 resetApp();
             });
 
-            // Sidebar phase clicks → browse models for that phase
+            // Sidebar phase clicks → start filter questions for that phase
             document.querySelectorAll('.phase-sidebar-item').forEach(item => {
                 item.addEventListener('click', () => {
                     if (!problemDescribed) return;
                     currentPhase = item.dataset.phase;
+                    selectedModel = null;
+                    filterHistory = [];
+                    filterQuestionIndex = 0;
+                    modelScores = {};
                     updatePhaseButtons();
-                    renderBrowseModels(currentPhase);
+                    renderFilterView();
                 });
             });
 
@@ -5737,11 +5780,12 @@
             if (quickSuggest) {
                 quickSuggest.addEventListener('click', () => {
                     if (!problemDescribed) return;
-                    // Clear current model selection and start fresh tree
+                    // Clear current model selection and start fresh filter
                     selectedModel = null;
-                    treeCurrentNode = null;
-                    treeHistory = [];
-                    renderTreeView();
+                    filterHistory = [];
+                    filterQuestionIndex = 0;
+                    modelScores = {};
+                    renderFilterView();
                 });
             }
 
