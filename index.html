@@ -1562,22 +1562,59 @@
             opacity: 1;
         }
 
-        /* Filter progress bar */
-        .filter-progress {
+        /* Filter unified view */
+        .filter-unified-view {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .filter-question-area {
+            background: var(--bg-surface);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 2px 12px var(--shadow-md);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .filter-question-area .tree-step-label {
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-question-area .tree-question {
+            margin-top: 0.75rem;
+        }
+
+        .filter-question-area .tree-buttons {
+            margin-top: 0.75rem;
+        }
+
+        .filter-done-text {
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            opacity: 0.7;
             margin: 0.75rem 0;
         }
 
+        .filter-models-area {
+            width: 100%;
+        }
+
+        /* Filter progress bar */
+        .filter-progress {
+            margin: 0.5rem 0 0;
+        }
+
         .filter-progress-bar {
-            height: 6px;
+            height: 4px;
             background: var(--border-light);
-            border-radius: 3px;
+            border-radius: 2px;
             overflow: hidden;
-            margin-bottom: 0.4rem;
         }
 
         .filter-progress-fill {
             height: 100%;
-            border-radius: 3px;
+            border-radius: 2px;
             transition: width 0.4s ease;
         }
 
@@ -1587,36 +1624,19 @@
         .filter-progress-fill.generative { background: var(--generative-color); }
         .filter-progress-fill.implementation { background: var(--implementation-color); }
 
-        .filter-progress-text {
-            font-size: 0.75rem;
-            color: var(--charcoal);
-            opacity: 0.7;
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 500;
-        }
-
-        .filter-actions {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.4rem;
-            margin-top: 0.75rem;
-        }
-
         .filter-results-label {
             font-family: 'Montserrat', sans-serif;
             font-size: 0.8rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 0.5rem;
-            margin-top: 0.5rem;
+            margin-top: 0.25rem;
         }
 
         .filter-results-label.other-models-label {
             color: var(--slate);
-            margin-top: 1.5rem;
-            padding-top: 1rem;
+            margin-top: 1.25rem;
+            padding-top: 0.75rem;
             border-top: 1px solid var(--border-light);
         }
 
@@ -1629,8 +1649,22 @@
             font-size: 0.7rem;
             color: var(--primary);
             margin-top: 0.4rem;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             font-family: 'Montserrat', sans-serif;
+        }
+
+        .tree-btn.skip {
+            background: transparent;
+            color: var(--slate);
+            border: 1.5px solid var(--border-medium);
+            padding: 0.5rem 1.25rem;
+            font-size: 0.8rem;
+        }
+
+        .tree-btn.skip:hover {
+            border-color: var(--charcoal);
+            color: var(--charcoal);
+            background: var(--cream);
         }
 
         .models-grid {
@@ -4744,7 +4778,7 @@
         }
 
         function renderFilterView() {
-            focusArea.className = 'focus-area';
+            focusArea.className = 'focus-area top-aligned';
             const phaseData = mentalModelsData[currentPhase];
             const questions = filterQuestions[currentPhase] || [];
 
@@ -4760,94 +4794,129 @@
 
             const allModels = phaseData.models;
             const sortedModels = getFilteredModels();
-            const topModels = getTopModels();
-            const questionsRemaining = questions.length - filterHistory.length;
             const questionsAnswered = filterHistory.length;
+            const allDone = filterQuestionIndex >= questions.length;
+            const currentQuestion = allDone ? null : questions[filterQuestionIndex];
 
-            // If all questions answered or we've narrowed to 1-3 strong recommendations, show results
-            if (filterQuestionIndex >= questions.length || (questionsAnswered >= 2 && topModels.length >= 1 && topModels.length <= 3)) {
-                renderFilterResults(sortedModels, topModels);
-                return;
-            }
+            // Split models into recommended (score > 0) and others
+            const recommended = sortedModels.filter(m => m.score > 0);
+            const others = sortedModels.filter(m => m.score <= 0);
 
-            const currentQuestion = questions[filterQuestionIndex];
-
-            // Build history display
-            let historyHTML = '';
-            if (filterHistory.length > 0) {
-                historyHTML = '<div class="tree-history">';
-                filterHistory.forEach(h => {
-                    historyHTML += `<div class="tree-history-item">${h.question} <span class="answer">${h.answer}</span></div>`;
-                });
-                historyHTML += '</div>';
-            }
-
-            // Build progress indicator showing how many models are rising to top
-            const topCount = topModels.length > 0 ? topModels.length : allModels.length;
-            const totalCount = allModels.length;
-            const progressPct = Math.round(((totalCount - topCount) / totalCount) * 100);
-
-            const stepNum = filterHistory.length + 1;
-            focusArea.innerHTML = `
-                <div class="focus-card" style="max-width: 600px;">
-                    <div class="tree-step-label">${phaseData.title} - Question ${stepNum} of ${questions.length}</div>
-                    <div class="tree-phase-desc">${phaseData.purpose}</div>
-                    ${questionsAnswered > 0 ? `
-                    <div class="filter-progress">
-                        <div class="filter-progress-bar">
-                            <div class="filter-progress-fill ${currentPhase}" style="width: ${Math.round((questionsAnswered / questions.length) * 100)}%"></div>
+            // Build the question area (top section)
+            let questionHTML = '';
+            if (!allDone && currentQuestion) {
+                const stepNum = questionsAnswered + 1;
+                questionHTML = `
+                    <div class="filter-question-area">
+                        <div class="tree-step-label">${phaseData.title} — Question ${stepNum} of ${questions.length}</div>
+                        <div class="filter-progress">
+                            <div class="filter-progress-bar">
+                                <div class="filter-progress-fill ${currentPhase}" style="width: ${Math.round((questionsAnswered / questions.length) * 100)}%"></div>
+                            </div>
                         </div>
-                        <div class="filter-progress-text">${topCount > 0 && questionsAnswered > 0 ? `${topCount} model${topCount !== 1 ? 's' : ''} rising to the top` : `${totalCount} models — answer questions to narrow down`}</div>
-                    </div>
-                    ` : `<div class="filter-progress"><div class="filter-progress-text">${totalCount} models in this phase — your answers will narrow them down</div></div>`}
-                    ${historyHTML}
-                    <div class="tree-question">${currentQuestion.q}</div>
-                    <div class="tree-buttons">
-                        <button class="tree-btn yes" id="filterYes">Yes</button>
-                        <button class="tree-btn no" id="filterNo">No</button>
-                    </div>
-                    <div class="filter-actions">
-                        ${questionsAnswered > 0 ? `<span class="tree-restart-link" id="filterShowResults">Show results so far (${topCount > 0 ? topCount + ' top' : totalCount} models)</span>` : ''}
+                        <div class="tree-question">${currentQuestion.q}</div>
+                        <div class="tree-buttons">
+                            <button class="tree-btn yes" id="filterYes">Yes</button>
+                            <button class="tree-btn no" id="filterNo">No</button>
+                            <button class="tree-btn skip" id="filterSkip">Skip</button>
+                        </div>
                         ${questionsAnswered > 0 ? '<span class="tree-restart-link" id="filterRestart">↩ Start Over</span>' : ''}
+                    </div>
+                `;
+            } else {
+                questionHTML = `
+                    <div class="filter-question-area done">
+                        <div class="tree-step-label">${phaseData.title} — All questions answered</div>
+                        <div class="filter-progress">
+                            <div class="filter-progress-bar">
+                                <div class="filter-progress-fill ${currentPhase}" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="filter-done-text">Select a model below to get started</div>
+                        <span class="tree-restart-link" id="filterRestart">↩ Start Over</span>
+                    </div>
+                `;
+            }
+
+            // Build model cards — always visible, reorder by score
+            let modelCardsHTML = '';
+            if (questionsAnswered > 0 && recommended.length > 0) {
+                // Show recommended section
+                modelCardsHTML += `<div class="filter-results-label">Recommended for you</div>`;
+                modelCardsHTML += '<div class="models-grid">';
+                recommended.forEach(model => {
+                    const dots = '●'.repeat(Math.min(model.score, 5)) + '○'.repeat(Math.max(0, 5 - model.score));
+                    modelCardsHTML += `
+                        <div class="model-card ${currentPhase} recommended" data-model-name="${escapeHtml(model.name)}">
+                            <div class="model-name">${model.name}</div>
+                            <div class="model-description">${model.description}</div>
+                            <div class="model-score-badge">${dots}</div>
+                        </div>`;
+                });
+                modelCardsHTML += '</div>';
+
+                // Show others collapsed
+                modelCardsHTML += `<div class="filter-results-label other-models-label">Other models (${others.length})</div>`;
+                modelCardsHTML += '<div class="models-grid">';
+                others.forEach(model => {
+                    modelCardsHTML += `
+                        <div class="model-card ${currentPhase}" data-model-name="${escapeHtml(model.name)}">
+                            <div class="model-name">${model.name}</div>
+                            <div class="model-description">${model.description}</div>
+                        </div>`;
+                });
+                modelCardsHTML += '</div>';
+            } else {
+                // No scoring yet — show all equally
+                modelCardsHTML += `<div class="filter-results-label">${questionsAnswered === 0 ? 'All models in this phase' : 'All models'} (${allModels.length})</div>`;
+                modelCardsHTML += '<div class="models-grid">';
+                sortedModels.forEach(model => {
+                    modelCardsHTML += `
+                        <div class="model-card ${currentPhase}" data-model-name="${escapeHtml(model.name)}">
+                            <div class="model-name">${model.name}</div>
+                            <div class="model-description">${model.description}</div>
+                        </div>`;
+                });
+                modelCardsHTML += '</div>';
+            }
+
+            focusArea.innerHTML = `
+                <div class="filter-unified-view phase-${currentPhase}">
+                    ${questionHTML}
+                    <div class="filter-models-area">
+                        ${modelCardsHTML}
                     </div>
                 </div>
             `;
 
-            document.getElementById('filterYes').addEventListener('click', () => {
-                logEntries.unshift({
-                    id: nextLogId++,
-                    phase: currentPhase,
-                    modelName: phaseData.title + ' - Guided Question',
-                    modelPrompt: currentQuestion.q,
-                    response: 'Yes',
-                    timestamp: new Date().toLocaleString()
-                });
-                renderJournal();
-                saveToLocalStorage();
-                filterHistory.push({ question: currentQuestion.q, answer: 'Yes' });
-                filterQuestionIndex++;
-                renderFilterView();
-            });
-            document.getElementById('filterNo').addEventListener('click', () => {
-                logEntries.unshift({
-                    id: nextLogId++,
-                    phase: currentPhase,
-                    modelName: phaseData.title + ' - Guided Question',
-                    modelPrompt: currentQuestion.q,
-                    response: 'No',
-                    timestamp: new Date().toLocaleString()
-                });
-                renderJournal();
-                saveToLocalStorage();
-                filterHistory.push({ question: currentQuestion.q, answer: 'No' });
-                filterQuestionIndex++;
-                renderFilterView();
-            });
+            // Wire up question buttons
+            const yesBtn = document.getElementById('filterYes');
+            const noBtn = document.getElementById('filterNo');
+            const skipBtn = document.getElementById('filterSkip');
 
-            const showResultsBtn = document.getElementById('filterShowResults');
-            if (showResultsBtn) showResultsBtn.addEventListener('click', () => {
-                renderFilterResults(sortedModels, topModels);
-            });
+            function handleAnswer(answer) {
+                if (currentQuestion) {
+                    logEntries.unshift({
+                        id: nextLogId++,
+                        phase: currentPhase,
+                        modelName: phaseData.title + ' - Guided Question',
+                        modelPrompt: currentQuestion.q,
+                        response: answer,
+                        timestamp: new Date().toLocaleString()
+                    });
+                    renderJournal();
+                    saveToLocalStorage();
+                    if (answer !== 'Skip') {
+                        filterHistory.push({ question: currentQuestion.q, answer: answer });
+                    }
+                    filterQuestionIndex++;
+                    renderFilterView();
+                }
+            }
+
+            if (yesBtn) yesBtn.addEventListener('click', () => handleAnswer('Yes'));
+            if (noBtn) noBtn.addEventListener('click', () => handleAnswer('No'));
+            if (skipBtn) skipBtn.addEventListener('click', () => handleAnswer('Skip'));
 
             const restartBtn = document.getElementById('filterRestart');
             if (restartBtn) restartBtn.addEventListener('click', () => {
@@ -4856,86 +4925,8 @@
                 modelScores = {};
                 renderFilterView();
             });
-        }
 
-        function renderFilterResults(sortedModels, topModels) {
-            const phaseData = mentalModelsData[currentPhase];
-            focusArea.className = 'focus-area top-aligned';
-
-            // If we have strong recommendations (score > 0), show them prominently
-            const recommended = sortedModels.filter(m => m.score > 0);
-            const others = sortedModels.filter(m => m.score <= 0);
-
-            let historyHTML = '';
-            if (filterHistory.length > 0) {
-                historyHTML = '<div class="tree-history" style="margin-bottom: 1rem;">';
-                filterHistory.forEach(h => {
-                    historyHTML += `<div class="tree-history-item">${h.question} <span class="answer">${h.answer}</span></div>`;
-                });
-                historyHTML += '</div>';
-            }
-
-            let recCardsHtml = '';
-            recommended.forEach((model, index) => {
-                recCardsHtml += `
-                    <div class="model-card ${currentPhase} recommended" data-model-name="${escapeHtml(model.name)}">
-                        <div class="model-name">${model.name}</div>
-                        <div class="model-description">${model.description}</div>
-                        <div class="model-score-badge">Match strength: ${'●'.repeat(Math.min(model.score, 5))}${'○'.repeat(Math.max(0, 5 - model.score))}</div>
-                    </div>
-                `;
-            });
-
-            let otherCardsHtml = '';
-            others.forEach((model, index) => {
-                otherCardsHtml += `
-                    <div class="model-card ${currentPhase}" data-model-name="${escapeHtml(model.name)}">
-                        <div class="model-name">${model.name}</div>
-                        <div class="model-description">${model.description}</div>
-                    </div>
-                `;
-            });
-
-            focusArea.innerHTML = `
-                <div class="browse-models-view phase-${currentPhase}">
-                    <span class="browse-back-link" id="backToFilter">← Back to questions (${filterQuestions[currentPhase].length - filterHistory.length} remaining)</span>
-                    <h3>${phaseData.title}</h3>
-                    <div class="browse-subtitle">${phaseData.purpose}</div>
-                    ${historyHTML}
-                    ${recommended.length > 0 ? `
-                        <div class="filter-results-label">Recommended for you (${recommended.length})</div>
-                        <div class="models-grid">${recCardsHtml}</div>
-                    ` : ''}
-                    ${others.length > 0 ? `
-                        <div class="filter-results-label other-models-label">${recommended.length > 0 ? 'Other models in this phase' : 'All models'} (${others.length})</div>
-                        <div class="models-grid">${otherCardsHtml}</div>
-                    ` : ''}
-                    <div style="margin-top: 1rem;">
-                        <span class="tree-restart-link" id="filterRestart2">↩ Start questions over</span>
-                    </div>
-                </div>
-            `;
-
-            const backBtn = document.getElementById('backToFilter');
-            if (backBtn) backBtn.addEventListener('click', () => {
-                // If all questions answered, restart; otherwise continue
-                if (filterQuestionIndex >= filterQuestions[currentPhase].length) {
-                    // All done, restart
-                    filterHistory = [];
-                    filterQuestionIndex = 0;
-                    modelScores = {};
-                }
-                renderFilterView();
-            });
-
-            const restartBtn2 = document.getElementById('filterRestart2');
-            if (restartBtn2) restartBtn2.addEventListener('click', () => {
-                filterHistory = [];
-                filterQuestionIndex = 0;
-                modelScores = {};
-                renderFilterView();
-            });
-
+            // Wire up model card clicks
             focusArea.querySelectorAll('.model-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const modelName = card.dataset.modelName;
@@ -4945,7 +4936,7 @@
                             id: nextLogId++,
                             phase: currentPhase,
                             modelName: 'Model Selected',
-                            modelPrompt: 'Selected from filtered recommendations',
+                            modelPrompt: questionsAnswered > 0 ? 'Selected from filtered recommendations' : 'Selected from model list',
                             response: model.name,
                             timestamp: new Date().toLocaleString()
                         });
